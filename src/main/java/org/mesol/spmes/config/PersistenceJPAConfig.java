@@ -19,8 +19,11 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -30,6 +33,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Assert;
 
 /**
  * $Rev:$ $Author:$ $Date:$
@@ -40,9 +44,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaAuditing
+@PropertySource("classpath:/" + PersistenceJPAConfig.CONFIG)
 public class PersistenceJPAConfig 
 {
+    public static final String CONFIG = "ds/jdbc.properties";
     private static final Logger logger = Logger.getLogger(PersistenceJPAConfig.class);
+    
+    @Autowired
+    private Environment                             env;
 
     public static String getRevisionNumber() {
         return "$Revision:$";
@@ -63,12 +72,30 @@ public class PersistenceJPAConfig
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spring_jpa");
-        dataSource.setUsername("tutorialuser");
-        dataSource.setPassword("tutorialmy5ql");
-        return dataSource;
+        if (logger.isDebugEnabled())
+            logger.debug("call datasource");
+
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+
+        String driver = env.getProperty("jdbc.driver");
+        String url = env.getProperty("jdbc.url");
+        String user = env.getProperty("jdbc.user");
+        String password = env.getProperty("jdbc.password");
+
+        Assert.notNull(driver, "Driver cannot be empty");
+        Assert.notNull(url, "URL cannot be empty");
+
+        Properties props = new Properties();
+        props.setProperty("autoCommit", "false");
+        props.setProperty("defaultAutoCommit", "false");
+
+        ds.setConnectionProperties(props);
+        ds.setDriverClassName(driver);
+        ds.setUrl(url);
+        ds.setUsername(user);
+        ds.setPassword(password);
+
+        return ds;
     }
 
     @Bean
@@ -83,10 +110,15 @@ public class PersistenceJPAConfig
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    Properties additionalProperties() {
+    private void readAndSetProperty (Properties properties, String property) {
+        properties.setProperty(property, env.getProperty(property));
+    }
+    
+    private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
+        readAndSetProperty(properties, "hibernate.generateDDL");
+        readAndSetProperty(properties, "hibernate.dialect");
+        readAndSetProperty(properties, "hibernate.hbm2ddl.auto");
         return properties;
     }
 }

@@ -21,9 +21,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
 /**
- * $Rev:$
- * $Author:$
- * $Date:$
  * 
  * @version 1.0.0
  * @author ASementsov
