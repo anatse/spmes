@@ -24,7 +24,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
