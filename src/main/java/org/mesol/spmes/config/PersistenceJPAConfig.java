@@ -26,6 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -44,6 +45,7 @@ import org.springframework.util.Assert;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaAuditing
+@EnableJpaRepositories(basePackages = {"org.mesol.spmes.repo"})
 @PropertySource("classpath:/" + PersistenceJPAConfig.CONFIG)
 public class PersistenceJPAConfig 
 {

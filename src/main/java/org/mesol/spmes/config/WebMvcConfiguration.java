@@ -50,7 +50,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
  * @author ASementsov
  */
 @EnableWebMvc
-@ComponentScan({"org.mesol.gmes.mvc.controller", "org.mesol.gmes.mvc.service"})
+@ComponentScan({"org.mesol.spmes.controller", "org.mesol.spmes.service"})
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.ENABLED)

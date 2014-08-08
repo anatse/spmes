@@ -17,6 +17,7 @@
 package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -39,13 +40,31 @@ public class Group extends AbstractEntity implements Serializable, GrantedAuthor
         return "$Revision:$";
     }
     
-    private String      name;
+    private String          name;
+    @ManyToMany(mappedBy = "groups")
+    private Set<User>       users;
+
+    public Group(GrantedAuthority grp) {
+        name = grp.getAuthority();
+    }
+
+    public Group() {
+    }
 
     @Override
     public String getAuthority() {
         return name;
     }
-    
-    @ManyToMany(mappedBy = "groups")
-    private Set<User>       users;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<User> getUsers() {
+        return Collections.unmodifiableSet(users);
+    }
 }

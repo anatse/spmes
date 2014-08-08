@@ -17,6 +17,10 @@
 package org.mesol.spmes.config;
 
 import org.apache.log4j.Logger;
+import org.mesol.spmes.model.security.DBAuthProvider;
+import org.mesol.spmes.model.security.DBUserDetailsManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +39,9 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @EnableWebMvcSecurity
 public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
 {
+    @Autowired(required = true)
+    private DBUserDetailsManager        userDetailsManager;
+
     private static final Logger     logger = Logger.getLogger(WebMvcSecurityConfig.class);
     public static String getRevisionNumber () {
         return "$Revision:$";
@@ -42,19 +49,20 @@ public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        TiAuthProvider np = new TiAuthProvider();
-//        np.setUserDetailsService(userDetailsManager);
-//        auth.authenticationProvider(np);
+        DBAuthProvider np = new DBAuthProvider();
+        np.setUserDetailsService(userDetailsManager);
+        auth.authenticationProvider(np);
     }
 
-//    @Bean
-//    public TiUserDetailsManager userDetailsManager () {
-//        return new TiUserDetailsManager();
-//    }
+    @Bean
+    public DBUserDetailsManager userDetailsManager () {
+        return new DBUserDetailsManager();
+    }
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+//            .antMatchers("/auth").authenticated()
             .anyRequest().authenticated()
             .and()
             .httpBasic()
