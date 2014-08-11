@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.security.Group;
 import org.mesol.spmes.model.security.User;
+import org.mesol.spmes.repo.GroupRepo;
 import org.mesol.spmes.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,9 @@ public class Welcome
 {
     @Autowired
     private UserRepo        userRepo;
+    
+    @Autowired
+    private GroupRepo       groupRepo;
     
     private static final Logger     logger = Logger.getLogger(Welcome.class);
     public static String getRevisionNumber () {
@@ -64,8 +68,9 @@ public class Welcome
         Group users = new Group();
         users.setName("users");
         demo.addGroup (users);
-        
+
         demo = userRepo.save(demo);
+        groupRepo.save(users);
         return demo;
     }
 }

@@ -84,7 +84,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (groups == null)
-            return groups;
+            return Collections.EMPTY_SET;
 
         return Collections.unmodifiableSet(groups);
     }

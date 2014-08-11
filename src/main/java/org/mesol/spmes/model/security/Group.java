@@ -65,6 +65,9 @@ public class Group extends AbstractEntity implements Serializable, GrantedAuthor
     }
 
     public Set<User> getUsers() {
+        if (users == null)
+            return Collections.EMPTY_SET;
+
         return Collections.unmodifiableSet(users);
     }
 }
