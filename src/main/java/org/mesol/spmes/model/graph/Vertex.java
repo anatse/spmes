@@ -13,38 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.abs;
+package org.mesol.spmes.model.graph;
 
-import java.sql.Timestamp;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.io.Serializable;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.apache.log4j.Logger;
+import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**
- * 
+ * Class represents Vertex
  * @version 1.0.0
  * @author ASementsov
  */
 @MappedSuperclass
-public abstract class AbstractEntity 
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Vertex extends AbstractEntity implements Serializable
 {
-    @Id 
-    @GeneratedValue 
-    private Long id;
+    private static final Logger     logger = Logger.getLogger(Vertex.class);
 
-	@CreatedDate
-	private Timestamp       createdDate;
-
-	@LastModifiedDate
-	private Timestamp       modifiedDate;
-
-    @CreatedBy
-    private String          createdBy;
-
-    @LastModifiedBy
-    private String          modifiedBy;
 }
