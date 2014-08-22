@@ -19,10 +19,15 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -32,13 +37,18 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  * @author ASementsov
  */
 @Entity
-@Table(name = "EQC")
+@Table(name = "EQC",  uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
 public class EquipmentClass extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(EquipmentClass.class);
     public static String getRevisionNumber () {
         return "$Revision:$";
     }
+
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "eqcId", sequenceName = "EQC_SEQ")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqcId")
+    private Long id;
     
     private String          name;
     private String          description;

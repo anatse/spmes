@@ -61,12 +61,23 @@ public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+////            .antMatchers("/auth").authenticated()
+//            .anyRequest().authenticated()
+//            .and()
+//            .httpBasic()
+//            .and()
+//            .csrf();
+        
         http.authorizeRequests()
-//            .antMatchers("/auth").authenticated()
             .anyRequest().authenticated()
             .and()
-            .httpBasic()
+            .formLogin()
+                .loginPage("/login") 
+                .permitAll()
             .and()
-            .csrf();
+                .logout()
+                .logoutUrl("/j_spring_security_logout")
+                .logoutSuccessUrl("/");        
     }
 }

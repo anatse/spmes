@@ -27,10 +27,15 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,13 +47,17 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author ASementsov
  */
 @Entity
-@Table(name = "USR")
+@Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
     private static final Logger     logger = Logger.getLogger(User.class);
     public static String getRevisionNumber () {
         return "$Revision:$";
     }
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
+    private Long id;
     
     private String          name;
     private String          password;
