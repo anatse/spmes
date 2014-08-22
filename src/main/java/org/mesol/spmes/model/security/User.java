@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -51,17 +52,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
     private static final Logger     logger = Logger.getLogger(User.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
+
     @Id
     @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
     private Long id;
     
+    @Column(nullable = false, length = 32)
     private String          name;
+    @Column(nullable = false, length = 180)
     private String          password;
+    @Column(length = 180)
     private String          firstName;
+    @Column(length = 180)
     private String          lastName;
     private boolean         enabled = true;
     private boolean         expired = false;
@@ -75,7 +78,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         foreignKey = @ForeignKey(name = "FK_USR_GRP"),
         inverseForeignKey = @ForeignKey(name = "FK_GRP_USR")
     )
-    private Set<Group>      groups;
+    private Set<UserGroup>      groups;
 
     public User () {
     }
@@ -86,7 +89,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         groups = new HashSet<>();
 
         usr.getAuthorities().forEach(grp -> {
-            groups.add(new Group(grp));
+            groups.add(new UserGroup(grp));
         });
     }
 
@@ -168,7 +171,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.locked = locked;
     }
 
-    public void setGroups(Set<Group> groups) {
+    public void setGroups(Set<UserGroup> groups) {
         this.groups = groups;
     }
 
@@ -185,7 +188,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         return pw.equals(password);
     }
 
-    public void addGroup(Group users) {
+    public void addGroup(UserGroup users) {
         if (groups == null)
             groups = new HashSet<>();
 

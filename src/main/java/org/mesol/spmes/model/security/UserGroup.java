@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,27 +38,25 @@ import org.springframework.security.core.GrantedAuthority;
  */
 @Entity
 @Table(name = "GRP", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
-public class Group extends AbstractEntity implements Serializable, GrantedAuthority
+public class UserGroup extends AbstractEntity implements Serializable, GrantedAuthority
 {
-    private static final Logger     logger = Logger.getLogger(Group.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
+    private static final Logger     logger = Logger.getLogger(UserGroup.class);
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "grpId", sequenceName = "GRP_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "grpId")
     private Long id;
-        
+
+    @Column(nullable = false, length = 32)
     private String          name;
     @ManyToMany(mappedBy = "groups")
     private Set<User>       users;
 
-    public Group(GrantedAuthority grp) {
+    public UserGroup(GrantedAuthority grp) {
         name = grp.getAuthority();
     }
 
-    public Group() {
+    public UserGroup() {
     }
 
     @Override

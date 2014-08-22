@@ -16,13 +16,12 @@
 package org.mesol.spmes.model.factory;
 
 import java.io.Serializable;
-import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -40,15 +39,13 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 public class EquipmentAttr extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(EquipmentAttr.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "eqAttrId", sequenceName = "EQ_ATTR_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqAttrId")
     private Long id;
-        
+
+    @Column(name = "NAME", length = 32, nullable = false)
     private String                  name;
     private String                  description;
   

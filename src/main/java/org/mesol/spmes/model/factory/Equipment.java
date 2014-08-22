@@ -17,6 +17,7 @@ package org.mesol.spmes.model.factory;
 
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,18 +41,17 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 public class Equipment extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(Equipment.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqId")
-    private Long id;
-        
+    private Long                    id;
+
+    @Column(name = "NAME", length = 32, nullable = false)
     private String                  name;
+    @Column(name = "DESCRIPTION", length = 255)
     private String                  description;
-    
+
     @ManyToMany(mappedBy = "equipments")
     private Set<EquipmentClass>     equipmentClasses;
     

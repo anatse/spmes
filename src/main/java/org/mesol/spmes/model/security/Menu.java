@@ -16,16 +16,9 @@
 package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,13 +29,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
-import org.mesol.spmes.model.factory.Equipment;
-import org.mesol.spmes.model.factory.EquipmentClass;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 
@@ -54,17 +42,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Menu extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(Menu.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "menuId", sequenceName = "MENU_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "menuId")
     private Long id;
-        
+
+    @Column(length = 80, nullable = false)
     private String                  name;
-    private String                  description;   
+    @Column(length = 255)
+    private String                  description;
+    @Column(length = 1024, nullable = false)
     private String                  url;
         
     @ManyToOne
@@ -79,5 +67,53 @@ public class Menu extends AbstractEntity implements Serializable
         foreignKey = @ForeignKey(name = "FK_MENU_GRP"),
         inverseForeignKey = @ForeignKey(name = "FK_GRP_MENU")
     )
-    private Set<Group>   Groups;
+    private Set<UserGroup>   groups;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Menu getParentMenu() {
+        return parentMenu;
+    }
+
+    public void setParentMenu(Menu parentMenu) {
+        this.parentMenu = parentMenu;
+    }
+
+    public Set<UserGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<UserGroup> groups) {
+        this.groups = groups;
+    }
 }

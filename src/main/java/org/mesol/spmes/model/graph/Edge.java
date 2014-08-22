@@ -15,6 +15,16 @@
  */
 package org.mesol.spmes.model.graph;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -22,12 +32,60 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  * 
  * @version 1.0.0
  * @author ASementsov
+ * @param <T>
  */
-public class Edge extends AbstractEntity
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "EDG")
+@DiscriminatorColumn(name = "TYPE")
+public abstract class Edge<T extends Vertex> extends AbstractEntity
 {
     private static final Logger     logger = Logger.getLogger(Edge.class);
 
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "edgeId", sequenceName = "EDGE_SEQ")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "edgeId")
+    private Long                    id;
+
+    @Column(nullable = false, length = 32)
     private String                  name;
+    @Column(name = "TYPE", nullable = false, length = 32)
     private String                  type;
+    @Column(nullable = false)
     private Double                  weight;
+
+    public abstract T getFrom ();
+    public abstract T getTo ();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 }
