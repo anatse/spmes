@@ -7,10 +7,10 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.0.5.RELEASE</spring.version>
+        <spring.version>4.0.6.RELEASE</spring.version>
         <cglib.version>3.1</cglib.version>
         <springdata.version>3.0.1.RELEASE</springdata.version>
-        <springsecurity.version>3.2.4.RELEASE</springsecurity.version>
+        <springsecurity.version>3.2.5.RELEASE</springsecurity.version>
         <slf4j.version>1.7.7</slf4j.version>
         <querydsl.version>3.4.2</querydsl.version>
     </properties>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.4.1.1</version>
+            <version>2.4.2</version>
         </dependency>
         <!--
             Hibernate
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.5.1.RELEASE</version>
+            <version>1.6.2.RELEASE</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -128,12 +128,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.5.Final</version>
+            <version>4.3.6.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.1.1.Final</version>
+            <version>5.1.2.Final</version>
         </dependency>
         <!--
             Testing

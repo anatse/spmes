@@ -17,6 +17,7 @@
 package org.mesol.spmes.repo;
 
 import org.mesol.spmes.model.security.User;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,7 +26,7 @@ import org.springframework.data.repository.CrudRepository;
  * @version 1.0.0
  * @author ASementsov
  */
-public interface UserRepo extends CrudRepository<User, Long>
+public interface UserRepo extends CrudRepository<User, Long>, JpaSpecificationExecutor
 {
     @Query("select r from User r where r.name = ?1")
     User findByName (String userName);
