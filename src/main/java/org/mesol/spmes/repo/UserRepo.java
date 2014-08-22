@@ -18,7 +18,6 @@ package org.mesol.spmes.repo;
 
 import org.mesol.spmes.model.security.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -28,9 +27,9 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface UserRepo extends CrudRepository<User, Long>, JpaSpecificationExecutor
 {
-    @Query("select r from User r where r.name = ?1")
+//    @Query("select r from User r where r.name = ?1")
     User findByName (String userName);
 
-    @Query("delete User r where r.name = ?1")
-    void deteteUser (String userName);
+//    @Query("delete User r where r.name = ?1")
+    void deleteByName (String userName);
 }
