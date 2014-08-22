@@ -16,11 +16,7 @@
 package org.mesol.spmes.model.abs;
 
 import java.sql.Timestamp;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.SequenceGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -34,11 +30,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @MappedSuperclass
 public abstract class AbstractEntity 
 {
-//    @Id 
-//    @SequenceGenerator(initialValue = 1, name = "idgen", sequenceName = "SEQ_TAB_ID")
-//    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "idgen")
-//    private Long id;
-
     @CreatedDate
     private Timestamp       createdDate;
 

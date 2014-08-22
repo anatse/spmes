@@ -20,7 +20,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.mesol.spmes.model.security.Group;
 import org.mesol.spmes.model.security.User;
 import org.mesol.spmes.repo.GroupRepo;
 import org.mesol.spmes.repo.UserRepo;
