@@ -47,4 +47,28 @@ public class RouterStep extends Vertex
     
     @OneToMany(mappedBy = "to")
     private Collection<OperEdge>    in;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Collection<OperEdge> getOut() {
+        return out;
+    }
+
+    public void setOut(Collection<OperEdge> out) {
+        this.out = out;
+    }
+
+    public Collection<OperEdge> getIn() {
+        return in;
+    }
+
+    public void setIn(Collection<OperEdge> in) {
+        this.in = in;
+    }
 }
