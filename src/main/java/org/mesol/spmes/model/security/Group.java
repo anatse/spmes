@@ -20,8 +20,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,14 +37,19 @@ import org.springframework.security.core.GrantedAuthority;
  * @author ASementsov
  */
 @Entity
-@Table(name = "GRP")
+@Table(name = "GRP", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
 public class Group extends AbstractEntity implements Serializable, GrantedAuthority
 {
     private static final Logger     logger = Logger.getLogger(Group.class);
     public static String getRevisionNumber () {
         return "$Revision:$";
     }
-    
+
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "grpId", sequenceName = "GRP_SEQ")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "grpId")
+    private Long id;
+        
     private String          name;
     @ManyToMany(mappedBy = "groups")
     private Set<User>       users;
