@@ -62,8 +62,21 @@ public class EquipmentTest {
 
     @Test
     public void test() {
-//        Assert.notNull(userRepo, "User repository must not be null");
-//        User user = userRepo.findByName("admin");
-//        Assert.notNull(user);
+        User admin = new User();
+        admin.setName("admin");
+        admin.setPassword("admin");
+        userRepo.save(admin);
+        
+        User demo = new User();
+        demo.setName("demo");
+        demo.setPassword("demo");
+        userRepo.save(demo);
+        
+        Assert.notNull(userRepo, "User repository must not be null");
+        User user = userRepo.findByName("admin");
+        Assert.notNull(user, "admin not found");
+        
+        user = userRepo.findByName("demo");
+        Assert.notNull(user, "Demo user not found");
     }
 }

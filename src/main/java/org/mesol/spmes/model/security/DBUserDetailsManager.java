@@ -52,7 +52,7 @@ public class DBUserDetailsManager implements UserDetailsManager
 
     @Override
     public void deleteUser(String username) {
-        userRepo.deteteUser(username);
+        userRepo.deleteByName(username);
     }
 
     @Override
