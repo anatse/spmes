@@ -17,12 +17,18 @@ package org.mesol.spmes.model.graph;
 
 import java.io.Serializable;
 import javax.persistence.ConstraintMode;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.factory.Equipment;
 
 /**
  * 
@@ -30,33 +36,20 @@ import org.apache.log4j.Logger;
  * @author ASementsov
  */
 @Entity
-@DiscriminatorValue("Oper")
-public class OperEdge extends Edge<RouterStep> implements Serializable
+@Table(name = "ROUTER")
+public class Router extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(OperEdge.class);
+    private static final Logger     logger = Logger.getLogger(Router.class);
+
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "routerId", sequenceName = "ROUTER_SEQ")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "routerId")
+    private Long                    id;
+
+    @ManyToOne
+    @JoinColumn(name = "EQ_ID", 
+        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_ROUTER_EQO"))
+    private Equipment               owner;
     
-    @ManyToOne
-    @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_OPER_FROM", value = ConstraintMode.CONSTRAINT))
-    private RouterStep              from;
-    @ManyToOne
-    @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_OPER_TO", value = ConstraintMode.CONSTRAINT))
-    private RouterStep              to;
-
-    @Override
-    public RouterStep getFrom() {
-        return from;
-    }
-
-    @Override
-    public RouterStep getTo() {
-        return to;
-    }
-
-    public void setFrom(RouterStep from) {
-        this.from = from;
-    }
-
-    public void setTo(RouterStep to) {
-        this.to = to;
-    }
+    
 }

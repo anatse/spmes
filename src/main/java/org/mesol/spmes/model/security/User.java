@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -75,8 +76,8 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         name="USR2GRP",
         joinColumns = @JoinColumn(name="USR_ID", referencedColumnName="ID"),
         inverseJoinColumns = @JoinColumn(name="GRP_ID", referencedColumnName="ID"),
-        foreignKey = @ForeignKey(name = "FK_USR_GRP"),
-        inverseForeignKey = @ForeignKey(name = "FK_GRP_USR")
+        foreignKey = @ForeignKey(name = "FK_USR_GRP", value = ConstraintMode.CONSTRAINT),
+        inverseForeignKey = @ForeignKey(name = "FK_GRP_USR", value = ConstraintMode.CONSTRAINT)
     )
     private Set<UserGroup>      groups;
 

@@ -18,6 +18,7 @@ package org.mesol.spmes.model.security;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -64,8 +65,8 @@ public class Menu extends AbstractEntity implements Serializable
         name="MENU2GRP",
         joinColumns = @JoinColumn(name="MENU_ID", referencedColumnName="ID"),
         inverseJoinColumns = @JoinColumn(name="GRP_ID", referencedColumnName="ID"),
-        foreignKey = @ForeignKey(name = "FK_MENU_GRP"),
-        inverseForeignKey = @ForeignKey(name = "FK_GRP_MENU")
+        foreignKey = @ForeignKey(name = "FK_MENU_GRP", value = ConstraintMode.CONSTRAINT),
+        inverseForeignKey = @ForeignKey(name = "FK_GRP_MENU", value = ConstraintMode.CONSTRAINT)
     )
     private Set<UserGroup>   groups;
 

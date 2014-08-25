@@ -27,9 +27,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface UserRepo extends CrudRepository<User, Long>, JpaSpecificationExecutor
 {
-//    @Query("select r from User r where r.name = ?1")
     User findByName (String userName);
-
-//    @Query("delete User r where r.name = ?1")
     void deleteByName (String userName);
 }

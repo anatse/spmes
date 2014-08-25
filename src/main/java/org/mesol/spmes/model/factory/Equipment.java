@@ -18,7 +18,9 @@ package org.mesol.spmes.model.factory;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,16 +48,53 @@ public class Equipment extends AbstractEntity implements Serializable
     @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ")
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqId")
     private Long                    id;
-
     @Column(name = "NAME", length = 32, nullable = false)
     private String                  name;
     @Column(name = "DESCRIPTION", length = 255)
     private String                  description;
-
     @ManyToMany(mappedBy = "equipments")
     private Set<EquipmentClass>     equipmentClasses;
-    
     @ManyToOne
-    @JoinColumn(name="PARENT_ID")
+    @JoinColumn(name="PARENT_ID", foreignKey = @ForeignKey(name = "FK_EQ_PARENT", value = ConstraintMode.CONSTRAINT))
     private Equipment               parentEquipment;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<EquipmentClass> getEquipmentClasses() {
+        return equipmentClasses;
+    }
+
+    public void setEquipmentClasses(Set<EquipmentClass> equipmentClasses) {
+        this.equipmentClasses = equipmentClasses;
+    }
+
+    public Equipment getParentEquipment() {
+        return parentEquipment;
+    }
+
+    public void setParentEquipment(Equipment parentEquipment) {
+        this.parentEquipment = parentEquipment;
+    }
 }

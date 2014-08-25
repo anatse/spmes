@@ -17,7 +17,9 @@ package org.mesol.spmes.model.factory;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,9 +50,41 @@ public class EquipmentAttr extends AbstractEntity implements Serializable
     @Column(name = "NAME", length = 32, nullable = false)
     private String                  name;
     private String                  description;
-  
+ 
     @ManyToOne
-    @JoinColumn(name="EQ_ID", nullable=false)
+    @JoinColumn(name="EQ_ID", nullable=false, foreignKey = @ForeignKey(name = "FK_EQATTR_EQ", value = ConstraintMode.CONSTRAINT))
     private Equipment               equipment;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
+    }
         
 }
