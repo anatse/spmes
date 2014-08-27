@@ -37,7 +37,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @author ASementsov
  */
 @Entity
-@Table(name = "GRP", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
+@Table(name = "GRP", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_GRP_NAME"))
 public class UserGroup extends AbstractEntity implements Serializable, GrantedAuthority
 {
     private static final Logger     logger = Logger.getLogger(UserGroup.class);

@@ -73,11 +73,11 @@ public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
             .anyRequest().authenticated()
             .and()
             .formLogin()
-                .loginPage("/login") 
-                .permitAll()
+            .loginPage("/login") 
+            .permitAll()
             .and()
-                .logout()
-                .logoutUrl("/j_spring_security_logout")
-                .logoutSuccessUrl("/");        
+            .logout()
+            .logoutUrl("/j_spring_security_logout")
+            .logoutSuccessUrl("/");        
     }
 }

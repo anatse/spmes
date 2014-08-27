@@ -49,7 +49,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author ASementsov
  */
 @Entity
-@Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}))
+@Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_USERNAME"))
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
     private static final Logger     logger = Logger.getLogger(User.class);

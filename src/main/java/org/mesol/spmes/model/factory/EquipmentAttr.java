@@ -37,7 +37,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  * @author ASementsov
  */
 @Entity
-@Table(name = "EQ_ATTR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME", "EQ_ID"}))
+@Table(name = "EQ_ATTR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME", "EQ_ID"}, name = "UK_EQATTR_NAME"))
 public class EquipmentAttr extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(EquipmentAttr.class);

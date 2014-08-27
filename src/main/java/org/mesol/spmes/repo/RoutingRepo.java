@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.repo;
 
-import org.mesol.spmes.model.factory.Equipment;
+import java.util.List;
+import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.graph.Router;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,11 +26,8 @@ import org.springframework.data.repository.CrudRepository;
  * @version 1.0.0
  * @author ASementsov
  */
-public interface EquipmentRepo extends CrudRepository<Equipment, Long>
+public interface RoutingRepo extends CrudRepository<Router, Long>
 {
-    @Query("select e from Equipment e where e.name = ?1")
-    Equipment findByName (String equipmentName);
-
-    @Query("select e from Equipment e where e.parentEquipment is null")
-    Equipment findRootElements (String equipmentName);
+//    @Query (nativeQuery = true, value = "select * from edg where type = 'Oper' and ")
+//    List<OperEdge> findAllOpers ();
 }

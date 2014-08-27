@@ -59,31 +59,31 @@ public class AuthController
         HttpServletRequest request, 
         HttpServletResponse response
     ) {       
-            return new ModelAndView("home");
+        return new ModelAndView("home");
     }
 
-    
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
-    Locale locale,
+            Locale locale,
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout) {
 
-    ModelAndView model = new ModelAndView();
-            if (error != null) {
-        String message = messageSource.getMessage("invalidCredentials.message", new Object[0], locale);
-                    model.addObject("error", message);
-            }
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            String message = messageSource.getMessage("invalidCredentials.message", new Object[0], locale);
+            model.addObject("error", message);
+        }
 
-            if (logout != null) {
-        String message = messageSource.getMessage("loggedOut.message", new Object[0], locale);
-                    model.addObject("msg", message);
-            }
+        if (logout != null) {
+            String message = messageSource.getMessage("loggedOut.message", new Object[0], locale);
+            model.addObject("msg", message);
+        }
 
-            model.setViewName("login");
-            return model;
-    }    
-//    @RequestMapping(value = "/")
+        model.setViewName("login");
+        return model;
+    }
+
+//    @RequestMapping(value = "/adduser")
 //    @Transactional
 //    public User test (HttpServletRequest request, HttpServletResponse response) {
 //        User admin = new User();
@@ -92,7 +92,7 @@ public class AuthController
 //        admin = userRepo.save(admin);
 //        return admin;
 //    }
-    
+
     @RequestMapping(value = "/test")
     @Transactional
     public User test2 (HttpServletRequest request, HttpServletResponse response) {

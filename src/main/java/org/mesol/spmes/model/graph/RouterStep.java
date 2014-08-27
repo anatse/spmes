@@ -17,6 +17,7 @@
 package org.mesol.spmes.model.graph;
 
 import java.util.Collection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,6 +48,9 @@ public class RouterStep extends Vertex
     
     @OneToMany(mappedBy = "to")
     private Collection<OperEdge>    in;
+    
+    @Column(nullable = false, length = 32)
+    private String                  name;
 
     public Long getId() {
         return id;
@@ -70,5 +74,13 @@ public class RouterStep extends Vertex
 
     public void setIn(Collection<OperEdge> in) {
         this.in = in;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

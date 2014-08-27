@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.graph;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -24,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
@@ -47,9 +49,34 @@ public class Router extends AbstractEntity implements Serializable
     private Long                    id;
 
     @ManyToOne
-    @JoinColumn(name = "EQ_ID", 
-        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_ROUTER_EQO"))
+    @JoinColumn(name = "EQ_ID", foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_ROUTER_EQO"))
     private Equipment               owner;
-    
-    
+
+    @OneToOne
+    @JoinColumn (name = "OPER_ID", foreignKey = @ForeignKey(name = "FK_ROUTER_FOPER", value = ConstraintMode.CONSTRAINT))
+    private OperEdge                firstOper;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Equipment getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Equipment owner) {
+        this.owner = owner;
+    }
+
+    public OperEdge getFirstOper() {
+        return firstOper;
+    }
+
+    public void setFirstOper(OperEdge firstOper) {
+        this.firstOper = firstOper;
+    }
 }
