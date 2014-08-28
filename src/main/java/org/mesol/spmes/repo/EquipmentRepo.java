@@ -27,7 +27,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface EquipmentRepo extends CrudRepository<Equipment, Long>
 {
-    @Query("select e from Equipment e where e.name = ?1")
     Equipment findByName (String equipmentName);
 
     @Query("select e from Equipment e where e.parentEquipment is null")
