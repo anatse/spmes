@@ -22,15 +22,39 @@ import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import org.apache.log4j.Logger;
 
 /**
+ * Class describes operation edge
+ * 
+ * @SqlResultSetMapping(
+ *    name = "OperEdgeResult",
+ *    classes = {
+ *        @ConstructorResult(
+ *            targetClass = OperEdge.class,
+ *            columns = {
+ *                // level, id, name, from_id, to_id, weight
+ *                @ColumnResult(name = "level"),
+ *                @ColumnResult(name = "id"),
+ *                @ColumnResult(name = "name")
+ *            }
+ *        )
+ *    }
+ * )
  * 
  * @version 1.0.0
  * @author ASementsov
  */
 @Entity
 @DiscriminatorValue("Oper")
+@NamedNativeQuery (name = "OperEdge.operList", 
+    resultClass = OperEdge.class, 
+    query = "select * " + 
+            "from operedge op " +
+            "start with id = (select oper_id from router where id = ?1) " +
+            "connect by prior to_id = from_id " +
+            "order by level")
 public class OperEdge extends Edge<RouterStep> implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(OperEdge.class);

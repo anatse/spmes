@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.model.graph;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,6 +61,7 @@ public class RouterStep extends Vertex
         this.id = id;
     }
 
+    @JsonIgnore
     public Collection<OperEdge> getOut() {
         return out;
     }
@@ -68,6 +70,7 @@ public class RouterStep extends Vertex
         this.out = out;
     }
 
+    @JsonIgnore
     public Collection<OperEdge> getIn() {
         return in;
     }

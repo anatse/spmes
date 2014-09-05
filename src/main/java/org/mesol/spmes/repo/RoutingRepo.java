@@ -28,10 +28,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface RoutingRepo extends CrudRepository<Router, Long>
 {
-    @Query (nativeQuery = true, value = "select level, id, name, from_id, to_id, weight " +
-                                        "from operedge op " +
-                                        "start with id = (select oper_id from router where id = ?1) " +
-                                        "connect by prior to_id = from_id " +
-                                        "order by level")
+    @Query (name = "OperEdge.operList")
     List<OperEdge> findAllOpers (Long routerId);
 }

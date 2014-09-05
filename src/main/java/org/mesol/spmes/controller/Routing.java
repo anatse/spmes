@@ -43,4 +43,11 @@ public class Routing
     public List<OperEdge> findAllOperations (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
         return routingRepo.findAllOpers(routerId);
     }
+    
+    @RequestMapping(value = "oper", method = RequestMethod.PUT)
+    public List<OperEdge> addOperation (
+        @RequestParam(value = "oper")OperEdge oper
+    ) {
+        return null;
+    }
 }

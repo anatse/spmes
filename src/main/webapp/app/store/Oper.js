@@ -1,5 +1,5 @@
 /* 
- * Copyright 2014 ASementsov.
+ * Copyright 2014 Mes Solutions.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Ext.define('NeoMes.view.ContentPanel', {
-    extend: 'Ext.panel.Panel',
-    requires: [
-        'Ext.grid.Panel'
-    ],
-    xtype: 'contentPanel',
-    title: '',
-    autoScroll: true
+Ext.define('NeoMes.store.Oper', {
+    extend: 'Ext.data.Store',
+    autoLoad: true,
+    autoSync: true,
+    model: 'NeoMes.model.Oper',
+    proxy: {
+        type: 'rest',
+        headers: NeoMes.utils.CommonUtils.buildCSRFHeader (),
+        url: 'router/oper.json',
+        reader: {
+            type: 'json',
+            rootProperty: 'operEdgeList'
+        },
+        writer: {
+            type: 'json'
+        }
+    }
 });
 
