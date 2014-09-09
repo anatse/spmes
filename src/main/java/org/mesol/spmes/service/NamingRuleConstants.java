@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.repo;
 
-import java.util.List;
-import org.mesol.spmes.model.graph.OperEdge;
-import org.mesol.spmes.model.graph.Router;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+package org.mesol.spmes.service;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface RoutingRepo extends CrudRepository<Router, Long>
+public interface NamingRuleConstants 
 {
-    @Query (name = "OperEdge.operList")
-    List<OperEdge> findAllRouterOpers (Long routerId);
+    String ATTRIBUTES = "attributes";
+    String OWNER = "owner";
+    String NAME = "name";
+    String VALUE = "attrValue";
+    String ID = "id"; 
 }

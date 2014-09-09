@@ -19,13 +19,17 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
-import java.util.Collection;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.EmbeddableType;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Type;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -48,16 +52,15 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author ASementsov
  */
 @Service
-@Transactional
 public class Import extends DefaultHandler implements ApplicationContextAware
 {
     private static final Logger     logger = Logger.getLogger(Import.class);
 
     private static final class Container {
-        private AbstractEntity              entity;
+        private Object                      entity;
         private final List<Container>       children = new ArrayList<>();
 
-        public Container(AbstractEntity entity) {
+        public Container(Object entity) {
             this.entity = entity;
         }
     }
@@ -68,6 +71,8 @@ public class Import extends DefaultHandler implements ApplicationContextAware
     private ApplicationContext          appContext;
     private final Stack<Container>      stack = new Stack<>();
     private final List<Container>       objects = new ArrayList<>();
+    private Set<EntityType<?>>          types;
+    private Set<EmbeddableType<?>>      embeddables;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -85,19 +90,26 @@ public class Import extends DefaultHandler implements ApplicationContextAware
         });
 
         BeanWrapper bwT = getWrapper(cont.entity);
-        AbstractEntity ent = entityManager.merge(cont.entity);
-        BeanWrapper bwF = getWrapper(ent);
-        bwT.setPropertyValue("id", bwF.getPropertyValue("id"));
+        
+        if (cont.entity instanceof AbstractEntity) {
+            AbstractEntity ent = entityManager.merge((AbstractEntity)cont.entity);
+            BeanWrapper bwF = getWrapper(ent);
+            bwT.setPropertyValue("id", bwF.getPropertyValue("id"));
+        }
     }
-    
+
     private void saveObjects () {
         objects.stream().forEach((obj) -> {
             saveObject (obj);
         });
     }
     
+    @Transactional
     public void parse (final InputStream xml) {
 		try {
+            types = entityManager.getMetamodel().getEntities();
+            embeddables = entityManager.getMetamodel().getEmbeddables();
+
      		final SAXParserFactory spf = SAXParserFactory.newInstance();
 			final SAXParser sp = spf.newSAXParser();
             sp.parse(xml, this);
@@ -123,13 +135,29 @@ public class Import extends DefaultHandler implements ApplicationContextAware
         if ("data".equals(qName))
             return;
 
+        if (qName.equals("EquipmentAttribute"))
+            logger.info(qName);
+        
+        Type<?> foundObj = null;
+
         // Find enity class
-        final Set<EntityType<?>> types = entityManager.getMetamodel().getEntities();
-        final EntityType<?> et = types.stream().filter(w -> (w.getName() == null ? qName == null : w.getName().equals(qName))).findFirst().get();
-        if (et != null) {
+        final Stream<EntityType<?>> found = types.stream().filter(w -> (qName.equals(w.getName())));
+        Optional optData = found.findFirst();
+        if (!optData.isPresent()) {
+            // Try to find in embeddables
+            final Stream<EmbeddableType<?>> embFound = embeddables.stream().filter(w -> (qName.equals(w.getJavaType().getSimpleName())));
+            optData = embFound.findFirst();
+            if (optData.isPresent())
+                foundObj = (Type<?>)optData.get();
+        }
+        else {
+            foundObj = (Type<?>)optData.get();
+        }
+
+        if (foundObj != null) {
             try {
-                Class<?> cl = et.getJavaType();
-                AbstractEntity obj = (AbstractEntity)cl.newInstance();
+                Class<?> cl = foundObj.getJavaType();
+                Object obj = cl.newInstance();
                 Container cont = new Container(obj);
 
                 BeanWrapper bw = getWrapper (obj);

@@ -15,15 +15,23 @@
  */
 package org.mesol.spmes.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.beans.PropertyEditorSupport;
+import java.io.IOException;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.repo.RoutingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -41,13 +49,38 @@ public class Routing
     
     @RequestMapping(value = "oper", method = RequestMethod.GET)
     public List<OperEdge> findAllOperations (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
-        return routingRepo.findAllOpers(routerId);
+        return routingRepo.findAllRouterOpers(routerId);
     }
     
-    @RequestMapping(value = "oper", method = RequestMethod.PUT)
+    @RequestMapping(value = "oper", method = RequestMethod.POST)
+    @ResponseBody
     public List<OperEdge> addOperation (
-        @RequestParam(value = "oper")OperEdge oper
+        @RequestBody OperEdge oper
     ) {
+        
+
         return null;
+    }
+    
+    
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(OperEdge.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                ObjectMapper mapper = new ObjectMapper();
+                OperEdge value = null;
+
+                try {
+                    value = mapper.readValue(text, OperEdge.class);
+                } 
+                catch (IOException ex) {
+                    if (logger.isDebugEnabled())
+                        logger.debug(ex, ex);
+                }
+
+                setValue(value);
+            }
+        });
     }
 }

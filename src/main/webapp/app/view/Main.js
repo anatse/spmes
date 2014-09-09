@@ -27,16 +27,6 @@ Ext.define('NeoMes.view.Main', {
             xtype: 'contentPanel'
         }];
     
-        var store = Ext.create ('NeoMes.store.Oper');
-        store.load ();
-        store.load({
-            success: function(store) {
-                
-            }
-        });
-
-        store.insert(0, new NeoMes.store.Oper());
-        store.save();
         this.callParent();
     }
 });

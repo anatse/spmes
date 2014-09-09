@@ -17,8 +17,10 @@ package org.mesol.spmes.model.factory;
 
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -57,6 +59,12 @@ public class Equipment extends AbstractEntity implements Serializable
     @ManyToOne
     @JoinColumn(name="PARENT_ID", foreignKey = @ForeignKey(name = "FK_EQ_PARENT", value = ConstraintMode.CONSTRAINT))
     private Equipment               parentEquipment;
+    @ElementCollection
+    @CollectionTable (
+        name = "EQA",
+        joinColumns = @JoinColumn(name = "EQ_ID")
+    )
+    private Set<EquipmentAttribute> attributes;
 
     public Long getId() {
         return id;
@@ -96,5 +104,13 @@ public class Equipment extends AbstractEntity implements Serializable
 
     public void setParentEquipment(Equipment parentEquipment) {
         this.parentEquipment = parentEquipment;
+    }
+
+    public Set<EquipmentAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<EquipmentAttribute> attributes) {
+        this.attributes = attributes;
     }
 }
