@@ -16,6 +16,10 @@
 package org.mesol.spmes;
 
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.mail.NoSuchProviderException;
 import javax.transaction.Transactional;
 import org.junit.Test;
@@ -25,7 +29,9 @@ import org.mesol.spmes.config.RootConfiguration;
 import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
 import org.mesol.spmes.model.factory.Equipment;
+import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.repo.EquipmentRepo;
+import org.mesol.spmes.service.EquipmentService;
 import org.mesol.spmes.service.Import;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -60,20 +66,53 @@ public class EquipmentTest {
 	}
 
     @Autowired
-    private EquipmentRepo   eqRepo;
+    private EquipmentRepo       eqRepo;
     
     @Autowired
-    private Import          imp;
+    private EquipmentService    eqService;
+    
+    @Autowired
+    private Import              imp;
+
+    private Map<String, Object> testEquipmentFilter () {
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("description", "Wor%Center");
+        return ret;
+    }
+
+    private List<EquipmentAttribute> testEqAttrFilter () {
+        List<EquipmentAttribute> ret = new ArrayList<>();
+        EquipmentAttribute attr = new EquipmentAttribute();
+        attr.setName("capability");
+        attr.setAttrValue("120");
+        ret.add(attr);
+        return ret;
+    }
 
     @Test
     @Transactional
-    public void test() throws GeneralSecurityException, NoSuchProviderException {
+    public void testFM() throws GeneralSecurityException, NoSuchProviderException {
+        System.out.println ("Import sample data");
+        
         imp.parse(getClass().getClassLoader().getResourceAsStream("imp/equipment.xml"));
 
+        System.out.println ("Check sample data");
+        
         Equipment site = eqRepo.findByName("2000");
         Assert.notNull(site, "site 2000 not found");
         Assert.notEmpty(site.getAttributes(), "Attributes not found in site 1000");
         Assert.notNull(site.getAttributes().iterator().next().getOwner(), "Owner of the first attribute site 2000 is empty");
+
+        System.out.println ("Test criteria API for factory model");
+
+        List<Equipment> eqs = eqService.findExtendedFilteredRange(
+            0,                          // first record
+            100,                        // last record
+            "name",                     // attribute for order
+            false,                      // descend order
+            testEquipmentFilter(),      // filter values
+            testEqAttrFilter()          // attributes to filter
+        );
     }
 }
 

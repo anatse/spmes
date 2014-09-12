@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.service;
+package org.mesol.spmes.model.abs;
 
 /**
  * 

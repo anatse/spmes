@@ -21,15 +21,19 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -38,24 +42,29 @@ import javax.persistence.metamodel.EntityType;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractAttribute;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
+import org.mesol.spmes.model.factory.EquipmentAttribute;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  * @param <T>
+ * @param <A>
  */
 public abstract class AbstractCriteriaService<T extends AbstractEntity, A extends AbstractAttribute>
 {
     protected static final Logger       logger = Logger.getLogger(AbstractCriteriaService.class);
     protected static final Pattern      OPERANDS_PATTERN = Pattern.compile("<|>|=");
 
-    private Class<T>                    entityClass;
+    private final Class<T>              entityClass;
+    private final Class<A>              attributesClass;
 
     protected abstract EntityManager getEntityManager();
     
-    protected AbstractCriteriaService (Class<T> entityClass) {
+    protected AbstractCriteriaService (Class<T> entityClass, Class<A> attributesClass) {
         this.entityClass = entityClass;
+        this.attributesClass = attributesClass;
     }
     
     /**
@@ -217,8 +226,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
                  */
                 if (column.indexOf('[') != -1) {
                     try {
-                        String attrName = column.substring(column.indexOf('[')+2, column.indexOf(']')-1);
-                        Class attributesClass = from.get (NamingRuleConstants.ATTRIBUTES).getJavaType();
+                        String attrName = column.substring(column.indexOf('[') + 2, column.indexOf(']') - 1);
                         if (AbstractAttribute.class.isAssignableFrom(attributesClass)) {
                             AbstractAttribute attr = (AbstractAttribute)attributesClass.newInstance();
                             attr.setName(attrName);
@@ -315,7 +323,6 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         /*
          * Get attributes class
          */
-        Class attributesClass = from.get (NamingRuleConstants.ATTRIBUTES).getJavaType();
         Subquery<A> subquery = cq.subquery(attributesClass);
         Root fromAttr = subquery.from(attributesClass);
 
@@ -345,5 +352,89 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         
         subquery.where(wherePredicates);
         preList.add(builder.in(from.get(NamingRuleConstants.ID)).value(subquery));
+    }
+    
+    /**
+     * Function find range of entities filtered with two dimensions: 
+     * <ul>
+     * <li>Simple filtration use embedded attributes
+     * <li>Extended filtration use values of external attributes
+     * </ul>
+     * For extended filtration it uses subquery, e.g. if it need to find all equipment
+     * with external attribute STATE=AVAILABLE and attribute PERFORMANCE_RATE=100 select 
+     * statement for Oracle will seems as follow
+     * <code>
+     * select *
+     * from eq 
+     * where eq_id in (
+     *              select e.id
+     *              from eq_attr a, eq e
+     *              where (
+     *                      (a.name = 'STATE' and value = 'AVAILABLE')
+     *                      or
+     *                      (a.name = 'PERFORMANCE_RATE' and value = 100)
+     *                     )
+     *                     and a.eq_id = e.id
+     *              group by e.id
+     *              having count(e.id) = 2)
+     * </code>
+     * @param first - first row number
+     * @param pageSize - page size
+     * @param sortField - field to sort with
+     * @param descend - filter direction
+     * @param filters - simple filters list
+     * @param attributesFilter - attributes metadata with names and values which will be used to make additional filter
+     * @return list of selected entities
+     */
+    public List<T> findExtendedFilteredRange (int first, int pageSize, 
+                                          String sortField, boolean descend, 
+                                          Map<String, Object> filters,
+                                          List<? extends AbstractAttribute> attributesFilter)
+    {
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<T> cq = builder.createQuery(entityClass);
+        Root<T> fromEntity = cq.from(entityClass);
+        cq.select(fromEntity);
+        
+        final List<Predicate> predicates = new ArrayList<>();
+        filters.forEach((String key, Object value) -> {
+            if (value instanceof String) {
+                if (((String)value).contains("%")) 
+                    predicates.add(builder.like(builder.lower(fromEntity.get (key)), ((String)value).toLowerCase()));
+                else
+                    predicates.add(builder.equal(builder.lower(fromEntity.get (key)), ((String)value).toLowerCase()));
+            }
+        });
+
+//        Expression<Collection<AbstractAttribute>> value = fromEntity.get(NamingRuleConstants.ATTRIBUTES);
+//        predicates.add(value.in(attributesFilter.get(0)));
+//        predicates.add (builder.isMember (attributesFilter.get(0), value));
+
+//        EntityType<T> Pet_ = fromEntity.getModel();
+        AbstractAttribute attr = attributesFilter.get(0);
+        Join ja = fromEntity.join(NamingRuleConstants.ATTRIBUTES);
+        predicates.add (ja.in(attributesFilter));
+
+        
+        /*
+         * Set where clause for query
+         */
+        cq.where(predicates.toArray(new Predicate[predicates.size()]));
+         
+        /*
+         * Set sorting clause
+         */
+        if (sortField != null && !sortField.isEmpty())
+            setOrderBy(cq, builder, fromEntity, sortField, descend);
+
+        Query q = getEntityManager().createQuery(cq);
+        q.setMaxResults(pageSize);
+        q.setFirstResult(first);
+
+        if (logger.isInfoEnabled())
+            logger.info (q.unwrap(org.hibernate.Query.class).getQueryString());
+
+        return q.getResultList();
     }
 }
