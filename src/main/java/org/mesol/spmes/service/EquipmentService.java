@@ -16,11 +16,16 @@
 
 package org.mesol.spmes.service;
 
+import java.util.Collections;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
+import org.mesol.spmes.repo.EquipmentRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,17 +36,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class EquipmentService extends AbstractCriteriaService<Equipment, EquipmentAttribute>
 {
-    private static final Logger     logger = Logger.getLogger(EquipmentService.class);
-
     @PersistenceContext
     private EntityManager           entityManager;
+    
+    @Autowired
+    private EquipmentRepo           equipmentRepo;
 
     public EquipmentService() {
-        super(Equipment.class, EquipmentAttribute.class);
+        super(Equipment.class);
+        if (logger.isDebugEnabled())
+            logger.debug("create EquipmentService object");
     }
 
     @Override
     protected EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public Equipment findByName (String name) {
+        return findSingleObject(new OrderField[0], new FilterValue(NamingRuleConstants.NAME, name));
+//        return equipmentRepo.findByName(name);
+    }
+
+    public List<Equipment> findRoot () {
+        return equipmentRepo.findRootElements();
+    }
+    
+    public List<Equipment> findByParent (Equipment parent) {
+        return findFiltered(new OrderField[0], new FilterValue(NamingRuleConstants.PARENT, parent));
     }
 }

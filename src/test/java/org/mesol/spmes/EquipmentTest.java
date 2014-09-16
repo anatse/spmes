@@ -31,6 +31,7 @@ import org.mesol.spmes.config.WebMvcSecurityConfig;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.repo.EquipmentRepo;
+import org.mesol.spmes.service.AbstractCriteriaService;
 import org.mesol.spmes.service.EquipmentService;
 import org.mesol.spmes.service.Import;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,21 +75,6 @@ public class EquipmentTest {
     @Autowired
     private Import              imp;
 
-    private Map<String, Object> testEquipmentFilter () {
-        Map<String, Object> ret = new HashMap<>();
-        ret.put("description", "Wor%Center");
-        return ret;
-    }
-
-    private List<EquipmentAttribute> testEqAttrFilter () {
-        List<EquipmentAttribute> ret = new ArrayList<>();
-        EquipmentAttribute attr = new EquipmentAttribute();
-        attr.setName("capability");
-        attr.setAttrValue("120");
-        ret.add(attr);
-        return ret;
-    }
-
     @Test
     @Transactional
     public void testFM() throws GeneralSecurityException, NoSuchProviderException {
@@ -105,14 +91,20 @@ public class EquipmentTest {
 
         System.out.println ("Test criteria API for factory model");
 
-        List<Equipment> eqs = eqService.findExtendedFilteredRange(
-            0,                          // first record
-            100,                        // last record
-            "name",                     // attribute for order
-            false,                      // descend order
-            testEquipmentFilter(),      // filter values
-            testEqAttrFilter()          // attributes to filter
+        List<Equipment> eqs = eqService.findFilteredRange(
+            // first record
+            0,
+            // last record
+            100,
+            // attribute for order
+            new AbstractCriteriaService.OrderField[] {
+                new AbstractCriteriaService.OrderField("name", false)
+            },
+            // filter values
+            new AbstractCriteriaService.FilterValue("description", "WorkCenter%")
         );
+
+        Assert.notEmpty(eqs, "Not found any equipment");
     }
 }
 

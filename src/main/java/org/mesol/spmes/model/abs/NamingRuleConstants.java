@@ -27,5 +27,6 @@ public interface NamingRuleConstants
     String OWNER = "owner";
     String NAME = "name";
     String VALUE = "attrValue";
-    String ID = "id"; 
+    String ID = "id";
+    String PARENT = "parent";
 }

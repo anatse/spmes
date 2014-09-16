@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.repo;
 
+import java.util.List;
 import org.mesol.spmes.model.factory.Equipment;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,7 +29,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface EquipmentRepo extends CrudRepository<Equipment, Long>
 {
     Equipment findByName (String equipmentName);
-
+    
     @Query("select e from Equipment e where e.parentEquipment is null")
-    Equipment findRootElements (String equipmentName);
+    List<Equipment> findRootElements ();
 }
