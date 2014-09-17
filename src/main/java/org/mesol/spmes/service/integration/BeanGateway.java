@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.repo;
+package org.mesol.spmes.service.integration;
 
-import java.util.List;
-import org.mesol.spmes.model.factory.Equipment;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.integration.annotation.Gateway;
 
 /**
- * Repository class for equipment
+ * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface EquipmentRepo extends CrudRepository<Equipment, Long>
+public interface BeanGateway 
 {
-    Equipment findByName (String equipmentName);
-    
-    @Query("select e from Equipment e where e.parentEquipment is null")
-    List<Equipment> findRootElements ();
+    @Gateway(requestChannel="orders")
+	public Object placeOrder(Object payload);
 }

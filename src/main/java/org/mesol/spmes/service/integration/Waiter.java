@@ -13,22 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.repo;
 
-import java.util.List;
+package org.mesol.spmes.service.integration;
+
+import org.apache.log4j.Logger;
 import org.mesol.spmes.model.factory.Equipment;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 /**
- * Repository class for equipment
+ * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface EquipmentRepo extends CrudRepository<Equipment, Long>
+public class Waiter 
 {
-    Equipment findByName (String equipmentName);
-    
-    @Query("select e from Equipment e where e.parentEquipment is null")
-    List<Equipment> findRootElements ();
+    private Equipment eq;
+    private static final Logger     logger = Logger.getLogger(Waiter.class);
+ 	public Waiter prepareDelivery(Equipment eq) {
+        if (logger.isInfoEnabled())
+            logger.info("Equipment: " + eq.getName());
+
+        this.eq = eq;
+		return this;
+	}
+
+    @Override
+    public String toString() {
+        return "Waiter{" + "eq=" + (eq != null ? eq.toString() : "null") + '}';
+    }
 }

@@ -7,10 +7,11 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.0.6.RELEASE</spring.version>
+        <spring.version>4.1.0.RELEASE</spring.version>
         <cglib.version>3.1</cglib.version>
         <springdata.version>3.0.1.RELEASE</springdata.version>
         <springsecurity.version>3.2.5.RELEASE</springsecurity.version>
+        <spring.integration>4.0.4.RELEASE</spring.integration>
         <slf4j.version>1.7.7</slf4j.version>
         <querydsl.version>3.4.2</querydsl.version>
     </properties>
@@ -60,6 +61,20 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <!--
+            Spring Integration
+        -->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-core</artifactId>
+            <version>${spring.integration}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-stream</artifactId>
+            <version>${spring.integration}</version>
+            <scope>compile</scope>
         </dependency>
         <!--
             Spring aspects
@@ -117,7 +132,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.6.2.RELEASE</version>
+            <version>1.7.0.RELEASE</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -174,12 +189,12 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.7</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.2</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>

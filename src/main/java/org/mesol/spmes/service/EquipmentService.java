@@ -16,24 +16,24 @@
 
 package org.mesol.spmes.service;
 
-import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.repo.EquipmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Service
+@Service(value = "eqService")
 public class EquipmentService extends AbstractCriteriaService<Equipment, EquipmentAttribute>
 {
     @PersistenceContext
@@ -54,8 +54,8 @@ public class EquipmentService extends AbstractCriteriaService<Equipment, Equipme
     }
 
     public Equipment findByName (String name) {
-        return findSingleObject(new OrderField[0], new FilterValue(NamingRuleConstants.NAME, name));
-//        return equipmentRepo.findByName(name);
+//        return findSingleObject(new OrderField[0], new FilterValue(NamingRuleConstants.NAME, name));
+        return equipmentRepo.findByName(name);
     }
 
     public List<Equipment> findRoot () {
