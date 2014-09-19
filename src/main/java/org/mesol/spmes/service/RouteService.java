@@ -15,11 +15,16 @@
  */
 package org.mesol.spmes.service;
 
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
-import org.hibernate.cfg.NotYetImplementedException;
+import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.Router;
+import org.mesol.spmes.model.graph.RouterStep;
+import org.mesol.spmes.repo.RoutingRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +41,46 @@ public class RouteService
 
     @PersistenceContext
     private EntityManager           em;
+    
+    @Autowired
+    private RoutingRepo             repo;
 
-    public Router findAllRouters () {
-        throw new NotYetImplementedException();
+    public Iterable<Router> findAllRouters () {
+        return repo.findAll();
     }
 
-    public Router findRouterByName () {
-        throw new NotYetImplementedException();
+    public Router findRouterByName (String routerName) {
+        return repo.findRouterByName(routerName);
+    }
+
+    public List<OperEdge> findAllOperation (Long routerId) {
+        return repo.findAllRouterOpers(routerId);
+    }
+
+    private OperEdge getNextOperation (RouterStep rs) {
+//        GroovyScriptEngine gs = new GroovyScriptEngine((ResourceConnector)null);
+//        gs.loadScriptByName(null);
+        return null;
+    }
+
+    public RouterStep getLastStep (Long routerId) {
+        RouterStep rs = null;
+        Router router = repo.findOne(routerId);
+        OperEdge oper = router.getFirstOper();
+        while (oper != null) {
+            
+            
+            Collection<OperEdge> opers = oper.getTo().getOut();
+            
+        }
+        
+        return rs;
+    }
+    
+    public OperEdge addOperation (OperEdge oper, RouterStep routerStep) {
+        
+        
+        
+        return null;
     }
 }

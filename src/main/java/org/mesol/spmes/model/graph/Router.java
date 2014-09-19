@@ -16,7 +16,7 @@
 package org.mesol.spmes.model.graph;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -28,6 +28,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.factory.Equipment;
@@ -55,6 +56,12 @@ public class Router extends AbstractEntity implements Serializable
     @OneToOne
     @JoinColumn (name = "OPER_ID", foreignKey = @ForeignKey(name = "FK_ROUTER_FOPER", value = ConstraintMode.CONSTRAINT))
     private OperEdge                firstOper;
+    
+    @Version
+    private Long                    version;
+    
+    @Column(length = 32, nullable = false)
+    private String                  name;
 
     public Long getId() {
         return id;
@@ -78,5 +85,21 @@ public class Router extends AbstractEntity implements Serializable
 
     public void setFirstOper(OperEdge firstOper) {
         this.firstOper = firstOper;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

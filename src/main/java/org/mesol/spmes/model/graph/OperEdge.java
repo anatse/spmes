@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.graph;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -65,6 +66,8 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @ManyToOne
     @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_OPER_TO", value = ConstraintMode.CONSTRAINT))
     private RouterStep              to;
+    @Column(length = 255)
+    private String                  rule;
 
     @Override
     public RouterStep getFrom() {
@@ -82,5 +85,13 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
 
     public void setTo(RouterStep to) {
         this.to = to;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 }

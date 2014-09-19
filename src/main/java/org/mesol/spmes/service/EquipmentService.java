@@ -24,9 +24,7 @@ import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.repo.EquipmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * 

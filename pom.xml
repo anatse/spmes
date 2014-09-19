@@ -198,6 +198,24 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <!--
+            Groovy script engine
+        -->
+<!--        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>2.3.6</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>2.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-jsr223</artifactId>
+            <version>2.3.6</version>
+        </dependency>
     </dependencies>
     <organization>
         <name>Mes Solutions</name>

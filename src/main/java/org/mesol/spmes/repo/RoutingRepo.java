@@ -20,7 +20,6 @@ import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.Router;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * 
@@ -31,4 +30,5 @@ public interface RoutingRepo extends CrudRepository<Router, Long>
 {
     @Query (name = "OperEdge.operList")
     List<OperEdge> findAllRouterOpers (Long routerId);
+    Router findRouterByName (String routerName);
 }
