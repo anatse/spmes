@@ -26,6 +26,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**
@@ -43,7 +44,7 @@ public abstract class Edge<T extends Vertex> extends AbstractEntity
     private static final Logger     logger = Logger.getLogger(Edge.class);
 
     @Id
-    @SequenceGenerator(initialValue = 1, name = "edgeId", sequenceName = "EDGE_SEQ")
+    @SequenceGenerator(initialValue = 1, name = "edgeId", sequenceName = "EDGE_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "edgeId")
     private Long                    id;
 

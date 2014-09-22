@@ -27,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 
 /**
  * 
@@ -40,7 +41,7 @@ public class RouterStep extends Vertex
     private static final Logger     logger = Logger.getLogger(RouterStep.class);
     
     @Id
-    @SequenceGenerator(initialValue = 1, name = "rsId", sequenceName = "RS_SEQ")
+    @SequenceGenerator(initialValue = 1, name = "rsId", sequenceName = "RS_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "rsId")
     private Long                    id;
     
@@ -52,6 +53,12 @@ public class RouterStep extends Vertex
     
     @Column(nullable = false, length = 32)
     private String                  name;
+
+    /**
+     * Groovy script to determine next operation (only for rule based operations)
+     */
+    @Column(length = 255)
+    private String                  rule;
 
     public Long getId() {
         return id;
@@ -85,5 +92,13 @@ public class RouterStep extends Vertex
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 }

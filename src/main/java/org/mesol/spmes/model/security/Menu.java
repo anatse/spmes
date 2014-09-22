@@ -31,6 +31,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**
@@ -45,7 +46,7 @@ public class Menu extends AbstractEntity implements Serializable
     private static final Logger     logger = Logger.getLogger(Menu.class);
 
     @Id
-    @SequenceGenerator(initialValue = 1, name = "menuId", sequenceName = "MENU_SEQ")
+    @SequenceGenerator(initialValue = 1, name = "menuId", sequenceName = "MENU_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "menuId")
     private Long id;
 

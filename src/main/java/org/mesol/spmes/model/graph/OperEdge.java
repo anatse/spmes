@@ -20,6 +20,8 @@ import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -66,8 +68,18 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @ManyToOne
     @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_OPER_TO", value = ConstraintMode.CONSTRAINT))
     private RouterStep              to;
-    @Column(length = 255)
-    private String                  rule;
+    /**
+     * Column contains value which can be used to check is this operation can be next
+     */
+    @Column(length = 255, name = "RULE_VAL")
+    private String                  ruleValue;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "OPER_TYPE")
+    private PerformanceType         performanceType;
+
+    public OperEdge() {
+        setType("Oper");
+    }
 
     @Override
     public RouterStep getFrom() {
@@ -87,11 +99,19 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
         this.to = to;
     }
 
-    public String getRule() {
-        return rule;
+    public String getRuleValue() {
+        return ruleValue;
     }
 
-    public void setRule(String rule) {
-        this.rule = rule;
+    public void setRuleValue(String ruleValue) {
+        this.ruleValue = ruleValue;
+    }
+
+    public PerformanceType getPerformanceType() {
+        return performanceType;
+    }
+
+    public void setPerformanceType(PerformanceType performanceType) {
+        this.performanceType = performanceType;
     }
 }

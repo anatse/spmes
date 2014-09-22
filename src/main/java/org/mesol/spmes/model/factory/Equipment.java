@@ -33,6 +33,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**
@@ -47,7 +48,7 @@ public class Equipment extends AbstractEntity implements Serializable
     private static final Logger     logger = Logger.getLogger(Equipment.class);
 
     @Id
-    @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ")
+    @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqId")
     private Long                    id;
     @Column(name = "NAME", length = 32, nullable = false)

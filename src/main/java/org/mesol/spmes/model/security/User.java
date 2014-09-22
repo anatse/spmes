@@ -39,6 +39,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,7 +56,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     private static final Logger     logger = Logger.getLogger(User.class);
 
     @Id
-    @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ")
+    @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
     private Long id;
     

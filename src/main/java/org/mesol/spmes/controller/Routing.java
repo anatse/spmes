@@ -20,11 +20,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.graph.PerformanceType;
+import org.mesol.spmes.model.graph.Router;
+import org.mesol.spmes.model.graph.RouterStep;
+import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
+import org.mesol.spmes.model.graph.exceptions.MultipleOperationsException;
+import org.mesol.spmes.model.graph.exceptions.NoRuleException;
+import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 import org.mesol.spmes.repo.RoutingRepo;
+import org.mesol.spmes.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,24 +55,53 @@ public class Routing
     private static final Logger     logger = Logger.getLogger(Routing.class);
     
     @Autowired
-    private RoutingRepo             routingRepo;
+    private RouteService            routeService;
     
     @RequestMapping(value = "oper", method = RequestMethod.GET)
     public List<OperEdge> findAllOperations (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
-        return routingRepo.findAllRouterOpers(routerId);
+        return routeService.findAllOperation(routerId);
     }
     
     @RequestMapping(value = "oper", method = RequestMethod.POST)
     @ResponseBody
-    public List<OperEdge> addOperation (
+    public OperEdge addOperation (
         @RequestBody OperEdge oper
     ) {
-        
+        try {
+            return routeService.addOperation(oper, null, null);
+        } 
+        catch (ManySequentalOperationException | NonParallelOperationException | NoRuleException ex) {
+            logger.error(ex, ex);
+        }
 
         return null;
     }
     
-    
+    @RequestMapping(value = "lastStep", method = RequestMethod.GET)
+    @Transactional
+    public RouterStep getlastStep (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
+        try {
+            //        Router rt = routeService.findRouter(routerId);
+            RouterStep rs = routeService.getLastStep(routerId);
+            RouterStep rsNew = new RouterStep();
+            rsNew.setName("seventhStep");
+
+//            rsNew = routeService.createRouterStep(rsNew);
+
+            OperEdge opNew = new OperEdge();
+            opNew.setName("newOper");
+            opNew.setPerformanceType(PerformanceType.SEQUENTIAL);
+            opNew.setWeight(100.0);
+            opNew = routeService.addOperation(opNew, rs, rsNew);
+            return routeService.getLastStep(routerId);
+        } 
+        catch (Exception ex) {
+            logger.error(ex, ex);
+        }
+
+        return null;
+    }
+        
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(OperEdge.class, new PropertyEditorSupport() {
