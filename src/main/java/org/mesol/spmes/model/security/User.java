@@ -196,4 +196,12 @@ public class User extends AbstractEntity implements Serializable, UserDetails
 
         groups.add(users);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

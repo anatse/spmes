@@ -15,22 +15,17 @@
  */
 package org.mesol.spmes.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.PerformanceType;
-import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterStep;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
-import org.mesol.spmes.model.graph.exceptions.MultipleOperationsException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
 import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
-import org.mesol.spmes.repo.RoutingRepo;
 import org.mesol.spmes.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

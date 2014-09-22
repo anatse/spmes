@@ -15,12 +15,15 @@
  */
 package org.mesol.spmes.model.abs;
 
-import java.sql.Timestamp;
+import org.joda.time.DateTime;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 
@@ -28,13 +31,16 @@ import org.springframework.data.annotation.LastModifiedDate;
  * @author ASementsov
  */
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity 
 {
     @CreatedDate
-    private Timestamp       createdDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime        createdDate;
 
     @LastModifiedDate
-    private Timestamp       modifiedDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime        modifiedDate;
 
     @CreatedBy
     private String          createdBy;
@@ -42,19 +48,19 @@ public abstract class AbstractEntity
     @LastModifiedBy
     private String          modifiedBy;
 
-    public Timestamp getCreatedDate() {
+    public DateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(DateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Timestamp getModifiedDate() {
+    public DateTime getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Timestamp modifiedDate) {
+    public void setModifiedDate(DateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
