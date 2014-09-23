@@ -49,7 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
- * 
+ * Class for testing router functionality
  * @version 1.0.0
  * @author ASementsov
  */
