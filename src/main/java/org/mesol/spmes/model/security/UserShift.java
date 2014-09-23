@@ -23,7 +23,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -36,13 +35,33 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Table (name = "USH")
 public class UserShift extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(UserShift.class);
     @Id
     @SequenceGenerator(initialValue = 1, name = "ushId", sequenceName = "USH_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "ushId")
     private Long            id;
-    
-    @Column(nullable = false, length = 32)
+
+    @Column(nullable = false, length = 32, unique = true)
     private String          name;
-    
+
+    @Column(name = "START_TIME")
+    private Integer         startTime;
+
+    @Column(name = "END_TIME")
+    private Integer         endTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
