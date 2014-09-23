@@ -16,11 +16,8 @@
 package org.mesol.spmes.service;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.script.Bindings;
@@ -189,7 +186,12 @@ public class RouteService
                     try {
                         Bindings bnd = engine.createBindings();
                         bnd.put("curStep", rs);
-                        CompiledScript script = compilingEngine.compile(rs.getRule());
+                        CompiledScript script = rs.getRuleScript();
+                        if (script == null) {
+                            script = compilingEngine.compile(rs.getRule());
+                            rs.setRuleScript(script);
+                        }
+
                         Object value = script.eval(bnd);
                         final Object ret = value == null ? "" : value.toString();
                         rs.getOut().stream().filter(w -> ret.equals(w.getRuleValue())).forEach((op) -> {
