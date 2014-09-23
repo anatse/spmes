@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.consts;
+package org.mesol.spmes.model.graph.attr;
+
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Parent;
+import org.mesol.spmes.model.abs.AbstractAttribute;
+import org.mesol.spmes.model.graph.Router;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface BasicConstants 
+@Embeddable
+public class RouterAttribute extends AbstractAttribute
 {
-    int SEQ_ALLOCATION_SIZE = 1;
-    String RULE_SCRIPT_ENGINE = "groovy";
+    @Parent
+    private Router           owner;
+
+    public Router getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Router owner) {
+        this.owner = owner;
+    }
 }

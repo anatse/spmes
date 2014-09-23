@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.consts;
+package org.mesol.spmes.model.graph.attr;
+
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Parent;
+import org.mesol.spmes.model.abs.AbstractAttribute;
+import org.mesol.spmes.model.graph.OperEdge;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface BasicConstants 
+@Embeddable
+public class OperAttribute extends AbstractAttribute
 {
-    int SEQ_ALLOCATION_SIZE = 1;
-    String RULE_SCRIPT_ENGINE = "groovy";
+    @Parent
+    private OperEdge           owner;
+
+    public OperEdge getOwner() {
+        return owner;
+    }
+
+    public void setOwner(OperEdge owner) {
+        this.owner = owner;
+    }
 }

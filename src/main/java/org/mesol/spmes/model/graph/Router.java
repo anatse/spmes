@@ -16,8 +16,11 @@
 package org.mesol.spmes.model.graph;
 
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -33,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.factory.Equipment;
+import org.mesol.spmes.model.graph.attr.RouterAttribute;
 
 /**
  * 
@@ -63,6 +67,13 @@ public class Router extends AbstractEntity implements Serializable
     
     @Column(length = 32, nullable = false)
     private String                  name;
+    
+    @ElementCollection
+    @CollectionTable (
+        name = "ROUTERA",
+        joinColumns = @JoinColumn(name = "ROUTER_ID")
+    )
+    private Set<RouterAttribute>      attributes;
 
     public Long getId() {
         return id;
@@ -102,5 +113,13 @@ public class Router extends AbstractEntity implements Serializable
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<RouterAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<RouterAttribute> attributes) {
+        this.attributes = attributes;
     }
 }

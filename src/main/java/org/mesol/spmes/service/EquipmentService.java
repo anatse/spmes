@@ -22,9 +22,11 @@ import javax.persistence.PersistenceContext;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
+import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.repo.EquipmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -62,5 +64,10 @@ public class EquipmentService extends AbstractCriteriaService<Equipment, Equipme
     
     public List<Equipment> findByParent (Equipment parent) {
         return findFiltered(new OrderField[0], new FilterValue(NamingRuleConstants.PARENT, parent));
+    }
+
+    @Transactional
+    public EquipmentClass saveEquipmentClass (EquipmentClass eqc) {
+        return getEntityManager().merge(eqc);
     }
 }

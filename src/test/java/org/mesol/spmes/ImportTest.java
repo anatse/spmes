@@ -18,6 +18,7 @@ package org.mesol.spmes;
 
 import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mesol.spmes.config.PersistenceJPAConfig;
@@ -64,6 +65,7 @@ public class ImportTest
     private Import      imp;
     
     @Test
+    @Ignore
     public void impTest () {
         imp.parse(getClass().getClassLoader().getResourceAsStream("imp/router.xml"));
     }

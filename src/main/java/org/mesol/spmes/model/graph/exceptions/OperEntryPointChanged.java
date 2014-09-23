@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.consts;
+package org.mesol.spmes.model.graph.exceptions;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public interface BasicConstants 
+public class OperEntryPointChanged  extends Exception
 {
-    int SEQ_ALLOCATION_SIZE = 1;
-    String RULE_SCRIPT_ENGINE = "groovy";
+    public OperEntryPointChanged() {
+    }
+
+    public OperEntryPointChanged(String message) {
+        super(message);
+    }
 }

@@ -17,6 +17,7 @@ package org.mesol.spmes.model.graph;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -38,11 +38,9 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "EDG")
-@DiscriminatorColumn(name = "TYPE")
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Edge<T extends Vertex> extends AbstractEntity
 {
-    private static final Logger     logger = Logger.getLogger(Edge.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "edgeId", sequenceName = "EDGE_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "edgeId")

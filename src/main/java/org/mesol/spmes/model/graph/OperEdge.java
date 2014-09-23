@@ -15,10 +15,15 @@
  */
 package org.mesol.spmes.model.graph;
 
+import org.mesol.spmes.model.graph.attr.OperAttribute;
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,6 +32,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.model.factory.EquipmentClass;
 
 /**
  * Class describes operation edge
@@ -65,7 +71,7 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @ManyToOne
     @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_OPER_FROM", value = ConstraintMode.CONSTRAINT))
     private RouterStep              from;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_OPER_TO", value = ConstraintMode.CONSTRAINT))
     private RouterStep              to;
     /**
@@ -76,6 +82,17 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "OPER_TYPE")
     private PerformanceType         performanceType;
+    
+    @ElementCollection
+    @CollectionTable (
+        name = "OPEDGA",
+        joinColumns = @JoinColumn(name = "OPER_ID")
+    )
+    private Set<OperAttribute>      attributes;
+
+    @ManyToOne
+    @JoinColumn(name = "EQC_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPEREDGE_EQC", value = ConstraintMode.CONSTRAINT))
+    private EquipmentClass          equipmentClass;
 
     public OperEdge() {
         setType("Oper");
@@ -93,10 +110,12 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
 
     public void setFrom(RouterStep from) {
         this.from = from;
+        from.addOut(this);
     }
 
     public void setTo(RouterStep to) {
         this.to = to;
+        to.addIn(this);
     }
 
     public String getRuleValue() {
@@ -113,5 +132,21 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
 
     public void setPerformanceType(PerformanceType performanceType) {
         this.performanceType = performanceType;
+    }
+
+    public Set<OperAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<OperAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public EquipmentClass getEquipmentClass() {
+        return equipmentClass;
+    }
+
+    public void setEquipmentClass(EquipmentClass equipmentClass) {
+        this.equipmentClass = equipmentClass;
     }
 }

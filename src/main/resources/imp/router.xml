@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <data>
-    <Router name="">
+    <Router name="RT-1">
         <Equipment link="owner" name="WC-1" description="WorkCenter 1">
             <Equipment link="parentEquipment" name="1000" description="Site 1000">
             </Equipment>

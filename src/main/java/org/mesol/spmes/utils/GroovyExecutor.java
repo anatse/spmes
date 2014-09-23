@@ -32,4 +32,19 @@ public class GroovyExecutor extends FutureTask<Object>
     public GroovyExecutor(Callable<Object> callable) {
         super(callable);
     }
+    
+    
+//        ScriptEngineManager factory = new ScriptEngineManager();
+////        List<ScriptEngineFactory> engines = factory.getEngineFactories();
+////        for (ScriptEngineFactory f : engines) {
+////            System.out.println (f.getEngineName());
+////        }
+//        
+//        ScriptEngine engine = factory.getEngineByName("groovy");
+//        String fact = "def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }";
+//        engine.eval(fact);
+//        Invocable inv = (Invocable) engine;
+//        Object[] params = { new Integer(5) };
+//        Object result = inv.invokeFunction("factorial", params);
+//        System.out.println(result);
 }

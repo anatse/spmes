@@ -18,12 +18,14 @@ package org.mesol.spmes.service;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -130,6 +132,24 @@ public class Import extends DefaultHandler implements ApplicationContextAware
         }
     }
 
+    private void setParent (BeanWrapper bw, Object parent) {
+        Class<?> cl = parent.getClass();
+        for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
+            if (pd.getPropertyType().equals(cl)) {
+                if (bw.isWritableProperty(pd.getName())) {
+                    try {
+                        bw.setPropertyValue(pd.getName(), parent);
+                    }
+                    catch (BeansException ex) {
+                        logger.error(ex, ex);
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if ("data".equals(qName))
@@ -172,6 +192,11 @@ public class Import extends DefaultHandler implements ApplicationContextAware
                     parentCont.children.add(cont);
 
                     BeanWrapper parent = getWrapper (parentCont.entity);
+                    // Check link from child to parent
+                    boolean isp = Boolean.valueOf(attributes.getValue("parent"));
+                    if (isp)
+                        setParent (bw, parentCont.entity);
+                    
                     PropertyDescriptor pd = parent.getPropertyDescriptor(linkName);
                     if (Collection.class.isAssignableFrom(pd.getPropertyType())) {
                         Collection children = (Collection)parent.getPropertyValue(linkName);
