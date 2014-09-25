@@ -19,9 +19,12 @@ package org.mesol.spmes.config;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.security.DBAuthProvider;
 import org.mesol.spmes.model.security.DBUserDetailsManager;
+import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -37,15 +40,13 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
+@EnableScheduling
 public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired(required = true)
     private DBUserDetailsManager        userDetailsManager;
 
-    private static final Logger     logger = Logger.getLogger(WebMvcSecurityConfig.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
+    private static final Logger         logger = Logger.getLogger(WebMvcSecurityConfig.class);
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -55,8 +56,15 @@ public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Bean
+    @Order(2)
     public DBUserDetailsManager userDetailsManager () {
         return new DBUserDetailsManager();
+    }
+    
+    @Bean
+    @Order(1)
+    public UserService userService () {
+        return new UserService();
     }
     
     @Override

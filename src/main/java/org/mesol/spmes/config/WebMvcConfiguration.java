@@ -55,7 +55,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.ENABLED)
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter
 {
-   @Override
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/app/**").addResourceLocations("/app/").setCachePeriod(31556926);

@@ -17,6 +17,7 @@ package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -78,5 +79,32 @@ public class UserGroup extends AbstractEntity implements Serializable, GrantedAu
             return Collections.EMPTY_SET;
 
         return Collections.unmodifiableSet(users);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserGroup other = (UserGroup) obj;
+        return Objects.equals(this.name, other.name);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

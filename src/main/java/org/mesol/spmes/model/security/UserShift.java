@@ -16,6 +16,8 @@
 package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**
+ * Class contains user shift definition. All time data defined in minutes
  * 
  * @version 1.0.0
  * @author ASementsov
@@ -63,5 +66,31 @@ public class UserShift extends AbstractEntity implements Serializable
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Integer startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
+    }
+
+    public static int convertTime (int hour, int minutes, int seconds) {
+        return hour * 3600 + minutes * 60 + seconds;
+    }
+
+    public static int convertTime (Date time) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        return convertTime(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
     }
 }

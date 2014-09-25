@@ -17,6 +17,7 @@ package org.mesol.spmes.model.security;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
@@ -37,4 +38,44 @@ public class WorkDay implements Serializable
     @ManyToOne
     @JoinColumn(name = "USH_ID", foreignKey = @ForeignKey(name = "FK_WD_USH", value = ConstraintMode.CONSTRAINT))
     private UserShift   shift;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public UserShift getShift() {
+        return shift;
+    }
+
+    public void setShift(UserShift shift) {
+        this.shift = shift;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.date);
+        hash = 79 * hash + Objects.hashCode(this.shift);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WorkDay other = (WorkDay) obj;
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+
+        return Objects.equals(this.shift, other.shift);
+    }
 }

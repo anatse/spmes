@@ -33,4 +33,20 @@ public class WorkCalendar extends AbstractEntity implements Serializable
     @EmbeddedId
     private WorkDay     workDay;
     private String      comments;
+
+    public WorkDay getWorkDay() {
+        return workDay;
+    }
+
+    public void setWorkDay(WorkDay workDay) {
+        this.workDay = workDay;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 }
