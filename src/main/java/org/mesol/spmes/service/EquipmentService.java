@@ -19,6 +19,7 @@ package org.mesol.spmes.service;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import static org.hibernate.criterion.Restrictions.*;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
@@ -54,7 +55,6 @@ public class EquipmentService extends AbstractCriteriaService<Equipment, Equipme
     }
 
     public Equipment findByName (String name) {
-//        return findSingleObject(new OrderField[0], new FilterValue(NamingRuleConstants.NAME, name));
         return equipmentRepo.findByName(name);
     }
 
@@ -63,7 +63,9 @@ public class EquipmentService extends AbstractCriteriaService<Equipment, Equipme
     }
     
     public List<Equipment> findByParent (Equipment parent) {
-        return findFiltered(new OrderField[0], new FilterValue(NamingRuleConstants.PARENT, parent));
+        return getHibernateSession().createCriteria(Equipment.class).add (
+            eq(NamingRuleConstants.PARENT, parent)
+        ).list();
     }
 
     @Transactional

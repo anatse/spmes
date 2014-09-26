@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.factory;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
@@ -28,6 +29,7 @@ import org.mesol.spmes.model.abs.AbstractAttribute;
 public class EquipmentAttribute extends AbstractAttribute
 {
     @Parent
+    @Column(name = "EQ_ID")
     private Equipment           owner;
 
     public Equipment getOwner() {

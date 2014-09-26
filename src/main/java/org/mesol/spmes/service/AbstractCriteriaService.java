@@ -15,25 +15,31 @@
  */
 package org.mesol.spmes.service;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.mesol.spmes.model.abs.AbstractAttribute;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
+import static org.hibernate.criterion.Restrictions.*;
+import org.hibernate.criterion.Subqueries;
 
 /**
  * 
@@ -49,230 +55,13 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
     protected static final String       LIKE_PATTERN = ".*[\\%|\\_|\\?]+.*";
 
     private final Class<T>              entityClass;
+//    private final Class<A>              attributeClass;
 
     protected abstract EntityManager getEntityManager();
     
     protected AbstractCriteriaService (Class<T> entityClass) {
         this.entityClass = entityClass;
-    }
-
-    protected Number toNumber (String value) {
-        Number numVar = null;
-
-        try {
-            String vs = ((String)value).replaceAll(OPERANDS_PATTERN.pattern(), "");
-            if (!vs.isEmpty())
-                numVar = NumberFormat.getNumberInstance().parse(vs);
-        } 
-        catch (ParseException ex) {
-            logger.error(ex, ex);
-        }
-
-        return numVar;
-    }
-    
-    protected Date toDate (String value) {
-        Date dateVar = null;
-
-        try {
-            String vs = ((String)value).replaceAll(OPERANDS_PATTERN.pattern(), "");
-            if (!vs.isEmpty())
-                dateVar = DateFormat.getDateTimeInstance().parse(vs);
-        } 
-        catch (ParseException ex) {
-            logger.error(ex, ex);
-        }
-
-        return dateVar;
-    }
-
-    protected Predicate buildNumberPredicate (
-        final CriteriaBuilder builder,
-        final Path fieldPath,
-        Object value
-    ) {
-        Predicate pd = null;
-        if (value instanceof String) {
-            Number numVar = toNumber ((String)value);
-            if (numVar == null)
-                return null;
-
-            Matcher matcher = OPERANDS_PATTERN.matcher((String)value);
-            if (matcher.find()) {
-                switch (matcher.group().charAt(0)) {
-                    case '<':
-                        pd = builder.le(fieldPath, numVar);
-                        break;
-
-                    case '>':
-                        pd = builder.ge(fieldPath, numVar);
-                        break;
-
-                    case '=':
-                        pd = builder.equal(fieldPath, numVar);
-                        break;
-                }
-            }
-            else {
-                pd = builder.equal(fieldPath, numVar);
-            }
-        }
-        else if (value instanceof Number) {
-            pd = builder.equal(fieldPath, (Number)value);
-        }
-
-        return pd;
-    }
-
-    protected Predicate buildDatePredicate(
-        final CriteriaBuilder builder, 
-        final Path fieldPath, 
-        final Object value
-    ) {
-        Predicate pd = null;
-        if (value instanceof String) {
-            Date dateVar = toDate((String)value);
-            Matcher matcher = OPERANDS_PATTERN.matcher((String)value);
-            if (matcher.find()) {
-                switch (matcher.group().charAt(0)) {
-                    case '<':
-                        pd = builder.lessThan(fieldPath, dateVar);
-                        break;
-
-                    case '>':
-                        pd = builder.greaterThan(fieldPath, dateVar);
-                        break;
-
-                    case '=':
-                        pd = builder.equal(fieldPath, dateVar);
-                        break;
-                }
-            }
-            else {
-                pd = builder.equal(fieldPath, dateVar);
-            }
-        }
-        else if (value instanceof Date) {
-            pd = builder.equal(fieldPath, (Date)value);
-        }
-
-        return pd;
-    }
-
-    protected Predicate buildColumnPredicate (
-        final CriteriaBuilder builder,
-        final Root<T> root,
-        final String field,
-        final Object value) {
-        Predicate pd = null;
-        final Path fieldPath = root.get(field);
-        final Class<?> fieldClass = fieldPath.getJavaType();
-
-        if (value == null) {
-            pd = builder.isNull (root.get(field));
-        }
-        else if (String.class.isAssignableFrom(fieldClass)) {
-            if (((String)value).matches(LIKE_PATTERN)) {
-                pd = builder.like(builder.lower(root.get(field)), value.toString().toLowerCase());
-            }
-            else {
-                pd = builder.equal(builder.lower(root.get(field)), value.toString().toLowerCase());
-            }
-        }
-        else if (Number.class.isAssignableFrom(fieldClass)) {
-            pd = buildNumberPredicate(builder, fieldPath, value);
-        }
-        else if (value instanceof Date) {
-            pd = buildDatePredicate(builder, fieldPath, value);
-        }
-
-        return pd;
-    }
-    
-    protected List<Predicate> buildFilters (
-        CriteriaBuilder builder,
-        Root<T> root,
-        FilterValue ... filters
-    ) {
-        List<Predicate> predicates = new ArrayList<>();
-        for (FilterValue fv : filters) {
-            final Predicate pd;
-            if (fv.value == null) {
-                pd = builder.isNull (root.get(fv.field));
-            }
-            else {
-                pd = buildColumnPredicate(builder, root, fv.field, fv.value);
-            }
-
-            if (pd != null)
-                predicates.add(pd);
-        }
-        return predicates;
-    }
-    
-    protected CriteriaQuery<T> buildQuery (
-        OrderField[] orderFields,
-        FilterValue ... filters
-    ) {
-        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<T> cq = builder.createQuery(entityClass);
-        Root<T> root = cq.from(entityClass);
-        cq.select(root);
-
-        if (filters.length != 0) {
-            List<Predicate> predicates = buildFilters(builder, root, filters);
-            cq.where(predicates.toArray(new Predicate[predicates.size()]));
-        }
-
-        if (orderFields.length > 0) {
-            List<Order> orders = new ArrayList<>();
-            for (OrderField orderField : orderFields) {
-                orders.add(orderField.desc ? builder.desc(root.get(orderField.field)) : builder.asc(root.get(orderField.field)));
-            }
-
-            cq.orderBy (orders);
-        }
-
-        return cq;
-    }
-    
-    public List<T> findFilteredRange (
-        int first,
-        int pageSize,
-        OrderField[] orderFields,
-        FilterValue ... filters
-    ) {
-        CriteriaQuery<T> cq = buildQuery(orderFields, filters);
-        TypedQuery<T> q = getEntityManager().createQuery(cq);
-
-        System.out.println (q.unwrap(org.hibernate.Query.class).getQueryString());
-
-        q.setMaxResults(pageSize);
-        q.setFirstResult(first);
-        return q.getResultList();
-    }
-    
-    public List<T> findFiltered (
-        OrderField[] orderFields,
-        FilterValue ... filters
-    ) {
-        CriteriaQuery<T> cq = buildQuery(orderFields, filters);
-        TypedQuery<T> q = getEntityManager().createQuery(cq);
-        return q.getResultList();
-    }
-
-    public T findSingleObject (
-        OrderField[] orderFields,
-        FilterValue ... filters
-    ) {
-        CriteriaQuery<T> cq = buildQuery(orderFields, filters);
-        TypedQuery<T> q = getEntityManager().createQuery(cq);
-        return q.getSingleResult();
-    }
-
-    public T find(Object id)
-    {
-        return getEntityManager().find(entityClass, id);
+//        attributeClass = getAttributeClass();
     }
 
     public List<T> findAll()
@@ -282,23 +71,79 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         return getEntityManager().createQuery(cq).getResultList();
     }
 
-    public static final class OrderField  {
-        public final String         field;
-        public final boolean        desc;
-
-        public OrderField(String field, boolean desc) {
-            this.field = field;
-            this.desc = desc;
-        }
+    /**
+     * Function find objects using all given object as template. I.e. all filled fields in this object
+     * used to build where clause. 
+     * 
+     * @param template
+     * @return 
+     */
+    public List<T> findByTemplate (T template) {
+        Example example = Example.create(template).ignoreCase().enableLike(MatchMode.ANYWHERE);
+        return getHibernateSession().createCriteria(entityClass).add (example).list();
     }
 
-    public static final class FilterValue {
-        public final String         field;
-        public final Object         value;
+    public Session getHibernateSession () {
+        return getEntityManager().unwrap(Session.class);
+    }
 
-        public FilterValue(String field, Object value) {
-            this.field = field;
-            this.value = value;
+    private Class<A> getAttributeClass () {
+        Class<A> type = null;
+
+        try {
+            Field field = entityClass.getDeclaredField(NamingRuleConstants.ATTRIBUTES);
+            if (!field.isAccessible())
+                field.setAccessible(true);
+
+            if (Collection.class.isAssignableFrom(field.getType())) {
+                Type genericFieldType = field.getGenericType();
+                if(genericFieldType instanceof ParameterizedType){
+                    ParameterizedType aType = (ParameterizedType) genericFieldType;
+                    Type[] fieldArgTypes = aType.getActualTypeArguments();
+                    for (Type fieldArgType : fieldArgTypes){
+                        type = (Class) fieldArgType;
+                        break;
+                    }
+                }
+            }
         }
+        catch (NoSuchFieldException | SecurityException ex) {
+            logger.error(ex, ex);
+        }
+        
+        return type;
+    }
+    
+    public List<T> findByAttribute (AbstractAttribute attr) {
+        return getHibernateSession().createCriteria(entityClass)
+            .createAlias(NamingRuleConstants.ATTRIBUTES, "attr")
+            .add (
+                and()
+                .add(eq("attr." + NamingRuleConstants.NAME, attr.getName()))
+                .add(eq("attr." + NamingRuleConstants.VALUE, attr.getAttrValue()))
+            ).list();
+    }
+
+    public List<T> findByAttributes (List<A> attrs, boolean all) {
+//        Criteria criteria = getHibernateSession().createCriteria(entityClass);
+//        criteria = criteria.createAlias(NamingRuleConstants.ATTRIBUTES, "attr");
+
+//        "from Equipment eq join eq.attributes as attrs where (attrs.name, attrs.attrValue) = all (select attr.name, attr.attrValue from eq.attributes attr where attr.name = 'testAttr')"
+        Query query = getHibernateSession().createQuery(
+            "from Equipment eq where eq.attributes.name = all (select attr.name from eq.attributes attr where attr.name = 'testAttr')"
+        );
+        
+        return query.list();
+        
+//        DetachedCriteria attrSubcri = DetachedCriteria.forClass(attributeClass, "attr");
+        
+//        attrSubcri.createAlias("attr." + NamingRuleConstants.OWNER, "owner");
+//        attrSubcri.add(
+//            eq("attr." + NamingRuleConstants.NAME, )
+//        );
+//        attrSubcri.setProjection(Projections.id());
+
+//        criteria.add(Subqueries.eqAll(attrs, attrSubcri));
+//        return criteria.list();
     }
 }

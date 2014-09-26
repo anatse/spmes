@@ -39,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service
-@Transactional
 public class UserService 
 {
     private static final Logger     logger = Logger.getLogger(UserService.class);
@@ -60,34 +59,23 @@ public class UserService
         return cal;
     }
 
-    private UserShift getCurrentShift (Date curDate) {
+    @Transactional
+    public UserShift getCurrentShift (Date curDate, User user) {
         TypedQuery<UserShift> shiftQuery = em.createQuery("select u from UserShift u where :curTime between u.startTime and u.endTime", UserShift.class);
         shiftQuery.setParameter("curTime", UserShift.convertTime(curDate));
         List<UserShift> res = shiftQuery.getResultList();
-        return res.isEmpty() ? null : res.iterator().next();
-    }
+        UserShift us = res.isEmpty() ? null : res.iterator().next();
+        if (us == null)
+            return null;
 
-    private List<UserShift> getAlLShifts () {
-        TypedQuery<UserShift> shiftQuery = em.createQuery("select u from UserShift u", UserShift.class);
-        return shiftQuery.getResultList();
-    }
-
-    public User findByName(String username) {
-        User usr = repo.findByName(username);
+        // Check is user has admin role
         UserGroup ug = new UserGroup();
         ug.setName(ADMIN_GROUP);
-        if (!usr.getAuthorities().contains(ug)) {
-            Date curDate = new Date();
-
-            // Get current shift
-            UserShift us = getCurrentShift(curDate);
-            // Shift not found, user cannot login
-            if (us == null)
-                return null;
-
+        if (!user.getAuthorities().contains(ug)) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(curDate);
             trunc (cal);
+
             WorkDay wd = new WorkDay();
             wd.setDate(cal.getTime());
             wd.setShift(us);
@@ -100,13 +88,30 @@ public class UserService
                 return null;
         }
 
+        return us;
+    }
+
+    @Transactional
+    public List<UserShift> getAlLShifts () {
+        TypedQuery<UserShift> shiftQuery = em.createQuery("select u from UserShift u", UserShift.class);
+        return shiftQuery.getResultList();
+    }
+
+    @Transactional
+    public User findByName(String username) {
+        User usr = repo.findByName(username);
+        if (getCurrentShift (new Date(), usr) == null)
+            usr = null;
+
         return usr;
     }
 
+    @Transactional
     public void deleteByName(String username) {
         repo.deleteByName(username);
     }
 
+    @Transactional
     public void save(User usr) {
         repo.save(usr);
     }
@@ -117,10 +122,9 @@ public class UserService
      * 
      * Scheduled at 00:00:00 every Saturday
      */
-    @Scheduled(cron = "30 0 0 * * *")
+    @Transactional
+    @Scheduled(cron = "30 * * * * *")
     public void fillWorkDays () {
-        List<UserShift> shifts = getAlLShifts ();
-
         Calendar cal = Calendar.getInstance();
         trunc (cal);
         int dayOfWeek = cal.get (Calendar.DAY_OF_WEEK);
@@ -132,19 +136,25 @@ public class UserService
                     continue;
                 
                 default:
-                    shifts.forEach((shift) -> {
-                        WorkDay wd = new WorkDay();
-                        wd.setDate(cal.getTime());
-                        wd.setShift(shift);
-                        WorkCalendar wcal = new WorkCalendar();
-                        wcal.setWorkDay(wd);
-                        wcal.setComments("Automatically filled by spring shcduler");
-                        em.merge(wcal);
-                    });
+                    addWorkDay (cal);
             }
 
             cal.add(Calendar.DAY_OF_MONTH, 1);
             dayOfWeek = cal.get (Calendar.DAY_OF_WEEK);
         } while (dayOfWeek != Calendar.SATURDAY);
+    }
+    
+    @Transactional
+    public void addWorkDay (Calendar truncedDate) {
+        List<UserShift> shifts = getAlLShifts ();
+        shifts.forEach((shift) -> {
+            WorkDay wd = new WorkDay();
+            wd.setDate(truncedDate.getTime());
+            wd.setShift(shift);
+            WorkCalendar wcal = new WorkCalendar();
+            wcal.setWorkDay(wd);
+            wcal.setComments("Automatically filled by saturday scheduler");
+            em.merge(wcal);
+        });
     }
 }

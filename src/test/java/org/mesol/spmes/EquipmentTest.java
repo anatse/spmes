@@ -16,6 +16,7 @@
 package org.mesol.spmes;
 
 import java.security.GeneralSecurityException;
+import java.util.LinkedList;
 import java.util.List;
 import javax.mail.NoSuchProviderException;
 import javax.transaction.Transactional;
@@ -26,7 +27,7 @@ import org.mesol.spmes.config.RootConfiguration;
 import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
 import org.mesol.spmes.model.factory.Equipment;
-import org.mesol.spmes.service.AbstractCriteriaService;
+import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.service.EquipmentService;
 import org.mesol.spmes.service.Import;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,25 @@ public class EquipmentTest {
 
         System.out.println ("Check sample data");
         
+        Equipment eqTemplate = new Equipment();
+        eqTemplate.setName("1%0");
+//        List<Equipment> found = eqService.findByTemplate(eqTemplate);
+        
+        List<EquipmentAttribute> attrs = new LinkedList<>();
+        EquipmentAttribute eqa = new EquipmentAttribute();
+        eqa.setName("testAttr");
+        eqa.setAttrValue("001");
+        eqa.setAttrType("num");
+        attrs.add(eqa);
+        
+        eqa = new EquipmentAttribute();
+        eqa.setName("testAttr");
+        eqa.setAttrValue("002");
+        eqa.setAttrType("num");
+        attrs.add(eqa);
+
+        List<Equipment> found = eqService.findByAttributes (attrs, true);
+
         Equipment site = eqService.findByName("2000");
         Assert.notNull(site, "site 2000 not found");
         Assert.notEmpty(site.getAttributes(), "Attributes not found in site 1000");
@@ -83,20 +103,20 @@ public class EquipmentTest {
 
         System.out.println ("Test criteria API for factory model");
 
-        List<Equipment> eqs = eqService.findFilteredRange (
-            // first record
-            0,
-            // last record
-            100,
-            // attribute for order
-            new AbstractCriteriaService.OrderField[] {
-                new AbstractCriteriaService.OrderField("name", false)
-            },
-            // filter values
-            new AbstractCriteriaService.FilterValue("description", "WorkCenter%")
-        );
+//        List<Equipment> eqs = eqService.findFilteredRange (
+//            // first record
+//            0,
+//            // last record
+//            100,
+//            // attribute for order
+//            new AbstractCriteriaService.OrderField[] {
+//                new AbstractCriteriaService.OrderField("name", false)
+//            },
+//            // filter values
+//            new AbstractCriteriaService.FilterValue("description", "WorkCenter%")
+//        );
 
-        Assert.notEmpty(eqs, "Not found any equipment");
+//        Assert.notEmpty(eqs, "Not found any equipment");
     }
 }
 
