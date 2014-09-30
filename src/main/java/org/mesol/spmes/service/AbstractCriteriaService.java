@@ -19,13 +19,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -87,7 +90,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         return getEntityManager().unwrap(Session.class);
     }
 
-    private Class<A> getAttributeClass () {
+    protected Class<A> getAttributeClass () {
         Class<A> type = null;
 
         try {
@@ -124,26 +127,37 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
             ).list();
     }
 
-    public List<T> findByAttributes (List<A> attrs, boolean all) {
-//        Criteria criteria = getHibernateSession().createCriteria(entityClass);
-//        criteria = criteria.createAlias(NamingRuleConstants.ATTRIBUTES, "attr");
+    public List<T> findByAttributes (List<A> attrs) {
+        final String namedQueryName = "findByAttributes";
+        javax.persistence.Query nq = getEntityManager().createNativeQuery(namedQueryName);
 
-//        "from Equipment eq join eq.attributes as attrs where (attrs.name, attrs.attrValue) = all (select attr.name, attr.attrValue from eq.attributes attr where attr.name = 'testAttr')"
-        Query query = getHibernateSession().createQuery(
-            "from Equipment eq where eq.attributes.name = all (select attr.name from eq.attributes attr where attr.name = 'testAttr')"
-        );
+        NamedNativeQuery nquery = entityClass.getAnnotation(NamedNativeQuery.class);
+        if (nquery == null || !nquery.name().equals(namedQueryName)) 
+            return Collections.EMPTY_LIST;
+
+        String sqlQuery = nquery.query();
+        // Build attributes where clause
+        StringBuilder sb = new StringBuilder("(");
+        for (int attrNo=0;attrNo<attrs.size();attrNo++) {
+            if (attrNo > 0)
+                sb.append(" or ");
+
+            sb.append("(name = :name").append(attrNo).append(" and attrvalue = :value").append(attrNo).append(")");
+        }
+
+        sb.append(")");
+        sqlQuery = String.format(sqlQuery, sb.toString());
+        SQLQuery query = getHibernateSession().createSQLQuery(sqlQuery);
+        query.addEntity(entityClass);
+//        query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+        int attrNo = 0;
+        for (A attr : attrs) {
+            query.setParameter("name" + attrNo, attr.getName());
+            query.setParameter("value" + attrNo, attr.getAttrValue());
+            attrNo++;
+        }
         
         return query.list();
-        
-//        DetachedCriteria attrSubcri = DetachedCriteria.forClass(attributeClass, "attr");
-        
-//        attrSubcri.createAlias("attr." + NamingRuleConstants.OWNER, "owner");
-//        attrSubcri.add(
-//            eq("attr." + NamingRuleConstants.NAME, )
-//        );
-//        attrSubcri.setProjection(Projections.id());
-
-//        criteria.add(Subqueries.eqAll(attrs, attrSubcri));
-//        return criteria.list();
     }
 }

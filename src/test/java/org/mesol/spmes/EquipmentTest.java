@@ -92,9 +92,9 @@ public class EquipmentTest {
         eqa.setName("testAttr");
         eqa.setAttrValue("002");
         eqa.setAttrType("num");
-        attrs.add(eqa);
+//        attrs.add(eqa);
 
-        List<Equipment> found = eqService.findByAttributes (attrs, true);
+        List<Equipment> found = eqService.findByAttributes (attrs);
 
         Equipment site = eqService.findByName("2000");
         Assert.notNull(site, "site 2000 not found");

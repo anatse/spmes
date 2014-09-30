@@ -29,6 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -43,6 +44,10 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 @Entity
 @Table(name = "EQ", uniqueConstraints=@UniqueConstraint(columnNames={"NAME", "PARENT_ID"}, name = "UK_EQ_NAME_PARENT"))
+@NamedNativeQuery(
+    name = "findByAttributes", 
+    query = "select distinct eq.* from eq, eqa where eqa.eq_id = eq.id and (eqa.name, eqa.attrvalue) = all (select a1.name, a1.attrvalue from eqa a1 where a1.eq_id = eq.id and %s)"
+)
 public class Equipment extends AbstractEntity implements Serializable
 {
     private static final Logger     logger = Logger.getLogger(Equipment.class);
