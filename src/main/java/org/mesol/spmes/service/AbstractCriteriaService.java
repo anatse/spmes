@@ -51,13 +51,11 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
     protected static final String       LIKE_PATTERN = ".*[\\%|\\_|\\?]+.*";
 
     private final Class<T>              entityClass;
-//    private final Class<A>              attributeClass;
 
     protected abstract EntityManager getEntityManager();
-    
+
     protected AbstractCriteriaService (Class<T> entityClass) {
         this.entityClass = entityClass;
-//        attributeClass = getAttributeClass();
     }
 
     public List<T> findAll()
