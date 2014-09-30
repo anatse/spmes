@@ -92,9 +92,10 @@ public class EquipmentTest {
         eqa.setName("testAttr");
         eqa.setAttrValue("002");
         eqa.setAttrType("num");
-//        attrs.add(eqa);
+        attrs.add(eqa);
 
         List<Equipment> found = eqService.findByAttributes (attrs);
+        Assert.isTrue(found.size() == 1, "Found not only one entity for given attributes");
 
         Equipment site = eqService.findByName("2000");
         Assert.notNull(site, "site 2000 not found");

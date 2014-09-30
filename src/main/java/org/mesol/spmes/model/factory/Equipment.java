@@ -45,8 +45,8 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Entity
 @Table(name = "EQ", uniqueConstraints=@UniqueConstraint(columnNames={"NAME", "PARENT_ID"}, name = "UK_EQ_NAME_PARENT"))
 @NamedNativeQuery(
-    name = "findByAttributes", 
-    query = "select distinct eq.* from eq, eqa where eqa.eq_id = eq.id and (eqa.name, eqa.attrvalue) = all (select a1.name, a1.attrvalue from eqa a1 where a1.eq_id = eq.id and %s)"
+    name = "Equipment.findByAttributes", 
+    query = "select distinct eq.id from eq, eqa where eqa.eq_id = eq.id and (eqa.name, eqa.attrvalue) = all (select a1.name, a1.attrvalue from eqa a1 where a1.eq_id = eq.id and %s)"
 )
 public class Equipment extends AbstractEntity implements Serializable
 {

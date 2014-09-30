@@ -20,29 +20,22 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Conjunction;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Example;
-import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
 import org.mesol.spmes.model.abs.AbstractAttribute;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import static org.hibernate.criterion.Restrictions.*;
-import org.hibernate.criterion.Subqueries;
 
 /**
  * 
@@ -129,10 +122,8 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
 
     public List<T> findByAttributes (List<A> attrs) {
         final String namedQueryName = "findByAttributes";
-        javax.persistence.Query nq = getEntityManager().createNativeQuery(namedQueryName);
-
         NamedNativeQuery nquery = entityClass.getAnnotation(NamedNativeQuery.class);
-        if (nquery == null || !nquery.name().equals(namedQueryName)) 
+        if (nquery == null || !nquery.name().contains(namedQueryName)) 
             return Collections.EMPTY_LIST;
 
         String sqlQuery = nquery.query();
@@ -148,8 +139,6 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         sb.append(")");
         sqlQuery = String.format(sqlQuery, sb.toString());
         SQLQuery query = getHibernateSession().createSQLQuery(sqlQuery);
-        query.addEntity(entityClass);
-//        query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
         int attrNo = 0;
         for (A attr : attrs) {
@@ -157,7 +146,13 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
             query.setParameter("value" + attrNo, attr.getAttrValue());
             attrNo++;
         }
-        
-        return query.list();
+
+        final List<Object> objs = query.list();
+        final List<T> ret = new LinkedList<>();
+        objs.stream().map((obj) -> getEntityManager().find(entityClass, ((Number)obj).longValue())).forEach((ent) -> {
+            ret.add(ent);
+        });
+
+        return ret;
     }
 }
