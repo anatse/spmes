@@ -110,7 +110,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
         return type;
     }
     
-    public List<T> findByAttribute (AbstractAttribute attr) {
+    public List<T> findByAttribute (A attr) {
         return getHibernateSession().createCriteria(entityClass)
             .createAlias(NamingRuleConstants.ATTRIBUTES, "attr")
             .add (
