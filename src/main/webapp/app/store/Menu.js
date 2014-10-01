@@ -15,7 +15,6 @@
  */
 Ext.define('NeoMes.store.Menu', {
     extend: 'Ext.data.TreeStore',
-    autoLoad: true,
     model: 'NeoMes.model.Menu',
     root: {
         id: -1,

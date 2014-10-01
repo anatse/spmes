@@ -84,7 +84,8 @@ public class AuthController
         return model;
     }
 
-    @Secured({BasicConstants.ADMIN_ROLE, BasicConstants.CHIEF_ROLE, BasicConstants.LABORER_ROLE})
+    // BasicConstants.ADMIN_ROLE, BasicConstants.CHIEF_ROLE, 
+    @Secured({BasicConstants.LABORER_ROLE})
     @RequestMapping(value = "/service/menu")
     @Transactional
     public List<Menu> getUserMenu (@RequestParam (value = "parentId", required = false) Long parentId) {
