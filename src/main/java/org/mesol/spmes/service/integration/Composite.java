@@ -69,7 +69,7 @@ public class Composite
         }
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void scheduler () {
         logger.info("scheduler called");
     }

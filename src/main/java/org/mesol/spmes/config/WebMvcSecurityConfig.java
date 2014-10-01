@@ -16,19 +16,25 @@
 
 package org.mesol.spmes.config;
 
+import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.security.DBAuthProvider;
 import org.mesol.spmes.model.security.DBUserDetailsManager;
 import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.core.Authentication;
 
 /**
  * $Rev:$
@@ -40,13 +46,19 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
-@EnableScheduling
+@EnableGlobalMethodSecurity(securedEnabled = true, mode = AdviceMode.ASPECTJ)
 public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired(required = true)
     private DBUserDetailsManager        userDetailsManager;
 
     private static final Logger         logger = Logger.getLogger(WebMvcSecurityConfig.class);
+    
+    @Bean
+    @Override 
+    public AuthenticationManager authenticationManagerBean() throws Exception {  
+       return super.authenticationManagerBean(); 
+    }
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -62,21 +74,13 @@ public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
     }
     
     @Bean
-    @Order(1)
+    @Order(10)
     public UserService userService () {
         return new UserService();
     }
-    
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-////            .antMatchers("/auth").authenticated()
-//            .anyRequest().authenticated()
-//            .and()
-//            .httpBasic()
-//            .and()
-//            .csrf();
-        
         http.authorizeRequests()
             .anyRequest().authenticated()
             .and()

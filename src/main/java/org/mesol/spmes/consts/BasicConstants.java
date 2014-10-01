@@ -26,8 +26,8 @@ public interface BasicConstants
     int SEQ_ALLOCATION_SIZE = 1;
     String RULE_SCRIPT_ENGINE = "groovy";
     
-    String ADMIN_ROLE = "mes_admin";
-    String LABORER_ROLE = "mes_laborer";
-    String CHIEF_ROLE = "mes_chief";
-    String TECHNOLOG_ROLE = "mes_tech";
+    String ADMIN_ROLE = "ROLE_ADMIN";
+    String LABORER_ROLE = "ROLE_LABORER";
+    String CHIEF_ROLE = "ROLE_CHIEF";
+    String TECHNOLOG_ROLE = "ROLE_TECH";
 }

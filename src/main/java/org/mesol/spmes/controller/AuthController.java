@@ -84,8 +84,12 @@ public class AuthController
         return model;
     }
 
-    // BasicConstants.ADMIN_ROLE, BasicConstants.CHIEF_ROLE, 
-    @Secured({BasicConstants.LABORER_ROLE})
+    @Secured({
+        BasicConstants.ADMIN_ROLE,
+        BasicConstants.CHIEF_ROLE,
+        BasicConstants.LABORER_ROLE,
+        BasicConstants.TECHNOLOG_ROLE
+    })
     @RequestMapping(value = "/service/menu")
     @Transactional
     public List<Menu> getUserMenu (@RequestParam (value = "parentId", required = false) Long parentId) {
@@ -96,6 +100,10 @@ public class AuthController
         return userService.getUserMenu(auth.getName(), parentId == -1 ? null : parentId);
     }
     
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
     @RequestMapping(value = "/service/user/list")
     @Transactional
     public List<User> findAllUsers () {
