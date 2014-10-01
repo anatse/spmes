@@ -24,6 +24,7 @@
         <title id="page-title"><spring:message code="App.title"/></title>
         <link rel="stylesheet" type="text/css" href="ext/resources/ext5-crisp/ext-theme-crisp-all.css"/>
         <script type="text/javascript" charset="utf-8" src="ext/ext-all.js"></script>
+        <script type="text/javascript" charset="utf-8" src="ext/ext-charts/ext-charts.js"></script>
         <%!
         public boolean testResource (final HttpServletRequest request, final String path) {
             final String realPath = getServletContext().getRealPath ("/" + path);

@@ -8,7 +8,8 @@ Ext.define('NeoMes.view.Main', {
         'NeoMes.view.Navigation',
         'NeoMes.view.ContentPanel',
         'NeoMes.utils.CommonUtils',
-        'NeoMes.view.user.List'
+        'NeoMes.view.user.List',
+        'NeoMes.view.factory.Equipment'
     ],
 
     initComponent:function () {

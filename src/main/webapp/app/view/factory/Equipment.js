@@ -16,38 +16,38 @@
 Ext.define('NeoMes.view.factory.Equipment', {
     extend: 'Ext.panel.Panel',
     requires: [
-        'Ext.draw.*'
+        'Ext.draw.Component'
     ],
     layout: 'fit',
-    alias: 'widget.eqipment-chart',
+    alias: 'widget.equipment',
     title: 'Organization chart',
     initComponent: function() {
         var drawComponent = Ext.create('Ext.draw.Component', {
             viewBox: false,
             items: [{
-                    type: 'text', // рисуем спрайт текст
-                    text: 'Все спрайты',
-                    fill: 'dark-gray', // цвет шрифта
-                    font: '14px serif', // установка шрифта
+                    type: 'text', // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+                    text: 'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                    fill: 'dark-gray', // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                    font: '14px serif', // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                     x: 80,
                     y: 10
                 }, {
-                    type: 'rect', //спрайт прямоугольник
+                    type: 'rect', //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     width: 50,
                     height: 50,
                     fill: 'blue',
                     x: 10,
                     y: 20
                 }, {
-                    type: 'circle', // спрайт круг
+                    type: 'circle', // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                     radius: 25,
                     fill: '#eee',
                     x: 100,
                     y: 45,
-                    stroke: 'red', // создаем границу-обводку
-                    'stroke-width': 1 //толщина обводки
+                    stroke: 'red', // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    'stroke-width': 1 //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 }, {
-                    type: 'ellipse', // спрайт эллипс
+                    type: 'ellipse', // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                     radiusX: 30,
                     radiusY: 20,
                     fill: '#eee',
@@ -57,15 +57,15 @@ Ext.define('NeoMes.view.factory.Equipment', {
                     stroke: 'red',
                     'stroke-width': 1
                 }, {
-                    type: 'image', // спрайт-изображение
-                    src: 'Penguins.jpg', //путь к изображению - рядом с файлом веб-страницы
+                    type: 'image', // пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    src: 'Penguins.jpg', //пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     width: 150,
                     height: 100,
                     x: 200,
                     y: 15
                 }, {
-                    type: 'path', // спрайт путь
-                    path: 'M 400 20 L 350 150 L 450 150', // комбинация точек пути
+                    type: 'path', // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                    path: 'M 400 20 L 350 150 L 450 150', // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                     fill: '#ccc'
                 }]
         });

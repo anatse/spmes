@@ -18,7 +18,7 @@ Ext.define('NeoMes.view.user.List', {
 //        });
 
         this.columns = [
-            {header: 'Name', dataIndex: 'name', flex:1},
+            {header: 'Name', dataIndex: 'username', flex:1},
             {header: 'Email', dataIndex: 'email', flex:1}
         ];
 

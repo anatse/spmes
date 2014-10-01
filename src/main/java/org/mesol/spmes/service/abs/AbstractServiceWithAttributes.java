@@ -13,25 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.service;
+package org.mesol.spmes.service.abs;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-import javax.persistence.EntityManager;
 import javax.persistence.NamedNativeQuery;
-import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.criterion.Example;
-import org.hibernate.criterion.MatchMode;
 import org.mesol.spmes.model.abs.AbstractAttribute;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
@@ -44,48 +38,20 @@ import static org.hibernate.criterion.Restrictions.*;
  * @param <T>
  * @param <A>
  */
-public abstract class AbstractCriteriaService<T extends AbstractEntity, A extends AbstractAttribute>
+public abstract class AbstractServiceWithAttributes<T extends AbstractEntity, A extends AbstractAttribute> extends AbstractService<T>
 {
-    protected static final Logger       logger = Logger.getLogger(AbstractCriteriaService.class);
     protected static final Pattern      OPERANDS_PATTERN = Pattern.compile("<|>|=");
     protected static final String       LIKE_PATTERN = ".*[\\%|\\_|\\?]+.*";
 
-    private final Class<T>              entityClass;
-
-    protected abstract EntityManager getEntityManager();
-
-    protected AbstractCriteriaService (Class<T> entityClass) {
-        this.entityClass = entityClass;
-    }
-
-    public List<T> findAll()
-    {
-        CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
-        cq.select(cq.from(entityClass));
-        return getEntityManager().createQuery(cq).getResultList();
-    }
-
-    /**
-     * Function find objects using all given object as template. I.e. all filled fields in this object
-     * used to build where clause. 
-     * 
-     * @param template
-     * @return 
-     */
-    public List<T> findByTemplate (T template) {
-        Example example = Example.create(template).ignoreCase().enableLike(MatchMode.ANYWHERE);
-        return getHibernateSession().createCriteria(entityClass).add (example).list();
-    }
-
-    public Session getHibernateSession () {
-        return getEntityManager().unwrap(Session.class);
+    protected AbstractServiceWithAttributes (Class<T> entityClass) {
+        super(entityClass);
     }
 
     protected Class<A> getAttributeClass () {
         Class<A> type = null;
 
         try {
-            Field field = entityClass.getDeclaredField(NamingRuleConstants.ATTRIBUTES);
+            Field field = getEntityClass().getDeclaredField(NamingRuleConstants.ATTRIBUTES);
             if (!field.isAccessible())
                 field.setAccessible(true);
 
@@ -109,7 +75,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
     }
     
     public List<T> findByAttribute (A attr) {
-        return getHibernateSession().createCriteria(entityClass)
+        return getHibernateSession().createCriteria(getEntityClass())
             .createAlias(NamingRuleConstants.ATTRIBUTES, "attr")
             .add (
                 and()
@@ -120,7 +86,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
 
     public List<T> findByAttributes (List<A> attrs) {
         final String namedQueryName = "findByAttributes";
-        NamedNativeQuery nquery = entityClass.getAnnotation(NamedNativeQuery.class);
+        NamedNativeQuery nquery = getEntityClass().getAnnotation(NamedNativeQuery.class);
         if (nquery == null || !nquery.name().contains(namedQueryName)) 
             return Collections.EMPTY_LIST;
 
@@ -147,7 +113,7 @@ public abstract class AbstractCriteriaService<T extends AbstractEntity, A extend
 
         final List<Object> objs = query.list();
         final List<T> ret = new LinkedList<>();
-        objs.stream().map((obj) -> getEntityManager().find(entityClass, ((Number)obj).longValue())).forEach((ent) -> {
+        objs.stream().map((obj) -> getEntityManager().find(getEntityClass(), ((Number)obj).longValue())).forEach((ent) -> {
             ret.add(ent);
         });
 

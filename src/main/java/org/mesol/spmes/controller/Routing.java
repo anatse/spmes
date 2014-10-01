@@ -20,6 +20,7 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.PerformanceType;
 import org.mesol.spmes.model.graph.RouterStep;
@@ -28,6 +29,7 @@ import org.mesol.spmes.model.graph.exceptions.NoRuleException;
 import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 import org.mesol.spmes.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
@@ -56,7 +58,8 @@ public class Routing
     public List<OperEdge> findAllOperations (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
         return routeService.findAllOperation(routerId);
     }
-    
+
+    @Secured({BasicConstants.TECHNOLOG_ROLE})
     @RequestMapping(value = "oper", method = RequestMethod.POST)
     @ResponseBody
     public OperEdge addOperation (

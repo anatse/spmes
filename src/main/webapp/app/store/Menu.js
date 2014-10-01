@@ -21,6 +21,7 @@ Ext.define('NeoMes.store.Menu', {
         id: -1,
         name: 'root'
     },
+    nodeParam: 'parentId',
     proxy: {
         type: 'ajax',
         headers: NeoMes.utils.CommonUtils.buildCSRFHeader (),
@@ -32,7 +33,7 @@ Ext.define('NeoMes.store.Menu', {
         },
         reader: {
             type: 'json',
-            rootProperty: 'menuItemList'
+            rootProperty: 'menuList'
         }
     }
 });

@@ -15,6 +15,8 @@
  */
 package org.mesol.spmes.model.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
@@ -54,12 +56,12 @@ public class Menu extends AbstractEntity implements Serializable
     private String                  name;
     @Column(length = 255)
     private String                  description;
-    @Column(length = 1024, nullable = false)
+    @Column(length = 1024, nullable = true)
     private String                  url;
-        
+
     @ManyToOne
     @JoinColumn(name="PARENT_ID")
-    private Menu                    parentMenu;
+    private Menu                    parent;
 
     @ManyToMany
     @JoinTable(
@@ -103,14 +105,16 @@ public class Menu extends AbstractEntity implements Serializable
         this.url = url;
     }
 
-    public Menu getParentMenu() {
-        return parentMenu;
+    @JsonIgnore
+    public Menu getParent() {
+        return parent;
     }
 
-    public void setParentMenu(Menu parentMenu) {
-        this.parentMenu = parentMenu;
+    public void setParent(Menu parent) {
+        this.parent = parent;
     }
 
+    @JsonIgnore
     public Set<UserGroup> getGroups() {
         return groups;
     }

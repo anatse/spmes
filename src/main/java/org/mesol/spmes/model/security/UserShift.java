@@ -23,6 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
@@ -36,6 +38,9 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 @Entity
 @Table (name = "USH")
+@NamedQueries(
+    @NamedQuery (name = "UserShift.currentShift", query = "select u from UserShift u where :curTime between u.startTime and u.endTime")
+)
 public class UserShift extends AbstractEntity implements Serializable
 {
     @Id

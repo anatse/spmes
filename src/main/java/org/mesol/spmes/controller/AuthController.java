@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.controller;
 
+import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
+import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
-import org.mesol.spmes.repo.GroupRepo;
-import org.mesol.spmes.repo.UserRepo;
+import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +45,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthController 
 {
     @Autowired
-    private UserRepo        userRepo;
-    
-    @Autowired
-    private GroupRepo       groupRepo;
+    private UserService             userService;
 
     @Autowired
-    private MessageSource       messageSource;
+    private MessageSource           messageSource;
     
     private static final Logger     logger = Logger.getLogger(AuthController.class);
     public static String getRevisionNumber () {
@@ -83,29 +84,23 @@ public class AuthController
         return model;
     }
 
-//    @RequestMapping(value = "/adduser")
-//    @Transactional
-//    public User test (HttpServletRequest request, HttpServletResponse response) {
-//        User admin = new User();
-//        admin.setName("admin");
-//        admin.setPassword("admin");
-//        admin = userRepo.save(admin);
-//        return admin;
-//    }
-
-    @RequestMapping(value = "/test")
+    @Secured({BasicConstants.ADMIN_ROLE, BasicConstants.CHIEF_ROLE, BasicConstants.LABORER_ROLE})
+    @RequestMapping(value = "/service/menu")
     @Transactional
-    public User test2 (HttpServletRequest request, HttpServletResponse response) {
-        User demo = new User();
-        demo.setName("demo");
-        demo.setPassword("demo");
-        
-//        Group users = new Group();
-//        users.setName("users");
-//        demo.addGroup (users);
-//
-//        demo = userRepo.save(demo);
-//        groupRepo.save(users);
-        return demo;
+    public List<Menu> getUserMenu (@RequestParam (value = "parentId", required = false) Long parentId) {
+        if (logger.isDebugEnabled())
+            logger.debug("getUserMenu called");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userService.getUserMenu(auth.getName(), parentId == -1 ? null : parentId);
+    }
+    
+    @RequestMapping(value = "/service/user/list")
+    @Transactional
+    public List<User> findAllUsers () {
+        if (logger.isDebugEnabled())
+            logger.debug("findAllUsers called");
+
+        return userService.findAll();
     }
 }

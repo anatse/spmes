@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.service;
 
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service(value = "eqService")
-public class EquipmentService extends AbstractCriteriaService<Equipment, EquipmentAttribute>
+public class EquipmentService extends AbstractServiceWithAttributes<Equipment, EquipmentAttribute>
 {
     @PersistenceContext
     private EntityManager           entityManager;

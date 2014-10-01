@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -96,6 +97,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (groups == null)
             return Collections.EMPTY_SET;
@@ -104,6 +106,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

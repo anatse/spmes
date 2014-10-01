@@ -15,21 +15,32 @@
  */
 package org.mesol.spmes.service;
 
+import org.mesol.spmes.service.abs.AbstractService;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import org.apache.log4j.Logger;
+import org.hibernate.FetchMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
+import static org.hibernate.criterion.Restrictions.*;
+import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
+import org.mesol.spmes.consts.BasicConstants;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
+import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
 import org.mesol.spmes.model.security.UserGroup;
 import org.mesol.spmes.model.security.UserShift;
 import org.mesol.spmes.model.security.WorkCalendar;
 import org.mesol.spmes.model.security.WorkDay;
-import org.mesol.spmes.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,17 +50,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service
-public class UserService 
+public class UserService extends AbstractService<User>
 {
-    private static final Logger     logger = Logger.getLogger(UserService.class);
-    
-    public static final String     ADMIN_GROUP = "mes_admin";
-
-    @Autowired
-    private UserRepo                repo;
-        
     @PersistenceContext
-    private EntityManager           em;
+    private EntityManager           entityManager;
 
     private static Calendar trunc (final Calendar cal) {
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -59,18 +63,23 @@ public class UserService
         return cal;
     }
 
+    public UserService() {
+        super(User.class);
+    }
+
     @Transactional
     public UserShift getCurrentShift (Date curDate, User user) {
-        TypedQuery<UserShift> shiftQuery = em.createQuery("select u from UserShift u where :curTime between u.startTime and u.endTime", UserShift.class);
-        shiftQuery.setParameter("curTime", UserShift.convertTime(curDate));
-        List<UserShift> res = shiftQuery.getResultList();
-        UserShift us = res.isEmpty() ? null : res.iterator().next();
+        Session session = getHibernateSession();
+        UserShift us = (UserShift)session.getNamedQuery("UserShift.currentShift")
+                        .setParameter("curTime", UserShift.convertTime(curDate))
+                        .uniqueResult();
+
         if (us == null)
             return null;
 
         // Check is user has admin role
         UserGroup ug = new UserGroup();
-        ug.setName(ADMIN_GROUP);
+        ug.setName(BasicConstants.ADMIN_ROLE);
         if (!user.getAuthorities().contains(ug)) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(curDate);
@@ -81,9 +90,11 @@ public class UserService
             wd.setShift(us);
 
             // Check available for shift
-            TypedQuery<Long> workdayCount = em.createQuery("select count(s) from WorkCalendar s where s.workDay = :workDay", Long.class);
-            workdayCount.setParameter("workDay", wd);
-            Long count = workdayCount.getSingleResult();
+            Long count = ((Number)session.createCriteria(WorkCalendar.class)
+                .add(eq ("workDay", wd))
+                .setProjection(Projections.rowCount())
+                .uniqueResult()).longValue();
+
             if (count == 0)
                 return null;
         }
@@ -93,27 +104,30 @@ public class UserService
 
     @Transactional
     public List<UserShift> getAlLShifts () {
-        TypedQuery<UserShift> shiftQuery = em.createQuery("select u from UserShift u", UserShift.class);
-        return shiftQuery.getResultList();
+        Session session = getHibernateSession();
+        return session.createCriteria(UserShift.class).list();
     }
 
     @Transactional
     public User findByName(String username) {
-        User usr = repo.findByName(username);
-        if (getCurrentShift (new Date(), usr) == null)
-            usr = null;
+        Session session = getHibernateSession();
+        User usr = (User) session.createCriteria(User.class)
+            .add (eq("name", username))
+            .setFetchMode("groups", FetchMode.JOIN)
+            .uniqueResult();
 
         return usr;
     }
 
     @Transactional
     public void deleteByName(String username) {
-        repo.deleteByName(username);
+        getHibernateSession().delete(findByName(username));
     }
 
     @Transactional
+    @Secured({BasicConstants.ADMIN_ROLE})
     public void save(User usr) {
-        repo.save(usr);
+        getHibernateSession().saveOrUpdate(usr);
     }
 
     /**
@@ -123,7 +137,7 @@ public class UserService
      * Scheduled at 00:00:00 every Saturday
      */
     @Transactional
-    @Scheduled(cron = "30 * * * * *")
+    @Scheduled(cron = "0 0 0 * * SAT")
     public void fillWorkDays () {
         Calendar cal = Calendar.getInstance();
         trunc (cal);
@@ -146,6 +160,7 @@ public class UserService
     
     @Transactional
     public void addWorkDay (Calendar truncedDate) {
+        Session session = getHibernateSession();
         List<UserShift> shifts = getAlLShifts ();
         shifts.forEach((shift) -> {
             WorkDay wd = new WorkDay();
@@ -154,7 +169,25 @@ public class UserService
             WorkCalendar wcal = new WorkCalendar();
             wcal.setWorkDay(wd);
             wcal.setComments("Automatically filled by saturday scheduler");
-            em.merge(wcal);
+            session.save(wcal);
         });
+    }
+
+    public List<Menu> getUserMenu(String username, Long parentId) {
+        Session session = getHibernateSession();
+        DetachedCriteria userGroups = DetachedCriteria.forClass(User.class)
+                                .createAlias("groups", "grp")
+                                .add(eq ("name", username))
+                                .setProjection(Property.forName("grp.id"));
+
+        return session.createCriteria(Menu.class)
+            .add(parentId == null ? isNull("parent") : eq("parent.id", parentId))
+            .createAlias("groups", "grp")
+            .add(Subqueries.propertyIn("grp.id", userGroups)).list();
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return entityManager;
     }
 }

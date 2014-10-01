@@ -30,7 +30,7 @@ Ext.define("NeoMes.controller.App", {
     },
     onNavSelectionChange: function(selModel, records) {
         var record = records[0],
-            xtype = record.get('module'),
+            xtype = record.get('url'),
             alias = 'widget.' + xtype;
     
         if (!this.getContentPanel)
