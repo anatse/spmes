@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.mesol.spmes.model.graph.attr;
+package org.mesol.spmes.model.mat;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.ConstraintMode;
@@ -23,7 +22,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
 
 /**
  * 
@@ -33,18 +31,18 @@ import org.mesol.spmes.model.graph.OperEdge;
 @Embeddable
 @AssociationOverride(
     name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
+    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_MMDA_UNIT", value = ConstraintMode.CONSTRAINT))
 )
-public class OperAttribute extends AbstractAttribute
+public class MatMDAttribute extends AbstractAttribute
 {
     @Parent
-    private OperEdge           owner;
+    private MatMD           owner;
 
-    public OperEdge getOwner() {
+    public MatMD getOwner() {
         return owner;
     }
 
-    public void setOwner(OperEdge owner) {
+    public void setOwner(MatMD owner) {
         this.owner = owner;
     }
 }

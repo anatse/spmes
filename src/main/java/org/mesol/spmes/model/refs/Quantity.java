@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.mesol.spmes.model.refs;
 
-package org.mesol.spmes.model.graph.attr;
-
-import javax.persistence.AssociationOverride;
+import java.io.Serializable;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
-import org.hibernate.annotations.Parent;
-import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
+import javax.persistence.ManyToOne;
 
 /**
  * 
@@ -31,20 +28,26 @@ import org.mesol.spmes.model.graph.OperEdge;
  * @author ASementsov
  */
 @Embeddable
-@AssociationOverride(
-    name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
-)
-public class OperAttribute extends AbstractAttribute
+public class Quantity implements Serializable 
 {
-    @Parent
-    private OperEdge           owner;
+    @ManyToOne
+    @JoinColumn(name = "UNIT_CODE", foreignKey = @ForeignKey(name = "FK_QTY_UNIT", value = ConstraintMode.CONSTRAINT))
+    private Unit        unit;
+    private Number      quantity;
 
-    public OperEdge getOwner() {
-        return owner;
+    public Unit getUnit() {
+        return unit;
     }
 
-    public void setOwner(OperEdge owner) {
-        this.owner = owner;
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public Number getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Number quantity) {
+        this.quantity = quantity;
     }
 }

@@ -18,7 +18,11 @@ package org.mesol.spmes.model.abs;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import org.mesol.spmes.model.refs.Unit;
 
 /**
  * 
@@ -32,8 +36,9 @@ public abstract class AbstractAttribute implements Serializable
     private String      name;
     @Column(length = 320)
     private String      attrValue;
-    @Column(length = 32)
-    private String      unitCode;
+    @ManyToOne
+    @JoinColumn(name = "UNIT_CODE")
+    private Unit        unit;
     @Column(length = 32)
     private String      attrType;
 
@@ -53,12 +58,12 @@ public abstract class AbstractAttribute implements Serializable
         this.attrValue = attrValue;
     }
 
-    public String getUnitCode() {
-        return unitCode;
+    public Unit getUnit() {
+        return unit;
     }
 
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 
     public String getAttrType() {
