@@ -137,6 +137,7 @@ public class PersistenceJPAConfig
         readAndSetProperty(properties, "hibernate.generateDDL");
         readAndSetProperty(properties, "hibernate.dialect");
         readAndSetProperty(properties, "hibernate.hbm2ddl.auto");
+        readAndSetProperty(properties, "hibernate.default_schema");
         return properties;
     }
 }

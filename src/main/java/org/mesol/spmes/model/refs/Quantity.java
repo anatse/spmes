@@ -16,11 +16,9 @@
 package org.mesol.spmes.model.refs;
 
 import java.io.Serializable;
-import javax.persistence.ConstraintMode;
+import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  * 
@@ -30,24 +28,24 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class Quantity implements Serializable 
 {
-    @ManyToOne
-    @JoinColumn(name = "UNIT_CODE", foreignKey = @ForeignKey(name = "FK_QTY_UNIT", value = ConstraintMode.CONSTRAINT))
-    private Unit        unit;
-    private Number      quantity;
+    @Column(name = "QTY_UNIT_CODE", length = 32)
+    private String      unitCode;
+    @Column(name = "QTY")
+    private Double  quantity;
 
-    public Unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    public Number getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Number quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
+    }
+
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
     }
 }

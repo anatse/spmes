@@ -15,8 +15,8 @@
  */
 package org.mesol.spmes;
 
+import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.logging.Level;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -35,8 +35,11 @@ import org.mesol.spmes.model.graph.exceptions.MultipleOperationsException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
 import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 import org.mesol.spmes.model.graph.exceptions.OperEntryPointChanged;
+import org.mesol.spmes.model.refs.Unit;
+import org.mesol.spmes.model.refs.UnitConverter;
 import org.mesol.spmes.service.EquipmentService;
 import org.mesol.spmes.service.RouteService;
+import org.mesol.spmes.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -78,13 +81,47 @@ public class RoutingTest
     
     @Autowired
     private EquipmentService    eqService;
+    
+    @Autowired
+    private UnitService         unitService;
+
+    @Test
+    @Transactional
+    public void testUnitConverter () {
+        if (logger.isInfoEnabled())
+            logger.info("Test unit converter");
+
+        Unit celsius = new Unit();
+        celsius.setCode("ºC");
+        celsius.setName("celsius");
+        celsius = unitService.save (celsius);
+
+        Unit fahrenheit = new Unit();
+        fahrenheit.setCode("ºF");
+        fahrenheit.setName("celsius");
+        fahrenheit = unitService.save (fahrenheit);
+
+        UnitConverter uc = new UnitConverter();
+        uc.setFromUnit(celsius);
+        uc.setToUnit(fahrenheit);
+        uc.setFormula("(#qty * 9 / 5) + 32");
+        unitService.saveUnitConverter (uc);
+
+        uc = unitService.findFor(celsius.getCode(), fahrenheit.getCode());
+
+        Double val = uc.convert(36.6);
+        Assert.isTrue(val == (36.6 * 9 / 5) + 32, "Wrong value calculated");
+
+        if (logger.isInfoEnabled())
+            logger.info("Unit converter passed");
+    }
 
     @Test
     @Transactional
     public void testRouter() throws ScriptException, NoSuchMethodException {
         Router rt = service.findRouterByName("R_TEST_1");
         Assert.notNull(rt, "Router not found");
-        
+
         try {
             EquipmentClass eqc = new EquipmentClass();
             eqc.setName("DEFAULT");

@@ -27,8 +27,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.PerformanceType;
