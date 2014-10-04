@@ -17,7 +17,7 @@
 package org.mesol.spmes.model.security;
 
 import org.apache.log4j.Logger;
-import org.mesol.spmes.repo.UserRepo;
+import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,29 +30,26 @@ import org.springframework.security.provisioning.UserDetailsManager;
  */
 public class DBUserDetailsManager implements UserDetailsManager
 {
-    @Autowired
-    private UserRepo        userRepo;
-    
     private static final Logger     logger = Logger.getLogger(DBUserDetailsManager.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
 
+    @Autowired
+    private UserService        userService;
+    
     @Override
     public void createUser(UserDetails user) {
         User usr = new User(user);
-        userRepo.save(usr);
+        userService.save(usr);
     }
 
     @Override
     public void updateUser(UserDetails user) {
         User usr = new User(user);
-        userRepo.save(usr);
+        userService.save(usr);
     }
 
     @Override
     public void deleteUser(String username) {
-        userRepo.deteteUser(username);
+        userService.deleteByName(username);
     }
 
     @Override
@@ -62,12 +59,16 @@ public class DBUserDetailsManager implements UserDetailsManager
 
     @Override
     public boolean userExists(String username) {
-        User usr = userRepo.findByName(username);
+        User usr = userService.findByName(username);
         return usr != null;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByName(username);
+        UserDetails ud = userService.findByName(username);
+        if (ud == null)
+            throw (new UsernameNotFoundException("user not found"));
+        
+        return ud;
     }
 }

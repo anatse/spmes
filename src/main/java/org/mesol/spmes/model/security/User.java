@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -24,14 +25,22 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.apache.log4j.Logger;
+import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,17 +51,23 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author ASementsov
  */
 @Entity
-@Table(name = "USR")
+@Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_USERNAME"))
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
     private static final Logger     logger = Logger.getLogger(User.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
+
+    @Id
+    @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
+    private Long id;
     
+    @Column(nullable = false, length = 32)
     private String          name;
+    @Column(nullable = false, length = 180)
     private String          password;
+    @Column(length = 180)
     private String          firstName;
+    @Column(length = 180)
     private String          lastName;
     private boolean         enabled = true;
     private boolean         expired = false;
@@ -63,10 +78,10 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         name="USR2GRP",
         joinColumns = @JoinColumn(name="USR_ID", referencedColumnName="ID"),
         inverseJoinColumns = @JoinColumn(name="GRP_ID", referencedColumnName="ID"),
-        foreignKey = @ForeignKey(name = "FK_USR_GRP"),
-        inverseForeignKey = @ForeignKey(name = "FK_GRP_USR")
+        foreignKey = @ForeignKey(name = "FK_USR_GRP", value = ConstraintMode.CONSTRAINT),
+        inverseForeignKey = @ForeignKey(name = "FK_GRP_USR", value = ConstraintMode.CONSTRAINT)
     )
-    private Set<Group>      groups;
+    private Set<UserGroup>      groups;
 
     public User () {
     }
@@ -77,11 +92,12 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         groups = new HashSet<>();
 
         usr.getAuthorities().forEach(grp -> {
-            groups.add(new Group(grp));
+            groups.add(new UserGroup(grp));
         });
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (groups == null)
             return Collections.EMPTY_SET;
@@ -90,6 +106,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -159,7 +176,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.locked = locked;
     }
 
-    public void setGroups(Set<Group> groups) {
+    public void setGroups(Set<UserGroup> groups) {
         this.groups = groups;
     }
 
@@ -176,10 +193,18 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         return pw.equals(password);
     }
 
-    public void addGroup(Group users) {
+    public void addGroup(UserGroup users) {
         if (groups == null)
             groups = new HashSet<>();
 
         groups.add(users);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

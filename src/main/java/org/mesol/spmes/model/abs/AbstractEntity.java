@@ -15,14 +15,15 @@
  */
 package org.mesol.spmes.model.abs;
 
-import java.sql.Timestamp;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.joda.time.DateTime;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 
@@ -30,21 +31,52 @@ import org.springframework.data.annotation.LastModifiedDate;
  * @author ASementsov
  */
 @MappedSuperclass
-public class AbstractEntity 
+@EntityListeners(AuditingEntityListener.class)
+public abstract class AbstractEntity 
 {
-    @Id 
-    @GeneratedValue 
-    private Long id;
+    @CreatedDate
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime        createdDate;
 
-	@CreatedDate
-	private Timestamp       createdDate;
-
-	@LastModifiedDate
-	private Timestamp       modifiedDate;
+    @LastModifiedDate
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime        modifiedDate;
 
     @CreatedBy
     private String          createdBy;
 
     @LastModifiedBy
     private String          modifiedBy;
+
+    public DateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(DateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public DateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(DateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
 }

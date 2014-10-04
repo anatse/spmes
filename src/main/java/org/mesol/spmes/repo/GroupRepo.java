@@ -16,7 +16,7 @@
 
 package org.mesol.spmes.repo;
 
-import org.mesol.spmes.model.security.Group;
+import org.mesol.spmes.model.security.UserGroup;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,8 +25,8 @@ import org.springframework.data.repository.CrudRepository;
  * @version 1.0.0
  * @author ASementsov
  */
-public interface GroupRepo extends CrudRepository<Group, Long>
+public interface GroupRepo extends CrudRepository<UserGroup, Long>
 {
-    @Query("select r from Group r where r.name = ?1")
-    Group findByName (String groupName);
+    @Query("select r from UserGroup r where r.name = ?1")
+    UserGroup findByName (String groupName);
 }
