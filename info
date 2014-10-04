@@ -1,0 +1,188 @@
+Apache Maven 3.2.3 (33f8c3e1027c3ddde99d3cdebad2656a31e8fdf4; 2014-08-12T00:58:10+04:00)
+Maven home: D:\distr\apache-maven-3.2.3\bin\..
+Java version: 1.8.0_20, vendor: Oracle Corporation
+Java home: C:\Program Files\Java\jdk1.8.0_20\jre
+Default locale: ru_RU, platform encoding: Cp1251
+OS name: "windows 7", version: "6.1", arch: "amd64", family: "dos"
+[INFO] Error stacktraces are turned on.
+[DEBUG] Reading global settings from D:\distr\apache-maven-3.2.3\bin\..\conf\settings.xml
+[DEBUG] Reading user settings from C:\Users\ASementsov\.m2\settings.xml
+[DEBUG] Using local repository at C:\Users\ASementsov\.m2\repository
+[DEBUG] Using manager EnhancedLocalRepositoryManager with priority 10.0 for C:\Users\ASementsov\.m2\repository
+[INFO] Scanning for projects...
+[DEBUG] Extension realms for project org.mesol:SpringMes:war:1.0-SNAPSHOT: (none)
+[DEBUG] Looking up lifecyle mappings for packaging war from ClassRealm[plexus.core, parent: null]
+[DEBUG] === REACTOR BUILD PLAN ================================================
+[DEBUG] Project: org.mesol:SpringMes:war:1.0-SNAPSHOT
+[DEBUG] Tasks:   [compile]
+[DEBUG] Style:   Regular
+[DEBUG] =======================================================================
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building SpringMes 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] === PROJECT BUILD PLAN ================================================
+[DEBUG] Project:       org.mesol:SpringMes:1.0-SNAPSHOT
+[DEBUG] Dependencies (collect): []
+[DEBUG] Dependencies (resolve): [compile]
+[DEBUG] Repositories (dependencies): [sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots/, releases+snapshots), spring-milestone (http://repo.springsource.org/milestone/, releases+snapshots), central (https://repo.maven.apache.org/maven2, releases)]
+[DEBUG] Repositories (plugins)     : [central (https://repo.maven.apache.org/maven2, releases)]
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-resources-plugin:2.6:resources (default-resources)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <buildFilters default-value="${project.build.filters}"/>
+  <encoding default-value="${project.build.sourceEncoding}">${encoding}</encoding>
+  <escapeString>${maven.resources.escapeString}</escapeString>
+  <escapeWindowsPaths default-value="true">${maven.resources.escapeWindowsPaths}</escapeWindowsPaths>
+  <includeEmptyDirs default-value="false">${maven.resources.includeEmptyDirs}</includeEmptyDirs>
+  <outputDirectory default-value="${project.build.outputDirectory}"/>
+  <overwrite default-value="false">${maven.resources.overwrite}</overwrite>
+  <project default-value="${project}"/>
+  <resources default-value="${project.resources}"/>
+  <session default-value="${session}"/>
+  <supportMultiLineFiltering default-value="false">${maven.resources.supportMultiLineFiltering}</supportMultiLineFiltering>
+  <useBuildFilters default-value="true"/>
+  <useDefaultDelimiters default-value="true"/>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-compiler-plugin:3.1:compile (default-compile)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <basedir default-value="${basedir}"/>
+  <buildDirectory default-value="${project.build.directory}"/>
+  <classpathElements default-value="${project.compileClasspathElements}"/>
+  <compileSourceRoots default-value="${project.compileSourceRoots}"/>
+  <compilerId default-value="javac">${maven.compiler.compilerId}</compilerId>
+  <compilerReuseStrategy default-value="${reuseCreated}">${maven.compiler.compilerReuseStrategy}</compilerReuseStrategy>
+  <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
+  <debug default-value="true">${maven.compiler.debug}</debug>
+  <debuglevel>${maven.compiler.debuglevel}</debuglevel>
+  <encoding default-value="${project.build.sourceEncoding}">${encoding}</encoding>
+  <executable>${maven.compiler.executable}</executable>
+  <failOnError default-value="true">${maven.compiler.failOnError}</failOnError>
+  <forceJavacCompilerUse default-value="false">${maven.compiler.forceJavacCompilerUse}</forceJavacCompilerUse>
+  <fork default-value="false">${maven.compiler.fork}</fork>
+  <generatedSourcesDirectory default-value="${project.build.directory}/generated-sources/annotations"/>
+  <maxmem>${maven.compiler.maxmem}</maxmem>
+  <meminitial>${maven.compiler.meminitial}</meminitial>
+  <mojoExecution>${mojoExecution}</mojoExecution>
+  <optimize default-value="false">${maven.compiler.optimize}</optimize>
+  <outputDirectory default-value="${project.build.outputDirectory}"/>
+  <projectArtifact default-value="${project.artifact}"/>
+  <showDeprecation default-value="false">${maven.compiler.showDeprecation}</showDeprecation>
+  <showWarnings default-value="false">${maven.compiler.showWarnings}</showWarnings>
+  <skipMain>${maven.main.skip}</skipMain>
+  <skipMultiThreadWarning default-value="false">${maven.compiler.skipMultiThreadWarning}</skipMultiThreadWarning>
+  <source default-value="1.5">1.8</source>
+  <staleMillis default-value="0">${lastModGranularityMs}</staleMillis>
+  <target default-value="1.5">1.8</target>
+  <useIncrementalCompilation default-value="true">${maven.compiler.useIncrementalCompilation}</useIncrementalCompilation>
+  <verbose default-value="false">${maven.compiler.verbose}</verbose>
+  <mavenSession default-value="${session}"/>
+  <session default-value="${session}"/>
+</configuration>
+[DEBUG] =======================================================================
+[DEBUG] Using connector WagonRepositoryConnector with priority 0.0 for https://oss.sonatype.org/content/repositories/snapshots/ via tmg.ibs.root.ibscorp.ru:80 with username=asementsov, password=***
+Downloading: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+[DEBUG] Writing tracking file C:\Users\ASementsov\.m2\repository\org\springframework\integration\spring-integration-core\{spring.integration}\spring-integration-core-{spring.integration}.pom.lastUpdated
+[DEBUG] Using connector WagonRepositoryConnector with priority 0.0 for http://repo.springsource.org/milestone/ via tmg.ibs.root.ibscorp.ru:80 with username=asementsov, password=***
+Downloading: http://repo.springsource.org/milestone/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+[DEBUG] Writing tracking file C:\Users\ASementsov\.m2\repository\org\springframework\integration\spring-integration-core\{spring.integration}\spring-integration-core-{spring.integration}.pom.lastUpdated
+[DEBUG] Using connector WagonRepositoryConnector with priority 0.0 for https://repo.maven.apache.org/maven2 via tmg.ibs.root.ibscorp.ru:80 with username=asementsov, password=***
+Downloading: https://repo.maven.apache.org/maven2/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+[DEBUG] Writing tracking file C:\Users\ASementsov\.m2\repository\org\springframework\integration\spring-integration-core\{spring.integration}\spring-integration-core-{spring.integration}.pom.lastUpdated
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=5, ConflictMarker.markTime=4, ConflictMarker.nodeCount=182, ConflictIdSorter.graphTime=3, ConflictIdSorter.topsortTime=2, ConflictIdSorter.conflictIdCount=56, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=21, ConflictResolver.conflictItemCount=140, DefaultDependencyCollector.collectTime=1553, DefaultDependencyCollector.transformTime=42}
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.083 s
+[INFO] Finished at: 2014-09-17T10:05:49+04:00
+[INFO] Final Memory: 7M/155M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project SpringMes: Could not resolve dependencies for project org.mesol:SpringMes:war:1.0-SNAPSHOT: Failed to collect dependencies at org.springframework.integration:spring-integration-core:jar:{spring.integration}: Failed to read artifact descriptor for org.springframework.integration:spring-integration-core:jar:{spring.integration}: Could not transfer artifact org.springframework.integration:spring-integration-core:pom:{spring.integration} from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots/): Illegal character in path at index 112: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom -> [Help 1]
+org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal on project SpringMes: Could not resolve dependencies for project org.mesol:SpringMes:war:1.0-SNAPSHOT: Failed to collect dependencies at org.springframework.integration:spring-integration-core:jar:{spring.integration}
+	at org.apache.maven.lifecycle.internal.LifecycleDependencyResolver.getDependencies(LifecycleDependencyResolver.java:220)
+	at org.apache.maven.lifecycle.internal.LifecycleDependencyResolver.resolveProjectDependencies(LifecycleDependencyResolver.java:127)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.ensureDependenciesAreResolved(MojoExecutor.java:257)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:200)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:153)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:145)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:116)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:80)
+	at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build(SingleThreadedBuilder.java:51)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:120)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:347)
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:154)
+	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:582)
+	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:214)
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:158)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
+Caused by: org.apache.maven.project.DependencyResolutionException: Could not resolve dependencies for project org.mesol:SpringMes:war:1.0-SNAPSHOT: Failed to collect dependencies at org.springframework.integration:spring-integration-core:jar:{spring.integration}
+	at org.apache.maven.project.DefaultProjectDependenciesResolver.resolve(DefaultProjectDependenciesResolver.java:167)
+	at org.apache.maven.lifecycle.internal.LifecycleDependencyResolver.getDependencies(LifecycleDependencyResolver.java:195)
+	... 22 more
+Caused by: org.eclipse.aether.collection.DependencyCollectionException: Failed to collect dependencies at org.springframework.integration:spring-integration-core:jar:{spring.integration}
+	at org.eclipse.aether.internal.impl.DefaultDependencyCollector.collectDependencies(DefaultDependencyCollector.java:292)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.collectDependencies(DefaultRepositorySystem.java:317)
+	at org.apache.maven.project.DefaultProjectDependenciesResolver.resolve(DefaultProjectDependenciesResolver.java:159)
+	... 23 more
+Caused by: org.eclipse.aether.resolution.ArtifactDescriptorException: Failed to read artifact descriptor for org.springframework.integration:spring-integration-core:jar:{spring.integration}
+	at org.apache.maven.repository.internal.DefaultArtifactDescriptorReader.loadPom(DefaultArtifactDescriptorReader.java:349)
+	at org.apache.maven.repository.internal.DefaultArtifactDescriptorReader.readArtifactDescriptor(DefaultArtifactDescriptorReader.java:231)
+	at org.eclipse.aether.internal.impl.DefaultDependencyCollector.process(DefaultDependencyCollector.java:461)
+	at org.eclipse.aether.internal.impl.DefaultDependencyCollector.collectDependencies(DefaultDependencyCollector.java:261)
+	... 25 more
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not transfer artifact org.springframework.integration:spring-integration-core:pom:{spring.integration} from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots/): Illegal character in path at index 112: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:459)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:262)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:239)
+	at org.apache.maven.repository.internal.DefaultArtifactDescriptorReader.loadPom(DefaultArtifactDescriptorReader.java:334)
+	... 28 more
+Caused by: org.eclipse.aether.transfer.ArtifactTransferException: Could not transfer artifact org.springframework.integration:spring-integration-core:pom:{spring.integration} from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots/): Illegal character in path at index 112: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+	at org.eclipse.aether.connector.wagon.WagonRepositoryConnector$6.wrap(WagonRepositoryConnector.java:1016)
+	at org.eclipse.aether.connector.wagon.WagonRepositoryConnector$6.wrap(WagonRepositoryConnector.java:1004)
+	at org.eclipse.aether.connector.wagon.WagonRepositoryConnector$GetTask.run(WagonRepositoryConnector.java:725)
+	at org.eclipse.aether.util.concurrency.RunnableErrorForwarder$1.run(RunnableErrorForwarder.java:67)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.IllegalArgumentException: Illegal character in path at index 112: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+	at java.net.URI.create(URI.java:852)
+	at org.apache.maven.wagon.providers.http.httpclient.client.methods.HttpGet.<init>(HttpGet.java:69)
+	at org.apache.maven.wagon.providers.http.AbstractHttpClientWagon.fillInputData(AbstractHttpClientWagon.java:841)
+	at org.apache.maven.wagon.StreamWagon.getInputStream(StreamWagon.java:116)
+	at org.apache.maven.wagon.StreamWagon.getIfNewer(StreamWagon.java:88)
+	at org.apache.maven.wagon.StreamWagon.get(StreamWagon.java:61)
+	at org.eclipse.aether.connector.wagon.WagonRepositoryConnector$GetTask.run(WagonRepositoryConnector.java:660)
+	... 4 more
+Caused by: java.net.URISyntaxException: Illegal character in path at index 112: https://oss.sonatype.org/content/repositories/snapshots/org/springframework/integration/spring-integration-core/{spring.integration}/spring-integration-core-{spring.integration}.pom
+	at java.net.URI$Parser.fail(URI.java:2848)
+	at java.net.URI$Parser.checkChars(URI.java:3021)
+	at java.net.URI$Parser.parseHierarchical(URI.java:3105)
+	at java.net.URI$Parser.parse(URI.java:3053)
+	at java.net.URI.<init>(URI.java:588)
+	at java.net.URI.create(URI.java:850)
+	... 10 more
+[ERROR] 
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
