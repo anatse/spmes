@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2014 Mes Solutions.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,21 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.mesol.spmes.model.abs;
-
-/**
- * 
- * @version 1.0.0
- * @author ASementsov
- */
-public interface NamingRuleConstants 
-{
-    String ATTRIBUTES = "attributes";
-    String OWNER = "owner";
-    String NAME = "name";
-    String VALUE = "attrValue";
-    String ID = "id";
-    String PARENT = "parent";
-    String PARENT_EQ = "parentEquipment";
-}
+Ext.define('NeoMes.model.Equipment', {
+    extend: 'Ext.data.Model',
+    fields: ['name', 'description'],
+    hasMany : {
+        model : 'NeoMes.model.EquipmentAttributes',
+        name  : 'attributes'
+    }
+});

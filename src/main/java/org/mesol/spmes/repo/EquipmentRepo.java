@@ -29,6 +29,10 @@ public interface EquipmentRepo extends CrudRepository<Equipment, Long>
 {
     Equipment findByName (String equipmentName);
     
+    Equipment findById (String equipmentName);
+    
     @Query("select e from Equipment e where e.parentEquipment is null")
     List<Equipment> findRootElements ();
+       
+//    List<Equipment> findByParentEquipment (Equipment parent);
 }

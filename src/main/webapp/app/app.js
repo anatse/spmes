@@ -4,8 +4,8 @@ Ext.application({
     appFolder:"app",
     autoCreateViewport:false,
 
-    models:['Menu'],
-    stores:['Menu'],
+    models:['Menu', 'Equipment'],
+    stores:['Menu', 'Equipment'],
     controllers:['App'],
 
     init: function() {
