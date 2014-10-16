@@ -15,7 +15,6 @@
  */
 package org.mesol.spmes.model.graph;
 
-import org.mesol.spmes.model.graph.attr.OperAttribute;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -31,8 +30,8 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.model.factory.EquipmentClass;
+import org.mesol.spmes.model.graph.attr.OperAttribute;
 
 /**
  * Class describes operation edge

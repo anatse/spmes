@@ -19,7 +19,6 @@ import java.io.Serializable;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
 /**

@@ -15,7 +15,6 @@
  */
 package org.mesol.spmes.service;
 
-import org.mesol.spmes.service.abs.AbstractService;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
-import static org.hibernate.criterion.Restrictions.*;
+import static org.hibernate.criterion.Restrictions.eq;
+import static org.hibernate.criterion.Restrictions.isNull;
 import org.hibernate.criterion.Subqueries;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.security.Menu;
@@ -35,6 +35,7 @@ import org.mesol.spmes.model.security.UserGroup;
 import org.mesol.spmes.model.security.UserShift;
 import org.mesol.spmes.model.security.WorkCalendar;
 import org.mesol.spmes.model.security.WorkDay;
+import org.mesol.spmes.service.abs.AbstractService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;

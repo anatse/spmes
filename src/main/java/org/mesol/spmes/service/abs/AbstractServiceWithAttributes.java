@@ -24,12 +24,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.persistence.NamedNativeQuery;
-import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
+import static org.hibernate.criterion.Restrictions.and;
+import static org.hibernate.criterion.Restrictions.eq;
 import org.mesol.spmes.model.abs.AbstractAttribute;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
-import static org.hibernate.criterion.Restrictions.*;
 
 /**
  * 

@@ -34,7 +34,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.script.CompiledScript;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.attr.RsAttribute;
 

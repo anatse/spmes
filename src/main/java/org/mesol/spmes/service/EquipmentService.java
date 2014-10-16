@@ -15,16 +15,16 @@
  */
 package org.mesol.spmes.service;
 
-import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import static org.hibernate.criterion.Restrictions.*;
+import static org.hibernate.criterion.Restrictions.eq;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.repo.EquipmentRepo;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

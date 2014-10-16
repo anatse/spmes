@@ -32,7 +32,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.factory.Equipment;

@@ -33,7 +33,6 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
