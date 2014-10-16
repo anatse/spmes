@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RouteService 
 {
-    private static final Logger     logger = Logger.getLogger(RouteService.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @PersistenceContext
     private EntityManager           em;

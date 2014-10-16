@@ -18,6 +18,7 @@ package org.mesol.spmes.model.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.lang.invoke.MethodHandles;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -54,7 +55,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_USERNAME"))
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
-    private static final Logger     logger = Logger.getLogger(User.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)

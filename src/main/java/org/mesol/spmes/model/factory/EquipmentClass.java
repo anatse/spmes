@@ -43,8 +43,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Table(name = "EQC",  uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_EQC_NAME"))
 public class EquipmentClass extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(EquipmentClass.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "eqcId", sequenceName = "EQC_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqcId")

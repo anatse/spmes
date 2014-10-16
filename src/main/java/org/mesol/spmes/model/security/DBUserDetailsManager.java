@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.model.security;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
  */
 public class DBUserDetailsManager implements UserDetailsManager
 {
-    private static final Logger     logger = Logger.getLogger(DBUserDetailsManager.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @Autowired
     private UserService        userService;

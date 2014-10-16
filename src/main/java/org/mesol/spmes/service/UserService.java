@@ -48,28 +48,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService extends AbstractService<User>
 {
-    @PersistenceContext
-    private EntityManager           entityManager;
 
-    private static Calendar trunc (final Calendar cal) {
+    private static Calendar trunc(final Calendar cal) {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal;
     }
+    @PersistenceContext
+    private EntityManager           entityManager;
 
-    public UserService() {
+    public UserService () {
         super(User.class);
     }
 
     @Transactional
-    public UserShift getCurrentShift (Date curDate, User user) {
+    public UserShift getCurrentShift(Date curDate, User user) {
         Session session = getHibernateSession();
         UserShift us = (UserShift)session.getNamedQuery("UserShift.currentShift")
-                        .setParameter("curTime", UserShift.convertTime(curDate))
-                        .uniqueResult();
-
+            .setParameter("curTime", UserShift.convertTime(curDate))
+            .uniqueResult();
+        
         if (us == null)
             return null;
 
@@ -105,7 +105,7 @@ public class UserService extends AbstractService<User>
     }
 
     @Transactional
-    public User findByName(String username) {
+    public User findByName (String username) {
         Session session = getHibernateSession();
         User usr = (User) session.createCriteria(User.class)
             .add (eq("name", username))
@@ -134,7 +134,7 @@ public class UserService extends AbstractService<User>
      */
     @Transactional
     @Scheduled(cron = "0 0 0 * * SAT")
-    public void fillWorkDays () {
+    public void fillWorkDays() {
         Calendar cal = Calendar.getInstance();
         trunc (cal);
         int dayOfWeek = cal.get (Calendar.DAY_OF_WEEK);
@@ -168,14 +168,14 @@ public class UserService extends AbstractService<User>
             session.save(wcal);
         });
     }
-
-    public List<Menu> getUserMenu(String username, Long parentId) {
+    
+    public List<Menu> getUserMenu (String username, Long parentId) {
         Session session = getHibernateSession();
         DetachedCriteria userGroups = DetachedCriteria.forClass(User.class)
-                                .createAlias("groups", "grp")
-                                .add(eq ("name", username))
-                                .setProjection(Property.forName("grp.id"));
-
+            .createAlias("groups", "grp")
+            .add(eq ("name", username))
+            .setProjection(Property.forName("grp.id"));
+        
         return session.createCriteria(Menu.class)
             .add(parentId == null ? isNull("parent") : eq("parent.id", parentId))
             .createAlias("groups", "grp")
@@ -186,4 +186,5 @@ public class UserService extends AbstractService<User>
     protected EntityManager getEntityManager() {
         return entityManager;
     }
+
 }

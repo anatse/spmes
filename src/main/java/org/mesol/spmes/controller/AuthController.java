@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.controller;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -44,31 +45,26 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AuthController 
 {
+    private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
+    public static String getRevisionNumber() {
+        return "$Revision:$";
+    }
     @Autowired
     private UserService             userService;
 
     @Autowired
     private MessageSource           messageSource;
     
-    private static final Logger     logger = Logger.getLogger(AuthController.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
-
     @RequestMapping(value = "/")
-    public ModelAndView home(
-        HttpServletRequest request, 
-        HttpServletResponse response
-    ) {       
+    public ModelAndView home (HttpServletRequest request, HttpServletResponse response) {       
         return new ModelAndView("home");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
-            Locale locale,
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "logout", required = false) String logout) {
-
+        Locale locale, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
+        
         ModelAndView model = new ModelAndView();
         if (error != null) {
             String message = messageSource.getMessage("invalidCredentials.message", new Object[0], locale);
@@ -92,7 +88,8 @@ public class AuthController
     })
     @RequestMapping(value = "/service/menu")
     @Transactional
-    public List<Menu> getUserMenu (@RequestParam (value = "parentId", required = false) Long parentId) {
+    public List<Menu> getUserMenu(
+        @RequestParam (value = "parentId", required = false) Long parentId) {
         if (logger.isDebugEnabled())
             logger.debug("getUserMenu called");
 
@@ -112,4 +109,5 @@ public class AuthController
 
         return userService.findAll();
     }
+    
 }

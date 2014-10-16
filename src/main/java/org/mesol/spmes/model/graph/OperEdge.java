@@ -66,8 +66,6 @@ import org.mesol.spmes.model.factory.EquipmentClass;
             "order by level")
 public class OperEdge extends Edge<RouterStep> implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(OperEdge.class);
-    
     @ManyToOne
     @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_OPER_FROM", value = ConstraintMode.CONSTRAINT))
     private RouterStep              from;

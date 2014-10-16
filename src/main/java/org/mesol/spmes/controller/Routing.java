@@ -18,6 +18,7 @@ package org.mesol.spmes.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
@@ -49,7 +50,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/router")
 public class Routing 
 {
-    private static final Logger     logger = Logger.getLogger(Routing.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     
     @Autowired
     private RouteService            routeService;

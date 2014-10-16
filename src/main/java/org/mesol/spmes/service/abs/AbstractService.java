@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.service.abs;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
@@ -33,14 +34,14 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 public abstract class AbstractService<T extends AbstractEntity>
 {
-    protected static final Logger   logger = Logger.getLogger(AbstractService.class);
+    protected static final Logger   logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     private final Class<T>          entityClass;
 
-    protected abstract EntityManager getEntityManager();
-
-    protected AbstractService (Class<T> entityClass) {
+    protected AbstractService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
+
+    protected abstract EntityManager getEntityManager ();
 
     public List<T> findAll()
     {

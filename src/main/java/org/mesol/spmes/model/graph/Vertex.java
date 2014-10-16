@@ -31,5 +31,4 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vertex extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Vertex.class);
 }

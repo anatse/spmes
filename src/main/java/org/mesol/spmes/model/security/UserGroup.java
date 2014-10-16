@@ -42,8 +42,6 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "GRP", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_GRP_NAME"))
 public class UserGroup extends AbstractEntity implements Serializable, GrantedAuthority
 {
-    private static final Logger     logger = Logger.getLogger(UserGroup.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "grpId", sequenceName = "GRP_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "grpId")

@@ -16,6 +16,7 @@
 
 package org.mesol.spmes;
 
+import java.lang.invoke.MethodHandles;
 import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
@@ -52,14 +53,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class ImportTest 
 {
-    private static final Logger     logger = Logger.getLogger(ImportTest.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     
-    @Configuration
-	@EnableJpaRepositories
-	@EnableJpaAuditing
-	static class Config {
-
-	}
     
     @Autowired
     private Import      imp;
@@ -68,5 +63,11 @@ public class ImportTest
     @Ignore
     public void impTest () {
         imp.parse(getClass().getClassLoader().getResourceAsStream("imp/router.xml"));
+    }
+
+    @Configuration
+    @EnableJpaRepositories
+    @EnableJpaAuditing
+    static class Config {
     }
 }

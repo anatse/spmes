@@ -15,7 +15,7 @@
  */
 package org.mesol.spmes;
 
-import java.math.BigDecimal;
+import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
@@ -67,14 +67,8 @@ import org.springframework.util.Assert;
 @WebAppConfiguration
 public class RoutingTest 
 {
-    private static final Logger     logger = Logger.getLogger(RoutingTest.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Configuration
-	@EnableJpaRepositories
-	@EnableJpaAuditing
-	static class Config {
-
-	}
 
     @Autowired
     private RouteService        service;
@@ -193,5 +187,11 @@ public class RoutingTest
         catch (MultipleOperationsException ex) {
             Assert. isTrue(false, ex.toString());
         }
+    }
+
+    @Configuration
+    @EnableJpaRepositories
+    @EnableJpaAuditing
+    static class Config {
     }
 }

@@ -18,14 +18,13 @@ package org.mesol.spmes.service;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
-import java.util.logging.Level;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -56,16 +55,8 @@ import org.xml.sax.helpers.DefaultHandler;
 @Service
 public class Import extends DefaultHandler implements ApplicationContextAware
 {
-    private static final Logger     logger = Logger.getLogger(Import.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final class Container {
-        private Object                      entity;
-        private final List<Container>       children = new ArrayList<>();
-
-        public Container(Object entity) {
-            this.entity = entity;
-        }
-    }
 
     @PersistenceContext
     private EntityManager               entityManager;
@@ -219,6 +210,16 @@ public class Import extends DefaultHandler implements ApplicationContextAware
             catch (InstantiationException | IllegalAccessException ex) {
                 logger.error(ex, ex);
             }
+        }
+    }
+
+    private static class Container {
+
+        private final Object entity;
+        private final List<Container>       children = new ArrayList<>();
+
+        public Container(Object entity) {
+            this.entity = entity;
         }
     }
 }

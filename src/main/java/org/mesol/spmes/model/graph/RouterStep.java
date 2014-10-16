@@ -47,8 +47,6 @@ import org.mesol.spmes.model.graph.attr.RsAttribute;
 @Table(name = "RS")
 public class RouterStep extends Vertex
 {
-    private static final Logger         logger = Logger.getLogger(RouterStep.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "rsId", sequenceName = "RS_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "rsId")

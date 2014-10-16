@@ -45,8 +45,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Table(name = "MENU")
 public class Menu extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Menu.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "menuId", sequenceName = "MENU_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "menuId")

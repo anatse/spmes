@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.controller;
 
+import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/import")
 public class InitialImport 
 {
-    private static final Logger     logger = Logger.getLogger(InitialImport.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @Autowired
     private Import                  imp;

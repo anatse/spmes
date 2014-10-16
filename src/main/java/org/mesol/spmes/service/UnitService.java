@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.service;
 
+import java.lang.invoke.MethodHandles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
@@ -33,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UnitService extends AbstractService<Unit>
 {
-    private static final Logger     logger = Logger.getLogger(UnitService.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @PersistenceContext
     private EntityManager           entityManager;

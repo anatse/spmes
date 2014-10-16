@@ -47,8 +47,6 @@ import org.mesol.spmes.model.graph.attr.RouterAttribute;
 @Table(name = "ROUTER")
 public class Router extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Router.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "routerId", sequenceName = "ROUTER_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "routerId")

@@ -50,8 +50,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 )
 public class Equipment extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Equipment.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqId")

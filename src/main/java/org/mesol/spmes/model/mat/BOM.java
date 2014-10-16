@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.mat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -82,6 +83,7 @@ public class BOM extends AbstractEntity implements Serializable
         this.externalBom = externalBom;
     }
 
+    @JsonIgnore
     public List<BOMComponent> getComponents() {
         return components;
     }
