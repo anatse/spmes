@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -94,6 +95,16 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter
         }));
 
         return df;
+    }
+    
+    /**
+     * Property SPeL Configurer
+     * This bean allowed to use @Value ("${placeholder}") annotation
+     * @return PropertySourcesPlaceholderConfigurer
+     */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     /*---------------------------------------------------------------------------------
