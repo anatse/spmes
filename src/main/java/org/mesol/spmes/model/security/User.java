@@ -70,9 +70,9 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     private String          firstName;
     @Column(length = 180)
     private String          lastName;
-    private boolean         enabled = true;
-    private boolean         expired = false;
-    private boolean         locked = false;
+    private Boolean         enabled = true;
+    private Boolean         expired = false;
+    private Boolean         locked = false;
     private String          email;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -166,15 +166,15 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.lastName = lastName;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    public void setExpired(boolean expired) {
+    public void setExpired(Boolean expired) {
         this.expired = expired;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Boolean locked) {
         this.locked = locked;
     }
 

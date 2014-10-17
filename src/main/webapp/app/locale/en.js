@@ -43,7 +43,10 @@ Ext.define('NeoMes.locale.en', {
         save: 'Save',
         cancel: 'Cancel',
         delete: 'Delete',
-        close: 'Close'
+        close: 'Close',
+        add: 'Add',
+        update: 'Update',
+        lock: 'Lock'
     },
     messages: {
         wait: 'Please wait...'

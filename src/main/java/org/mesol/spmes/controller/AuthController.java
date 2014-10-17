@@ -26,6 +26,8 @@ import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
 import org.mesol.spmes.service.UserService;
+import org.mesol.spmes.utils.EntityCopier;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
@@ -131,10 +133,16 @@ public class AuthController
     @Transactional
     public User saveUser (
         @PathVariable("userId")Long userId,
-        @RequestBody User user, 
+        @RequestBody User changedUser, 
         HttpServletResponse httpResponse, 
         WebRequest request
     ) {
+        User user = userService.findOne(userId);
+        if (user != null) {
+            user = EntityCopier.copy(changedUser, user);
+            userService.save(user);
+        }
+
         return user;
     }
 }

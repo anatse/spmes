@@ -40,10 +40,13 @@ Ext.define('NeoMes.locale.ru', {
 
     },
     button: {
-        save: 'Save',
-        cancel: 'Cancel',
-        delete: 'Delete',
-        close: 'Close'
+        save: 'Сохранить',
+        cancel: 'Отмена',
+        delete: 'Удалить',
+        close: 'Закрыть',
+        add: 'Добавить',
+        update: 'Изменить',
+        lock: 'Блокировать'
     },
     messages: {
         wait: 'Пожалуйста подождите...'
