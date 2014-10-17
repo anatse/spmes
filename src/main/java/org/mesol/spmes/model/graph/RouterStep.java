@@ -36,6 +36,7 @@ import javax.persistence.Table;
 import javax.script.CompiledScript;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.attr.RsAttribute;
+import org.mesol.spmes.model.mat.BOM;
 
 /**
  * 
@@ -74,6 +75,10 @@ public class RouterStep extends Vertex
     @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_RS_ROUTER", value = ConstraintMode.CONSTRAINT))
     private Router                      router;
 
+    @ManyToOne
+    @JoinColumn(name = "BOM_ID", nullable = true, foreignKey = @ForeignKey(name = "FK_RS_BOM", value = ConstraintMode.CONSTRAINT))
+    private BOM                         bom;
+    
     @ElementCollection
     @CollectionTable (
         name = "RSA",
@@ -161,5 +166,13 @@ public class RouterStep extends Vertex
 
     public void setRuleScript(CompiledScript ruleScript) {
         this.ruleScript = ruleScript;
+    }
+
+    public BOM getBom() {
+        return bom;
+    }
+
+    public void setBom(BOM bom) {
+        this.bom = bom;
     }
 }

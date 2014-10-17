@@ -92,7 +92,6 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     private EquipmentClass          equipmentClass;
 
     public OperEdge() {
-        setType("Oper");
     }
 
     @Override
