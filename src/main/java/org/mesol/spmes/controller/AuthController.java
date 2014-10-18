@@ -15,6 +15,8 @@
  */
 package org.mesol.spmes.controller;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,8 @@ import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
 import org.mesol.spmes.service.UserService;
+import org.mesol.spmes.utils.EntityCopier;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
@@ -31,9 +35,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -44,31 +51,26 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AuthController 
 {
+    private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
+    public static String getRevisionNumber() {
+        return "$Revision:$";
+    }
     @Autowired
     private UserService             userService;
 
     @Autowired
     private MessageSource           messageSource;
     
-    private static final Logger     logger = Logger.getLogger(AuthController.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
-
     @RequestMapping(value = "/")
-    public ModelAndView home(
-        HttpServletRequest request, 
-        HttpServletResponse response
-    ) {       
+    public ModelAndView home (HttpServletRequest request, HttpServletResponse response) {       
         return new ModelAndView("home");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
-            Locale locale,
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "logout", required = false) String logout) {
-
+        Locale locale, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
+        
         ModelAndView model = new ModelAndView();
         if (error != null) {
             String message = messageSource.getMessage("invalidCredentials.message", new Object[0], locale);
@@ -92,24 +94,55 @@ public class AuthController
     })
     @RequestMapping(value = "/service/menu")
     @Transactional
-    public List<Menu> getUserMenu (@RequestParam (value = "parentId", required = false) Long parentId) {
+    public List<Menu> getUserMenu(
+        @RequestParam (value = "parentId", required = false) Long parentId) {
         if (logger.isDebugEnabled())
             logger.debug("getUserMenu called");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.getUserMenu(auth.getName(), parentId == -1 ? null : parentId);
     }
-    
+
+    /**
+     * Function implements LIST and GET operation of the REST interface for users
+     * @param userId - identifier of user id
+     * @return list of users, or information about concrete  user
+     */
     @Secured({
         BasicConstants.ADMIN_ROLE, 
         BasicConstants.CHIEF_ROLE
     })
-    @RequestMapping(value = "/service/user/list")
+    @RequestMapping(value = "/service/user/list", method = {RequestMethod.GET}, produces = {"application/json"})
     @Transactional
     public List<User> findAllUsers () {
         if (logger.isDebugEnabled())
             logger.debug("findAllUsers called");
 
         return userService.findAll();
+    }
+
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
+    @RequestMapping(value = "/service/user/list/{userId}", 
+        method = {RequestMethod.PUT},
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
+    @Transactional
+    public User saveUser (
+        @PathVariable("userId")Long userId,
+        @RequestBody User changedUser, 
+        HttpServletResponse httpResponse, 
+        WebRequest request
+    ) {
+        User user = userService.findOne(userId);
+        if (user != null) {
+            user = EntityCopier.copy(changedUser, user);
+            userService.save(user);
+        }
+
+        return user;
     }
 }

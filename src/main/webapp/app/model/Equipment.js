@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Ext.define('NeoMes.view.user.UserViewModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.users',
-    
-    data : {
-        rec : null
+Ext.define('NeoMes.model.Equipment', {
+    extend: 'Ext.data.Model',
+    fields: ['name', 'description'],
+    hasMany : {
+        model : 'NeoMes.model.EquipmentAttributes',
+        name  : 'attributes'
     }
 });
-

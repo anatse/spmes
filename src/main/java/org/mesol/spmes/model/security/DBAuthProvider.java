@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.security;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,7 +33,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public class DBAuthProvider extends AbstractUserDetailsAuthenticationProvider 
 {
-    private static final Logger logger = Logger.getLogger(DBAuthProvider.class);
+    private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
+    public static String getRevisionNumber() {
+        return "$Revision:$";
+    }
     private UserDetailsService userDetailsService;
 
     public void setUserDetailsService(UserDetailsService userDetailsService) {
@@ -41,10 +46,6 @@ public class DBAuthProvider extends AbstractUserDetailsAuthenticationProvider
 
     protected UserDetailsService getUserDetailsService() {
         return userDetailsService;
-    }
-
-    public static String getRevisionNumber() {
-        return "$Revision:$";
     }
 
     @Override
@@ -80,4 +81,5 @@ public class DBAuthProvider extends AbstractUserDetailsAuthenticationProvider
 
         return loadedUser;
     }
+
 }

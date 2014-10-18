@@ -16,7 +16,7 @@
 
 package org.mesol.spmes.config;
 
-import java.util.Collection;
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.security.DBAuthProvider;
 import org.mesol.spmes.model.security.DBUserDetailsManager;
@@ -26,15 +26,12 @@ import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.core.Authentication;
 
 /**
  * $Rev:$
@@ -49,10 +46,10 @@ import org.springframework.security.core.Authentication;
 @EnableGlobalMethodSecurity(securedEnabled = true, mode = AdviceMode.ASPECTJ)
 public class WebMvcSecurityConfig extends WebSecurityConfigurerAdapter
 {
-    @Autowired(required = true)
-    private DBUserDetailsManager        userDetailsManager;
 
-    private static final Logger         logger = Logger.getLogger(WebMvcSecurityConfig.class);
+    private static final Logger         logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+    @Autowired(required = true)
+    private DBUserDetailsManager userDetailsManager;
     
     @Bean
     @Override 

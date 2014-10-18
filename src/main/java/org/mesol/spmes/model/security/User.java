@@ -18,6 +18,7 @@ package org.mesol.spmes.model.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.lang.invoke.MethodHandles;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -54,7 +55,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "USR", uniqueConstraints=@UniqueConstraint(columnNames={"NAME"}, name = "UK_USERNAME"))
 public class User extends AbstractEntity implements Serializable, UserDetails
 {
-    private static final Logger     logger = Logger.getLogger(User.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @Id
     @SequenceGenerator(initialValue = 1, name = "usrId", sequenceName = "USR_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
@@ -69,9 +70,10 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     private String          firstName;
     @Column(length = 180)
     private String          lastName;
-    private boolean         enabled = true;
-    private boolean         expired = false;
-    private boolean         locked = false;
+    private Boolean         enabled = true;
+    private Boolean         expired = false;
+    private Boolean         locked = false;
+    private String          email;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -164,15 +166,15 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.lastName = lastName;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    public void setExpired(boolean expired) {
+    public void setExpired(Boolean expired) {
         this.expired = expired;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Boolean locked) {
         this.locked = locked;
     }
 
@@ -206,5 +208,13 @@ public class User extends AbstractEntity implements Serializable, UserDetails
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

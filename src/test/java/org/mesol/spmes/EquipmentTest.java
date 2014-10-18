@@ -55,12 +55,6 @@ import org.springframework.util.Assert;
 @WebAppConfiguration
 public class EquipmentTest {
 
-    @Configuration
-	@EnableJpaRepositories
-	@EnableJpaAuditing
-	static class Config {
-
-	}
     
     @Autowired
     private EquipmentService    eqService;
@@ -118,6 +112,12 @@ public class EquipmentTest {
 //        );
 
 //        Assert.notEmpty(eqs, "Not found any equipment");
+    }
+
+    @Configuration
+    @EnableJpaRepositories
+    @EnableJpaAuditing
+    static class Config {
     }
 }
 

@@ -16,6 +16,7 @@
 package org.mesol.spmes.utils;
 
 
+import java.lang.invoke.MethodHandles;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import org.apache.log4j.Logger;
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class GroovyExecutor extends FutureTask<Object>
 {
-    private static final Logger     logger = Logger.getLogger(GroovyExecutor.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     public GroovyExecutor(Callable<Object> callable) {
         super(callable);

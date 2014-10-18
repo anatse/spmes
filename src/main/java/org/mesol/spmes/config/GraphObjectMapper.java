@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ser.PropertyFilter;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 
@@ -39,21 +40,35 @@ import org.apache.log4j.Logger;
  */
 public class GraphObjectMapper extends ObjectMapper 
 {
-    private static final Logger     logger = Logger.getLogger(GraphObjectMapper.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     
     static final long serialVersionUID = 1L;
     
-    public static final class JsonFilter extends SimpleFilterProvider {
+
+    public static String getRevisionNumber() {
+        return "$Revision:$";
+    }
+
+    public GraphObjectMapper() {
+        super ();
+        _serializationConfig = _serializationConfig
+            .withSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .withSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+            .without(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+            .without(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .withFilters(new JsonFilter());
+        
+        setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
+    }
+
+    public static class JsonFilter extends SimpleFilterProvider {
+
         private static final HashSet<String> hiddenFields = new HashSet<>();
         static {
             hiddenFields.add("password");
             hiddenFields.add("callbacks");
             hiddenFields.add("managed");
         }
-
         private final PropertyFilter pf;
 
         public JsonFilter() {
@@ -74,17 +89,5 @@ public class GraphObjectMapper extends ObjectMapper
         public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
             return pf;
         }
-    }
-
-    public GraphObjectMapper() {
-        super ();
-        _serializationConfig = _serializationConfig
-                .withSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .withSerializationInclusion(JsonInclude.Include.NON_EMPTY)
-                .without(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-                .without(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .withFilters(new JsonFilter());
-
-        setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
     }
 }

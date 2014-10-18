@@ -4,13 +4,10 @@ Ext.define('NeoMes.store.Users', {
     autoLoad: true,
 
     proxy:{
-        type: 'ajax',
-        api:{
-            read: 'service/user/list.json',
-            update: 'service/user/update.json'
-        },
+        type: 'rest',
+        url: 'service/user/list',
+        headers: NeoMes.utils.CommonUtils.buildCSRFHeader(),
         reader:{
-            type: 'json',
             rootProperty: 'userList'
         }
     }

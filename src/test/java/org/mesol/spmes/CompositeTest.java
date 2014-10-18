@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,14 +49,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class CompositeTest 
 {
-    private static final Logger     logger = Logger.getLogger(CompositeTest.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     
-    @Configuration
-	@EnableJpaRepositories
-	@EnableJpaAuditing
-	static class Config {
-
-	}
     
     @Autowired
     private Composite               composite;
@@ -63,5 +58,11 @@ public class CompositeTest
     @Test
     public void test () {
         composite.testGateway();
+    }
+
+    @Configuration
+    @EnableJpaRepositories
+    @EnableJpaAuditing
+    static class Config {
     }
 }

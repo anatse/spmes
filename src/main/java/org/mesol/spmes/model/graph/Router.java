@@ -32,7 +32,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.factory.Equipment;
@@ -47,8 +46,6 @@ import org.mesol.spmes.model.graph.attr.RouterAttribute;
 @Table(name = "ROUTER")
 public class Router extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Router.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "routerId", sequenceName = "ROUTER_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "routerId")

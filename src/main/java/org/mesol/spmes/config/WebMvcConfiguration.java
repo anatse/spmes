@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -60,7 +61,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/app/**").addResourceLocations("/app/").setCachePeriod(31556926);
+        registry.addResourceHandler("/app/**").addResourceLocations("/app/").setCachePeriod(31_556_926);
         registry.addResourceHandler("/ext/**").addResourceLocations("/ext/");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
@@ -94,6 +95,16 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter
         }));
 
         return df;
+    }
+
+    /**
+     * Property SPeL Configurer
+     * This bean allowed to use @Value ("${placeholder}") annotation
+     * @return PropertySourcesPlaceholderConfigurer
+     */
+    @Bean
+    public PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     /*---------------------------------------------------------------------------------

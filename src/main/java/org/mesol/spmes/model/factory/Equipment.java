@@ -22,18 +22,19 @@ import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -50,8 +51,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 )
 public class Equipment extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Equipment.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "eqId", sequenceName = "EQ_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "eqId")
@@ -60,12 +59,19 @@ public class Equipment extends AbstractEntity implements Serializable
     private String                  name;
     @Column(name = "DESCRIPTION", length = 255)
     private String                  description;
-    @ManyToMany(mappedBy = "equipments")
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable(
+        name="EQC2EQ",        
+        joinColumns = @JoinColumn(name="EQ_ID", referencedColumnName="ID"),
+        inverseJoinColumns = @JoinColumn(name="EQC_ID", referencedColumnName="ID"),
+        foreignKey = @ForeignKey(name = "FK_EQC_EQC", value = ConstraintMode.CONSTRAINT),
+        inverseForeignKey = @ForeignKey(name = "FK_EQ_EQ", value = ConstraintMode.CONSTRAINT)
+    )    
     private Set<EquipmentClass>     equipmentClasses;
     @ManyToOne
     @JoinColumn(name="PARENT_ID", foreignKey = @ForeignKey(name = "FK_EQ_PARENT", value = ConstraintMode.CONSTRAINT))
     private Equipment               parentEquipment;
-    @ElementCollection
+    @ElementCollection (fetch = FetchType.EAGER)
     @CollectionTable (
         name = "EQA",
         joinColumns = @JoinColumn(name = "EQ_ID")

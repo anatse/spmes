@@ -34,9 +34,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.script.CompiledScript;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.attr.RsAttribute;
+import org.mesol.spmes.model.mat.BOM;
 
 /**
  * 
@@ -47,8 +47,6 @@ import org.mesol.spmes.model.graph.attr.RsAttribute;
 @Table(name = "RS")
 public class RouterStep extends Vertex
 {
-    private static final Logger         logger = Logger.getLogger(RouterStep.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "rsId", sequenceName = "RS_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "rsId")
@@ -77,6 +75,10 @@ public class RouterStep extends Vertex
     @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_RS_ROUTER", value = ConstraintMode.CONSTRAINT))
     private Router                      router;
 
+    @ManyToOne
+    @JoinColumn(name = "BOM_ID", nullable = true, foreignKey = @ForeignKey(name = "FK_RS_BOM", value = ConstraintMode.CONSTRAINT))
+    private BOM                         bom;
+    
     @ElementCollection
     @CollectionTable (
         name = "RSA",
@@ -164,5 +166,13 @@ public class RouterStep extends Vertex
 
     public void setRuleScript(CompiledScript ruleScript) {
         this.ruleScript = ruleScript;
+    }
+
+    public BOM getBom() {
+        return bom;
+    }
+
+    public void setBom(BOM bom) {
+        this.bom = bom;
     }
 }

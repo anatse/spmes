@@ -15,8 +15,9 @@
  */
 package org.mesol.spmes.model.mat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,7 +49,9 @@ public class BOM extends AbstractEntity implements Serializable
     @Column(name = "EXTERNAL_BOM", length = 180)
     private String              externalBom;
     @OneToMany(mappedBy = "bom")
-    private List<BOMComponent>  components;
+    private Set<BOMInputCmp>    inputComponents;
+    @OneToMany(mappedBy = "bom")
+    private Set<BOMOutputCmp>   outputComponents;
 
     public Long getId() {
         return id;
@@ -82,11 +85,21 @@ public class BOM extends AbstractEntity implements Serializable
         this.externalBom = externalBom;
     }
 
-    public List<BOMComponent> getComponents() {
-        return components;
+    @JsonIgnore
+    public Set<BOMInputCmp> getInputComponents() {
+        return inputComponents;
     }
 
-    public void setComponents(List<BOMComponent> components) {
-        this.components = components;
+    public void setInputComponents(Set<BOMInputCmp> inputComponents) {
+        this.inputComponents = inputComponents;
+    }
+
+    @JsonIgnore
+    public Set<BOMOutputCmp> getOutputComponents() {
+        return outputComponents;
+    }
+
+    public void setOutputComponents(Set<BOMOutputCmp> outputComponents) {
+        this.outputComponents = outputComponents;
     }
 }

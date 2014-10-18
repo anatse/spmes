@@ -13,67 +13,141 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//Ext.define('NeoMes.view.factory.Equipment', {
+//    extend: 'Ext.tree.Panel',
+////    requires: [
+////        'Ext.draw.Component'
+////    ],
+//    xtype: 'treepanel',
+//    layout: 'border',
 Ext.define('NeoMes.view.factory.Equipment', {
     extend: 'Ext.panel.Panel',
+    xtype: 'equipmentPanel',
+    alias: 'widget.equipment',    
     requires: [
-        'Ext.draw.Component'
+        'Ext.layout.container.Border',
+        'NeoMes.controller.Equipment'
     ],
-    layout: 'fit',
-    alias: 'widget.equipment',
-    title: 'Organization chart',
-    initComponent: function() {
-        var drawComponent = Ext.create('Ext.draw.Component', {
-            viewBox: false,
-            items: [{
-                    type: 'text', // ������ ������ �����
-                    text: '��� �������',
-                    fill: 'dark-gray', // ���� ������
-                    font: '14px serif', // ��������� ������
-                    x: 80,
-                    y: 10
-                }, {
-                    type: 'rect', //������ �������������
-                    width: 50,
-                    height: 50,
-                    fill: 'blue',
-                    x: 10,
-                    y: 20
-                }, {
-                    type: 'circle', // ������ ����
-                    radius: 25,
-                    fill: '#eee',
-                    x: 100,
-                    y: 45,
-                    stroke: 'red', // ������� �������-�������
-                    'stroke-width': 1 //������� �������
-                }, {
-                    type: 'ellipse', // ������ ������
-                    radiusX: 30,
-                    radiusY: 20,
-                    fill: '#eee',
-                    opacity: 0.5,
-                    x: 140,
-                    y: 45,
-                    stroke: 'red',
-                    'stroke-width': 1
-                }, {
-                    type: 'image', // ������-�����������
-                    src: 'Penguins.jpg', //���� � ����������� - ����� � ������ ���-��������
-                    width: 150,
-                    height: 100,
-                    x: 200,
-                    y: 15
-                }, {
-                    type: 'path', // ������ ����
-                    path: 'M 400 20 L 350 150 L 450 150', // ���������� ����� ����
-                    fill: '#ccc'
-                }]
-        });
+    controller: 'equipment',
+    layout: 'border',
+//    width: 500,
+    height: 680,
+    border: false,
+    defaults: {
+        collapsible: true,
+        split: true
+//        stateful: true
+        //bodyPadding: 10
+    },
 
-        this.width = 800;
-        this.height = 600;
-        this.items = [drawComponent];
+    items: [
+        {
+            title: 'Equipment Attributes',
+            region: 'south',
+            height: '50%',
+            tbar : [{
+                text : "Добавить",
+                xtype : 'button',
+                height : '20px',
+                action : 'eqAttrAdd'
+//                listeners : {
+//                        scope : this,
+//                        click : function(node, rec) {alert('OK!')}
+//                }
+            },{
+                text : "Удалить",
+                xtype : 'button',
+                height : '20px',
+                action : 'eqAttrDel'
+//                listeners : {
+//                        scope : this,
+//                        click : function(node, rec) {alert('OK!')}
+//                }
+            },{
+                text : "Сохранить",
+                xtype : 'button',
+                height : '20px',
+                action : 'eqAttrSave'
+//                listeners : {
+//                        scope : this,
+//                        click : function(node, rec) {alert('OK!')}
+//                }
+            }],            
+            items:[{
+                xtype: 'propertygrid',
+                id: 'eqAttrGrid',
+                nameColumnWidth: 165,
+                source: {}
+            }]
+            
+//            minHeight: 75,
+//            maxHeight: 150,
+            //html: '<p>Eq Attr content</p>'
+        },
+        {
+            title: 'Equipment:',
+            collapsible: false,
+            height: '50%',
+            tbar : [{
+                text : "Добавить",
+                xtype : 'button',
+                height : '20px',
+                listeners : {
+                        scope : this,
+                        click : function(node, rec) {alert('OK!')}
+                }
+            },{
+                text : "Изменить",
+                xtype : 'button',
+                height : '20px',
+                listeners : {
+                        scope : this,
+                        click : function(node, rec) {alert('OK!')}
+                }
+            },{
+                text : "Удалить",
+                xtype : 'button',
+                height : '20px',
+                listeners : {
+                        scope : this,
+                        click : function(node, rec) {alert('OK!')}
+                }
+            }],
+            region: 'center',
+            autoScroll: true,
+            items:[{
+                xtype: 'treepanel',
+                id: 'eqGrid',
+                idField: 'id',
+                displayField: 'name',
+                autoScroll: false,
+                rootVisible: false,
+                store: Ext.create('NeoMes.store.Equipment'),
+                lines: false,
+                listeners: {
+                    itemclick: function(node, rec) {                                    
+                        var propGrid = Ext.getCmp('eqAttrGrid');
+                        if (propGrid)
+                        {
+                            var attributes = [];
+                            attributes = Ext.Array.toArray(rec.get('attributes'));
+                            
+                            var source = {};
+                            
+                            Ext.Array.forEach(attributes, function(record) {
+                              source[record.name] = record.attrValue;
+                            });
+                            
+                            propGrid.setSource(source);                         
+                        }
+                    }
+                }
+            }]
+        }
+    ],
+    initComponent: function() {
+
         this.callParent();
-    }
+    }      
 });
 

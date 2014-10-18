@@ -15,7 +15,6 @@
  */
 package org.mesol.spmes.model.graph;
 
-import org.mesol.spmes.model.graph.attr.OperAttribute;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -31,8 +30,8 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.model.factory.EquipmentClass;
+import org.mesol.spmes.model.graph.attr.OperAttribute;
 
 /**
  * Class describes operation edge
@@ -66,8 +65,6 @@ import org.mesol.spmes.model.factory.EquipmentClass;
             "order by level")
 public class OperEdge extends Edge<RouterStep> implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(OperEdge.class);
-    
     @ManyToOne
     @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_OPER_FROM", value = ConstraintMode.CONSTRAINT))
     private RouterStep              from;
@@ -95,7 +92,6 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     private EquipmentClass          equipmentClass;
 
     public OperEdge() {
-        setType("Oper");
     }
 
     @Override

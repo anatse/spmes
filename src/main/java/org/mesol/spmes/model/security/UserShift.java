@@ -43,6 +43,16 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 )
 public class UserShift extends AbstractEntity implements Serializable
 {
+
+    public static int convertTime(int hour, int minutes, int seconds) {
+        return hour * 3600 + minutes * 60 + seconds;
+    }
+
+    public static int convertTime(Date time) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        return convertTime(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+    }
     @Id
     @SequenceGenerator(initialValue = 1, name = "ushId", sequenceName = "USH_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "ushId")
@@ -89,13 +99,4 @@ public class UserShift extends AbstractEntity implements Serializable
         this.endTime = endTime;
     }
 
-    public static int convertTime (int hour, int minutes, int seconds) {
-        return hour * 3600 + minutes * 60 + seconds;
-    }
-
-    public static int convertTime (Date time) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(time);
-        return convertTime(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-    }
 }

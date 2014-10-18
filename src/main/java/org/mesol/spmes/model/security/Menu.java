@@ -16,7 +16,6 @@
 package org.mesol.spmes.model.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
@@ -32,7 +31,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 
@@ -45,8 +43,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Table(name = "MENU")
 public class Menu extends AbstractEntity implements Serializable
 {
-    private static final Logger     logger = Logger.getLogger(Menu.class);
-
     @Id
     @SequenceGenerator(initialValue = 1, name = "menuId", sequenceName = "MENU_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "menuId")

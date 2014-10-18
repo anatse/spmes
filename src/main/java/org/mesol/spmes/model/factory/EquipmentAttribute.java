@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.factory;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.hibernate.annotations.Parent;
@@ -27,11 +28,12 @@ import org.mesol.spmes.model.abs.AbstractAttribute;
  */
 @Embeddable
 public class EquipmentAttribute extends AbstractAttribute
-{
+{   
     @Parent
     @Column(name = "EQ_ID")
     private Equipment           owner;
 
+    @JsonIgnore
     public Equipment getOwner() {
         return owner;
     }

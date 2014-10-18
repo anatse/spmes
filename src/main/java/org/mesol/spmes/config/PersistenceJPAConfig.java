@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.config;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -54,24 +55,24 @@ import org.springframework.util.Assert;
 public class PersistenceJPAConfig 
 {
     public static final String CONFIG = "ds/jdbc.properties";
-    private static final Logger logger = Logger.getLogger(PersistenceJPAConfig.class);
-    
-    @Autowired
-    private Environment                             env;
+    private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     public static String getRevisionNumber() {
         return "$Revision:$";
     }
     
+    @Autowired
+    private Environment                             env;
+
     @Bean
-    public AuditorAware<User> auditorProvider() {
+    public AuditorAware<String> auditorProvider() {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
                 return null;
             }
 
-            return ((User) authentication.getPrincipal());
+            return ((User) authentication.getPrincipal()).getUsername();
         };
     }
 
@@ -128,11 +129,11 @@ public class PersistenceJPAConfig
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    private void readAndSetProperty (Properties properties, String property) {
+    private void readAndSetProperty(Properties properties, String property) {
         properties.setProperty(property, env.getProperty(property));
     }
     
-    private Properties additionalProperties() {
+    private Properties additionalProperties () {
         Properties properties = new Properties();
         readAndSetProperty(properties, "hibernate.generateDDL");
         readAndSetProperty(properties, "hibernate.dialect");
@@ -140,4 +141,5 @@ public class PersistenceJPAConfig
         readAndSetProperty(properties, "hibernate.default_schema");
         return properties;
     }
+    
 }

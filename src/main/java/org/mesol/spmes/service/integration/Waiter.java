@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.service.integration;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.factory.Equipment;
 
@@ -26,8 +27,8 @@ import org.mesol.spmes.model.factory.Equipment;
  */
 public class Waiter 
 {
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     private Equipment eq;
-    private static final Logger     logger = Logger.getLogger(Waiter.class);
  	public Waiter prepareDelivery(Equipment eq) {
         if (logger.isInfoEnabled())
             logger.info("Equipment: " + eq.getName());

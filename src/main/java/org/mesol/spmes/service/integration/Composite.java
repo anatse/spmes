@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.service.integration;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Description("Class used to work with spring integration composites")
 public class Composite 
 {
-    private static final Logger     logger = Logger.getLogger(Composite.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @Autowired
     private ApplicationContext      ctx;
@@ -65,11 +66,10 @@ public class Composite
             new ClassPathXmlApplicationContext (new String[]{"integration/cafeDemo-xml.xml"}, ctx)) {
             BeanGateway bg = ac.getBean("bgate", BeanGateway.class);
             Object ret = bg.placeOrder("WC-1");
-            System.out.println ("result: " + ret.getClass().getName());
         }
     }
 
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRate = 50_000)
     public void scheduler () {
         logger.info("scheduler called");
     }

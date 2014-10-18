@@ -23,7 +23,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.apache.log4j.Logger;
 
 /**
  * 
@@ -34,8 +33,6 @@ import org.apache.log4j.Logger;
 @Table(name = "MMDS")
 public class MatMdStatus implements Serializable 
 {
-    private static final Logger     logger = Logger.getLogger(MatMdStatus.class);
-
     @Id
     @Column(length =  10)
     private String                  name;

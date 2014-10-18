@@ -13,38 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.refs;
+package org.mesol.spmes.model.mat;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.ConstraintMode;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Embeddable
-public class Quantity implements Serializable 
+@Entity
+@DiscriminatorValue("IN")
+public class BOMInputCmp extends BOMComponent implements Serializable
 {
-    @Column(name = "QTY_UNIT_CODE", length = 32)
-    private String      unitCode;
-    @Column(name = "QTY")
-    private Double  quantity;
+    @ManyToOne
+    @JoinColumn(name = "BOM_ID", foreignKey = @ForeignKey(name = "FK_BOMC_BOM", value = ConstraintMode.CONSTRAINT))
+    private BOM                     bom;
 
-    public Double getQuantity() {
-        return quantity;
+    @Override
+    public BOM getBom() {
+        return bom;
     }
 
-    public void setQuantity(Double quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getUnitCode() {
-        return unitCode;
-    }
-
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
+    @Override
+    public void setBom(BOM bom) {
+        this.bom = bom;
     }
 }

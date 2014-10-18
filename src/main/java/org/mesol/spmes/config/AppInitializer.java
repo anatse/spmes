@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.config;
 
+import java.lang.invoke.MethodHandles;
 import javax.servlet.Filter;
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -34,7 +35,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 @EnableAsync
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
 {
-    private static final Logger     logger = Logger.getLogger(AppInitializer.class);
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     public static String getRevisionNumber () {
         return "$Revision:$";
     }

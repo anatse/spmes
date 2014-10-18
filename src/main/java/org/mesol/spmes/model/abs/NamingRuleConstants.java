@@ -29,4 +29,5 @@ public interface NamingRuleConstants
     String VALUE = "attrValue";
     String ID = "id";
     String PARENT = "parent";
+    String PARENT_EQ = "parentEquipment";
 }

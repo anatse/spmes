@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Ext.define('NeoMes.view.user.List', {
-    extend: 'Ext.form.Panel',
-    alias: 'widget.users',
-    requires : [
-        'NeoMes.view.user.UserViewModel'
-    ],
-    viewModel: {
-        type: 'users'
-    },
-    items: [{
-        xtype: 'button',
-        bind: {
-            hidden: '{!name}' 
-        }
+Ext.define('NeoMes.model.EquipmentAttributes', {
+    extend: 'Ext.data.Model',
+    fields: ['ATTRTYPE', 'NAME', 'ATTRVALUE'],  
+    associations : [{
+        model : 'NeoMes.model.Equipment',
+        name : 'equipment',
+        type : 'belongsTo'
     }]
 });
-

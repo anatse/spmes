@@ -15,16 +15,17 @@
  */
 package org.mesol.spmes.service;
 
-import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.hibernate.Criteria;
 import static org.hibernate.criterion.Restrictions.*;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.repo.EquipmentRepo;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,10 +63,29 @@ public class EquipmentService extends AbstractServiceWithAttributes<Equipment, E
         return equipmentRepo.findRootElements();
     }
     
+    public Equipment findById (Long eqId) {
+        return equipmentRepo.findOne(eqId);
+    }
+   
+    public List<Equipment> getAll () {
+        return (List<Equipment>) equipmentRepo.findAll();
+    }
+
+    public List<EquipmentAttribute> getAttributesByEquipment (Long eqId) {
+        Equipment eq;
+        eq = this.findById(eqId);        
+        return (List<EquipmentAttribute>) eq.getAttributes();
+    }
+    
+    @Transactional
     public List<Equipment> findByParent (Equipment parent) {
+        
+//        return equipmentRepo.findByParentEquipment(parent);
         return getHibernateSession().createCriteria(Equipment.class).add (
-            eq(NamingRuleConstants.PARENT, parent)
-        ).list();
+            eq(NamingRuleConstants.PARENT_EQ, parent)
+        )//.setFetchMode("equipmentClasses", FetchMode.SELECT)
+         //.setFetchMode(NamingRuleConstants.ATTRIBUTES, FetchMode.SELECT)
+         .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Transactional
