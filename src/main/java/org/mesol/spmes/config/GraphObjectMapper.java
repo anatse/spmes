@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 
@@ -59,6 +60,7 @@ public class GraphObjectMapper extends ObjectMapper
             .withFilters(new JsonFilter());
         
         setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
+        setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
     }
 
     public static class JsonFilter extends SimpleFilterProvider {

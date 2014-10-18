@@ -15,6 +15,10 @@
  */
 package org.mesol.spmes.model.abs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.Type;
@@ -48,18 +52,23 @@ public abstract class AbstractEntity
     @LastModifiedBy
     private String          modifiedBy;
 
-    public DateTime getCreatedDate() {
-        return createdDate;
+    @JsonProperty
+    public Timestamp getCreatedDate() {
+        // int offset = DateTimeZone.forID("anytimezone").getOffset(new DateTime());
+        return new Timestamp(createdDate.getMillis());
     }
 
+    @JsonIgnore
     public void setCreatedDate(DateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public DateTime getModifiedDate() {
-        return modifiedDate;
+    @JsonProperty
+    public Timestamp getModifiedDate() {
+        return new Timestamp(modifiedDate.getMillis());
     }
 
+    @JsonIgnore
     public void setModifiedDate(DateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
