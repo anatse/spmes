@@ -16,7 +16,6 @@
 package org.mesol.spmes.controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
 import org.mesol.spmes.service.UserService;
 import org.mesol.spmes.utils.EntityCopier;
-import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
@@ -86,6 +84,11 @@ public class AuthController
         return model;
     }
 
+    /**
+     * Function return menu for current user
+     * @param parentId
+     * @return 
+     */
     @Secured({
         BasicConstants.ADMIN_ROLE,
         BasicConstants.CHIEF_ROLE,
@@ -105,7 +108,6 @@ public class AuthController
 
     /**
      * Function implements LIST and GET operation of the REST interface for users
-     * @param userId - identifier of user id
      * @return list of users, or information about concrete  user
      */
     @Secured({
@@ -120,7 +122,34 @@ public class AuthController
 
         return userService.findAll();
     }
+    
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
+    @RequestMapping(
+        value = "/service/user/list", 
+        method = {RequestMethod.POST}, 
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
+    @Transactional
+    public User createUser (
+        @RequestBody User newUser
+    ) {
+        if (logger.isDebugEnabled())
+            logger.debug("findAllUsers called");
+        
+        userService.save(newUser);
+        return newUser;
+    }
 
+    /**
+     * Function update user information
+     * @param userId - user identifier
+     * @param changedUser - changed user data
+     * @return updated user
+     */
     @Secured({
         BasicConstants.ADMIN_ROLE, 
         BasicConstants.CHIEF_ROLE
@@ -133,9 +162,7 @@ public class AuthController
     @Transactional
     public User saveUser (
         @PathVariable("userId")Long userId,
-        @RequestBody User changedUser, 
-        HttpServletResponse httpResponse, 
-        WebRequest request
+        @RequestBody User changedUser
     ) {
         User user = userService.findOne(userId);
         if (user != null) {

@@ -62,8 +62,8 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
     private Long id;
     
-    @Column(nullable = false, length = 32)
-    private String          name;
+    @Column(name="NAME", nullable = false, length = 32)
+    private String          username;
     @Column(nullable = false, length = 180)
     private String          password;
     @Column(length = 180)
@@ -90,7 +90,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     
     public User(UserDetails usr) {
         password = encodePwd (usr.getPassword());
-        name = usr.getUsername();
+        username = usr.getUsername();
         groups = new HashSet<>();
 
         usr.getAuthorities().forEach(grp -> {
@@ -108,14 +108,13 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override
@@ -138,8 +137,8 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         return enabled;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     private String encodePwd (String password) {
@@ -206,6 +205,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         return id;
     }
 
+    @JsonIgnore
     public void setId(Long id) {
         this.id = id;
     }

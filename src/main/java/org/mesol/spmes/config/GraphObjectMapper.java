@@ -19,6 +19,7 @@ package org.mesol.spmes.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -56,38 +57,12 @@ public class GraphObjectMapper extends ObjectMapper
             .withSerializationInclusion(JsonInclude.Include.NON_EMPTY)
             .without(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .without(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .withFilters(new JsonFilter());
+            .withVisibility(PropertyAccessor.IS_GETTER, Visibility.PUBLIC_ONLY);
+
+        _deserializationConfig = _deserializationConfig
+            .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .withVisibility(PropertyAccessor.SETTER, Visibility.PUBLIC_ONLY);
         
-        setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
-    }
-
-    public static class JsonFilter extends SimpleFilterProvider {
-
-        private static final HashSet<String> hiddenFields = new HashSet<>();
-        static {
-            hiddenFields.add("password");
-            hiddenFields.add("callbacks");
-            hiddenFields.add("managed");
-        }
-        private final PropertyFilter pf;
-
-        public JsonFilter() {
-            this.pf = new SimpleBeanPropertyFilter() {
-                @Override
-                protected boolean include(BeanPropertyWriter writer) {
-                    return !hiddenFields.contains(writer.getName());
-                }
-                
-                @Override
-                protected boolean include(PropertyWriter writer) {
-                    return !hiddenFields.contains(writer.getName());
-                }
-            };
-        }
-        
-        @Override
-        public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
-            return pf;
-        }
+//        setVisibility(PropertyAccessor.IS_GETTER, Visibility.PUBLIC_ONLY);
     }
 }

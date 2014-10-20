@@ -109,7 +109,7 @@ public class UserService extends AbstractService<User>
     public User findByName (String username) {
         Session session = getHibernateSession();
         User usr = (User) session.createCriteria(User.class)
-            .add (eq("name", username))
+            .add (eq("username", username))
             .setFetchMode("groups", FetchMode.JOIN)
             .uniqueResult();
 
@@ -174,7 +174,7 @@ public class UserService extends AbstractService<User>
         Session session = getHibernateSession();
         DetachedCriteria userGroups = DetachedCriteria.forClass(User.class)
             .createAlias("groups", "grp")
-            .add(eq ("name", username))
+            .add(eq ("username", username))
             .setProjection(Property.forName("grp.id"));
         
         return session.createCriteria(Menu.class)
