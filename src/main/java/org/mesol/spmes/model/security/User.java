@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
@@ -153,6 +154,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         }
     }
     
+    @JsonProperty
     public void setPassword(String password) {
         this.password = encodePwd(password);
     }
@@ -201,6 +203,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         groups.add(users);
     }
 
+    @JsonProperty
     public Long getId() {
         return id;
     }

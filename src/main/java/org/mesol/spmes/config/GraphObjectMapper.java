@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 
@@ -63,6 +64,38 @@ public class GraphObjectMapper extends ObjectMapper
             .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .withVisibility(PropertyAccessor.SETTER, Visibility.PUBLIC_ONLY);
         
+        setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
+        setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
+    }
+
+    public static class JsonFilter extends SimpleFilterProvider {
+
+        private static final HashSet<String> hiddenFields = new HashSet<>();
+        static {
+            hiddenFields.add("password");
+            hiddenFields.add("callbacks");
+            hiddenFields.add("managed");
+        }
+        private final PropertyFilter pf;
+
+        public JsonFilter() {
+            this.pf = new SimpleBeanPropertyFilter() {
+                @Override
+                protected boolean include(BeanPropertyWriter writer) {
+                    return !hiddenFields.contains(writer.getName());
+                }
+                
+                @Override
+                protected boolean include(PropertyWriter writer) {
+                    return !hiddenFields.contains(writer.getName());
+                }
+            };
+        }
+        
+        @Override
+        public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
+            return pf;
+        }
 //        setVisibility(PropertyAccessor.IS_GETTER, Visibility.PUBLIC_ONLY);
     }
 }
