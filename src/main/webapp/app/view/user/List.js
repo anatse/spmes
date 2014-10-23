@@ -19,10 +19,15 @@ Ext.define('NeoMes.view.user.List', {
     }],
     initComponent: function () {
         this.store = Ext.create('NeoMes.store.Users');
-        this.columns = [
-            {header: 'Name', dataIndex: 'username', flex:1},
-            {header: 'Email', dataIndex: 'email', flex:1}
-        ];
+        this.columns = [{
+            header: NeoMes.utils.CommonUtils.getLocaleString('fields', 'userName'), 
+            dataIndex: 'username', 
+            flex:1
+        }, {
+            header: NeoMes.utils.CommonUtils.getLocaleString('fields', 'email'), 
+            dataIndex: 'email', 
+            flex:1
+        }];
 
         this.buttons = [{
             text: NeoMes.utils.CommonUtils.getLocaleString('button', 'save'),

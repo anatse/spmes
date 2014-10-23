@@ -24,28 +24,50 @@ Ext.define("NeoMes.view.user.ListController", {
         '#': {
             itemdblclick: 'editUser'
         },
+        'users button[action=add]': {
+            click: 'addUser'
+        },
+        'users button[action=update]': {
+            click: 'editUser'
+        },
         'users button[action=sync]': {
             click: 'syncUser'
         },
         'useredit button[action=save]': {
             click: 'updateUser'
         }
+        
     },
-    editUser: function(grid, record) {
+    editUser: function(button, record) {
         var win = new NeoMes.view.user.Edit ();
         win.down('form').loadRecord (record);
         win.show();
     },
+    addUser: function(button) {
+        var win = new NeoMes.view.user.Edit ({
+            addNew: true
+        });
+        win.show();
+    },
     updateUser: function(button) {
         var win = button.up('window'),
-                form = win.down('form'),
-                record = form.getRecord(),
-                values = form.getValues();
+            form = win.down('form'),
+            addNew = win.addNew,
+            record = form.getRecord(),
+            values = form.getValues(),
+            users = Ext.ComponentQuery.query ('users')[0];
+    
+        if (addNew) {
+            users.getStore().add(values);
+        }
+        else {
+            record.set(values);
+        }
 
-        record.set(values);
+        users.getView().refresh();
         win.close();
     },
-    syncUser: function(button) {
+    syncUser: function() {
         this.getView().getStore().sync();
     }
 });

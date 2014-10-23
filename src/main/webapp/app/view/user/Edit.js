@@ -21,22 +21,26 @@ Ext.define('NeoMes.view.user.Edit', {
     title: 'Edit User',
     layout: 'fit',
     autoShow: true,
+    closeAction: 'destroy',
+    addNew: false,
 
     initComponent:function () {
         this.items = [{
             xtype:'form',
             items:[{
-                xtype:'textfield',
-                name:'username',
-                fieldLabel:'Name'
+                xtype: 'textfield',
+                name: 'username',
+                fieldLabel: NeoMes.utils.CommonUtils.getLocaleString('fields', 'userName'),
+                editable: this.addNew
             }, {
-                xtype:'textfield',
-                name:'email',
-                fieldLabel:'Email'
+                xtype: 'textfield',
+                name: 'email',
+                fieldLabel: NeoMes.utils.CommonUtils.getLocaleString('fields', 'email')
             }, {
-                xtype:'hidden',
-                name:'id',
-                fieldLabel:'id'
+                xtype: 'textfield',
+                inputType: 'password',
+                name: 'password',
+                fieldLabel: NeoMes.utils.CommonUtils.getLocaleString('fields', 'password')
             }]
         }];
 

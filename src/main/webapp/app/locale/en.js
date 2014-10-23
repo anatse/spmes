@@ -37,7 +37,9 @@ Ext.define('NeoMes.locale.en', {
         users: 'User manager'
     },
     fields: {
-
+        userName: 'Username',
+        password: 'Password',
+        email: 'EMail'
     },
     button: {
         save: 'Save',

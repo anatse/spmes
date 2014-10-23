@@ -1,4 +1,8 @@
 Ext.define('NeoMes.model.User', {
     extend: 'Ext.data.Model',
-    fields: ['id', 'username', 'email']
+    fields: ['username', 'email', 'locked', 'password',
+    {
+        name: 'id',
+        type: 'number'
+    }]
 });

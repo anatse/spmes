@@ -37,7 +37,9 @@ Ext.define('NeoMes.locale.ru', {
         users: 'Пользователи системы'
     },
     fields: {
-
+        userName: 'Пользователь',
+        password: 'Пароль',
+        email: 'Почта'
     },
     button: {
         save: 'Сохранить',
