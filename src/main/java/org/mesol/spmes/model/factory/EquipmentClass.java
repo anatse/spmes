@@ -44,7 +44,7 @@ public class EquipmentClass extends AbstractEntity implements Serializable
     @Column(name = "NAME", length = 32, nullable = false)
     private String          name;
     private String          description;
-    
+
     public Long getId() {
         return id;
     }

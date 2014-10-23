@@ -7,7 +7,16 @@ Ext.define('NeoMes.view.user.List', {
         'NeoMes.view.user.ListController'
     ],
     controller: 'list',
-
+    tbar: [{
+        text: NeoMes.utils.CommonUtils.getLocaleString('button', 'add'),
+        action: 'add'
+    }, {
+        text: NeoMes.utils.CommonUtils.getLocaleString('button', 'update'),
+        action: 'update'
+    }, {
+        text: NeoMes.utils.CommonUtils.getLocaleString('button', 'lock'),
+        action: 'lock'
+    }],
     initComponent: function () {
         this.store = Ext.create('NeoMes.store.Users');
         this.columns = [
@@ -16,8 +25,8 @@ Ext.define('NeoMes.view.user.List', {
         ];
 
         this.buttons = [{
-            text:'Sync',
-            action:'sync'
+            text: NeoMes.utils.CommonUtils.getLocaleString('button', 'save'),
+            action: 'sync'
         }];
 
         this.callParent(arguments);

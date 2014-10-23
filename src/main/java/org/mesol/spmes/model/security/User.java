@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
@@ -62,8 +63,8 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "usrId")
     private Long id;
     
-    @Column(nullable = false, length = 32)
-    private String          name;
+    @Column(name="NAME", nullable = false, length = 32)
+    private String          username;
     @Column(nullable = false, length = 180)
     private String          password;
     @Column(length = 180)
@@ -90,7 +91,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     
     public User(UserDetails usr) {
         password = encodePwd (usr.getPassword());
-        name = usr.getUsername();
+        username = usr.getUsername();
         groups = new HashSet<>();
 
         usr.getAuthorities().forEach(grp -> {
@@ -108,14 +109,13 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override
@@ -138,8 +138,8 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         return enabled;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     private String encodePwd (String password) {
@@ -154,6 +154,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         }
     }
     
+    @JsonProperty
     public void setPassword(String password) {
         this.password = encodePwd(password);
     }
@@ -166,15 +167,15 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.lastName = lastName;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    public void setExpired(boolean expired) {
+    public void setExpired(Boolean expired) {
         this.expired = expired;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Boolean locked) {
         this.locked = locked;
     }
 
@@ -202,10 +203,12 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         groups.add(users);
     }
 
+    @JsonProperty
     public Long getId() {
         return id;
     }
 
+    @JsonIgnore
     public void setId(Long id) {
         this.id = id;
     }

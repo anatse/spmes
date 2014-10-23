@@ -65,14 +65,14 @@ public class PersistenceJPAConfig
     private Environment                             env;
 
     @Bean
-    public AuditorAware<User> auditorProvider() {
+    public AuditorAware<String> auditorProvider() {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
                 return null;
             }
 
-            return ((User) authentication.getPrincipal());
+            return ((User) authentication.getPrincipal()).getUsername();
         };
     }
 

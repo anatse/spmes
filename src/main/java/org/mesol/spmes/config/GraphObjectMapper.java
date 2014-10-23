@@ -19,15 +19,11 @@ package org.mesol.spmes.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
+import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
 
 /**
@@ -56,38 +52,42 @@ public class GraphObjectMapper extends ObjectMapper
             .withSerializationInclusion(JsonInclude.Include.NON_EMPTY)
             .without(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .without(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .withFilters(new JsonFilter());
+            .withVisibility(PropertyAccessor.IS_GETTER, Visibility.PUBLIC_ONLY);
+
+        _deserializationConfig = _deserializationConfig
+            .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .withVisibility(PropertyAccessor.SETTER, Visibility.PUBLIC_ONLY);
         
         setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
+        setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
     }
 
-    public static class JsonFilter extends SimpleFilterProvider {
-
-        private static final HashSet<String> hiddenFields = new HashSet<>();
-        static {
-            hiddenFields.add("password");
-            hiddenFields.add("callbacks");
-            hiddenFields.add("managed");
-        }
-        private final PropertyFilter pf;
-
-        public JsonFilter() {
-            this.pf = new SimpleBeanPropertyFilter() {
-                @Override
-                protected boolean include(BeanPropertyWriter writer) {
-                    return !hiddenFields.contains(writer.getName());
-                }
-                
-                @Override
-                protected boolean include(PropertyWriter writer) {
-                    return !hiddenFields.contains(writer.getName());
-                }
-            };
-        }
-        
-        @Override
-        public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
-            return pf;
-        }
-    }
+//    public static class JsonFilter extends SimpleFilterProvider {
+//        private static final HashSet<String> hiddenFields = new HashSet<>();
+//        static {
+//            hiddenFields.add("password");
+//            hiddenFields.add("callbacks");
+//            hiddenFields.add("managed");
+//        }
+//        private final PropertyFilter pf;
+//
+//        public JsonFilter() {
+//            this.pf = new SimpleBeanPropertyFilter() {
+//                @Override
+//                protected boolean include(BeanPropertyWriter writer) {
+//                    return !hiddenFields.contains(writer.getName());
+//                }
+//                
+//                @Override
+//                protected boolean include(PropertyWriter writer) {
+//                    return !hiddenFields.contains(writer.getName());
+//                }
+//            };
+//        }
+//        
+//        @Override
+//        public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
+//            return pf;
+//        }
+//    }
 }
