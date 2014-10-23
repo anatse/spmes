@@ -68,11 +68,11 @@ public class EquipmentTest {
     @Transactional
     public void testFM() throws GeneralSecurityException, NoSuchProviderException {
         System.out.println ("Import sample data");
-        
+
         imp.parse(getClass().getClassLoader().getResourceAsStream("imp/equipment.xml"));
 
         System.out.println ("Check sample data");
-        
+
         Equipment eqTemplate = new Equipment();
         eqTemplate.setName("1%0");
 
