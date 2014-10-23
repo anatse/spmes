@@ -16,6 +16,7 @@
 package org.mesol.spmes.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -108,6 +109,7 @@ public class AuthController
 
     /**
      * Function implements LIST and GET operation of the REST interface for users
+     * @param userId - identifier of user id
      * @return list of users, or information about concrete  user
      */
     @Secured({
@@ -122,7 +124,7 @@ public class AuthController
 
         return userService.findAll();
     }
-    
+
     @Secured({
         BasicConstants.ADMIN_ROLE, 
         BasicConstants.CHIEF_ROLE
@@ -169,7 +171,6 @@ public class AuthController
             user = EntityCopier.copy(changedUser, user);
             userService.save(user);
         }
-
         return user;
     }
 }

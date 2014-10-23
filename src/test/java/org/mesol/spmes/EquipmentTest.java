@@ -16,8 +16,9 @@
 package org.mesol.spmes;
 
 import java.security.GeneralSecurityException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.mail.NoSuchProviderException;
 import javax.transaction.Transactional;
 import org.junit.Test;
@@ -38,7 +39,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.util.Assert;
 
 /**
  *
@@ -73,29 +73,54 @@ public class EquipmentTest {
         
         Equipment eqTemplate = new Equipment();
         eqTemplate.setName("1%0");
+
+        Equipment wc1 = eqService.findByName("WorkCenter 1");
 //        List<Equipment> found = eqService.findByTemplate(eqTemplate);
         
-        List<EquipmentAttribute> attrs = new LinkedList<>();
+        Set<EquipmentAttribute> attrs;
+        attrs = new TreeSet<>();
         EquipmentAttribute eqa = new EquipmentAttribute();
-        eqa.setName("testAttr");
+        eqa.setOwner(wc1);
+        eqa.setName("testAttr1");
         eqa.setAttrValue("001");
         eqa.setAttrType("num");
         attrs.add(eqa);
         
         eqa = new EquipmentAttribute();
-        eqa.setName("testAttr");
+        eqa.setOwner(wc1);
+        eqa.setName("testAttr2");
         eqa.setAttrValue("002");
         eqa.setAttrType("num");
         attrs.add(eqa);
 
-        List<Equipment> found = eqService.findByAttributes (attrs);
-        Assert.isTrue(found.size() == 1, "Found not only one entity for given attributes");
+        eqa = new EquipmentAttribute();
+        eqa.setOwner(wc1);
+        eqa.setName("testAttr3");
+        eqa.setAttrValue("003");
+        eqa.setAttrType("num");
+        attrs.add(eqa);
 
-        Equipment site = eqService.findByName("2000");
-        Assert.notNull(site, "site 2000 not found");
-        Assert.notEmpty(site.getAttributes(), "Attributes not found in site 1000");
-        Assert.notNull(site.getAttributes().iterator().next().getOwner(), "Owner of the first attribute site 2000 is empty");
-
+        eqa = new EquipmentAttribute();
+        eqa.setOwner(wc1);
+        eqa.setName("testAttr4");
+        eqa.setAttrValue("004");
+        eqa.setAttrType("num");
+        attrs.add(eqa);                
+        
+//        Set<EquipmentAttribute> attrSet = new HashSet<>(attrs);
+        
+        //List<EquipmentAttribute> attrList = new ArrayList<>(attrs);
+        
+        wc1.setAttributes(attrs);
+        
+//        List<Equipment> found = eqService.findByAttributes (attrs);
+//        Assert.isTrue(found.size() == 1, "Found not only one entity for given attributes");
+//
+//        Equipment site = eqService.findByName("2000");
+//        Assert.notNull(site, "site 2000 not found");
+//        Assert.notEmpty(site.getAttributes(), "Attributes not found in site 1000");
+//        Assert.notNull(site.getAttributes().iterator().next().getOwner(), "Owner of the first attribute site 2000 is empty");
+//
         System.out.println ("Test criteria API for factory model");
 
 //        List<Equipment> eqs = eqService.findFilteredRange (

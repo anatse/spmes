@@ -1,4 +1,3 @@
-
 Ext.define('NeoMes.store.Equipment', {
     extend: 'Ext.data.TreeStore',
     model: 'NeoMes.model.Equipment',
@@ -11,17 +10,17 @@ Ext.define('NeoMes.store.Equipment', {
     nodeParam: 'eqId',
     proxy: {
         type: 'rest',
-        headers: NeoMes.utils.CommonUtils.buildCSRFHeader (),
+        headers: NeoMes.utils.CommonUtils.buildCSRFHeader(),
+        url: 'equipment/eq',
 //        actionMethods: {
 //            read: 'POST'
 //        },        
-        api: {
-            read: 'equipment/list.json'
-        },        
+//        api: {
+//            read: 'equipment/list'
+//        },        
         reader: {
-            type: 'json',
+//            type: 'json',
             rootProperty: 'equipmentList'
         }
     }
 });
-

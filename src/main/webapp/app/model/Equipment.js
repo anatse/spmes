@@ -15,9 +15,12 @@
  */
 Ext.define('NeoMes.model.Equipment', {
     extend: 'Ext.data.Model',
-    fields: ['name', 'description'],
+    fields: ['id', 'name', 'description'],
     hasMany : {
         model : 'NeoMes.model.EquipmentAttributes',
-        name  : 'attributes'
+        name  : 'attrs',
+        associationKey: 'attributes',
+        foreignKey: 'id',
+        instanceName:'attributes'
     }
 });

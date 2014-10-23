@@ -5,6 +5,10 @@ Ext.define("NeoMes.controller.Equipment", {
     views: ['factory.Equipment'],
     alias: 'controller.equipment',
 
+    requires: [
+      'NeoMes.view.factory.EquipmentUpd'  
+    ],
+    
     refs: [{
         ref: 'contentPanel',
         selector: 'contentPanel'
@@ -12,15 +16,22 @@ Ext.define("NeoMes.controller.Equipment", {
 
     init: function() {
         this.control ({
+//            '#': {
+//                itemdblclick: this.equipmentUpd
+//            },
            'equipment button[action=eqAdd]': {
                 click: this.equipmentAdd
             },
             'equipment button[action=eqUpd]': {
                 click: this.equipmentUpd
             },
+           'equipmentupd button[action=eqUpdSave]': {
+                click: this.equipmentUpdSave
+            },             
             'equipment button[action=eqDel]': {
                 click: this.equipmentDel
-            },
+            }
+            ,
             'equipment button[action=eqAttrAdd]': {
                 click: this.equipmentAttrAdd
             },
@@ -32,111 +43,54 @@ Ext.define("NeoMes.controller.Equipment", {
             }            
         });
     },
-//    equipmentAdd: function(grid, record) {
-//       alert("equipmentAdd!");
-//       
-//       
-//       
-//       
-//    },
-
+    equipmentAdd: function(button) {
+       alert("equipmentAdd!"); 
+    },
+    
     getEQSelection:function () {
-        var eqNode = Ext.getCmp('eqGrid').getSelectionModel().getSelectedNode();
+        var eqNode = Ext.getCmp('eqGrid').getSelectionModel().getSelection();
         return eqNode.length > 0 ? eqNode[0] : null;
     },
     
-    equipmentAdd: function () {
-        //var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
-        var win = null;
+    equipmentUpd: function (button) {
         
-        var eqNode = this.getEQSelection();
-        
-//        if (!soRow)
-//        {
-//            Ext.MessageBox.alert('Сначала нужно выбрать производственный заказ!');
-//            return;            
-//        }
-               
-//        if (maxCnt <= 0) {
-//            Ext.MessageBox.alert('Выбранный заказ целиком запущен в производство!');
-//            return;
-//        }
-        
-        win = new Ext.Window ({
-            width: 500,
-            height: 200, 
-            modal: true,
-            title: 'Новое оборудование',
-            layout: 'fit',           
-            items: [{
-                xtype: 'form',
-                layout: 'form',
-                id: 'equipmentAddForm',
-                frame: true,
-                bodyPadding: '5 5 0',
-                width: 450,
-                fieldDefaults: {
-                    msgTarget: 'side',
-                    labelWidth: 150
-                },
-                defaultType: 'textfield',
-                items: [
-                    {
-                        fieldLabel: 'Наименование',
-                        name: 'NAME'
-                        //value:soRow.get('SHOP_ORDER').toString()+'00'+(rcCount ? rcCount.toString() : '0'),
-                        //readOnly: true 
-                    },{
-                        fieldLabel: 'Описание',
-                        name: 'DESCRIPTION'
-                    },{
-                        xtype: 'hiddenfield',
-                        fieldLabel: 'PARENT',
-                        name: 'PARENT',
-                        value: eqNode ? eqNode.get('PARENT').toString() : ''
-                    }                    
-                ],
-                buttons: [
-                {
-                    text: 'Сохранить',
-                    scope: this,
-                    listeners: {
-                        scope: this,
-                        click: function () {
-                            var form = this.up('form');
-                            if (form.isValid()){
-                                var values = form.getValues(false, false, false, true);
-                                //this.saveEQ(values);
-                                alert("parent_val:"+values.parent)
-                                //win.close ();
-                            }
-                            else {
-                                Ext.MessageBox.alert('Errors', 'Проверьте пожалуйста введенные значения');
-                            }
-                        }
-                    }
-                }, {
-                    text: 'Закрыть',
-                    scope: this,
-                    listeners: {
-                        scope: this,
-                        click: function () {
-                            win.close();
-                        }
-                    }
-                }                    
-                    
-              ]
-           }]  
-        });
-
-        win.show(null, null, this);
+        var record = Ext.getCmp('eqGrid').getSelectionModel().getSelection();
+        var win = new NeoMes.view.factory.EquipmentUpd();
+        if (record)
+        {
+            win.down('form').loadRecord(record[0]);
+            win.show();
+        }
+        else
+        {
+            alert("Необходимо выбрать елемент!");
+        }
     },
-    
-    equipmentUpd: function(button) {
-       alert("equipmentUpd!"); 
+    equipmentUpdSave: function(button) {
+        var win = button.up('window'),
+                form = win.down('form'),
+                record = form.getRecord(),
+                values = form.getValues();
+        record.set(values);
+        Ext.getCmp('eqGrid').getStore().sync();
+        win.close();                                  
     },
+        
     equipmentDel: function(button) {
-        alert("equipmentUpd!"); 
-    }
+        alert("equipmentDel!"); 
+    },
+    equipmentAttrAdd: function(button) {
+       alert("equipmentAttrAdd!"); 
+    },
+    equipmentAttrDel: function(button) {
+        alert("equipmentAttrDel!"); 
+    },
+    equipmentAttrSave: function(button) {
+        //alert("equipmentAttrSave!"); 
+       // Ext.getCmp('eqAttrGrid').getStore().sync();
+       var record = Ext.getCmp('eqGrid').getSelectionModel().getSelection();
+       Ext.getCmp('eqGrid').getStore().getById(record[0].id).attrs().sync();
+       //Ext.getCmp('eqGrid').getStore().getById(record[0].id).setStore(Ext.getCmp('eqAttrGrid').getStore());
+       //Ext.getCmp('eqGrid').getStore().sync();
+    }    
 });

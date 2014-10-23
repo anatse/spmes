@@ -71,9 +71,9 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     private String          firstName;
     @Column(length = 180)
     private String          lastName;
-    private Boolean         enabled = true;
-    private Boolean         expired = false;
-    private Boolean         locked = false;
+    private boolean         enabled = true;
+    private boolean         expired = false;
+    private boolean         locked = false;
     private String          email;
 
     @ManyToMany(fetch = FetchType.EAGER)
