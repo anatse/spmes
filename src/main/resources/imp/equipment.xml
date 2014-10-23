@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <data>
-    <Equipment link="owner" name="WC-1" description="WorkCenter 1">
+    <Equipment link="owner" name="WC-2.1" description="WorkCenter 1">
         <EquipmentAttribute link="attributes" name="capability" unitCode="LBS" attrType="number" attrValue="120"/>
         <EquipmentAttribute link="attributes" name="status" unitCode="" attrType="string" attrValue="WAIT"/>
 

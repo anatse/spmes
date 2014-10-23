@@ -7,7 +7,7 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.1.0.RELEASE</spring.version>
+        <spring.version>4.1.1.RELEASE</spring.version>
         <cglib.version>3.1</cglib.version>
         <springdata.version>3.0.1.RELEASE</springdata.version>
         <springsecurity.version>3.2.5.RELEASE</springsecurity.version>
@@ -15,6 +15,24 @@
         <slf4j.version>1.7.7</slf4j.version>
         <querydsl.version>3.4.2</querydsl.version>
     </properties>
+    <organization>
+        <name>Mes Solutions</name>
+        <url>http://mes-solutions.org</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>anatolse</id>
+            <name>Sementsov Anatoly</name>
+            <email>anatolse@yandex.ru</email>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -74,13 +92,11 @@
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-stream</artifactId>
             <version>${spring.integration}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-jms</artifactId>
             <version>${spring.integration}</version>
-            <scope>compile</scope>
         </dependency>
         <!--
             Spring aspects
@@ -88,6 +104,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <!-- 
@@ -166,6 +187,14 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <version>5.1.2.Final</version>
         </dependency>
+        <!--        
+            Java mail
+        -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
         <!--
             Testing
         -->
@@ -187,6 +216,13 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.2</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
         <!--
             Oracle driver
         -->
@@ -196,41 +232,18 @@
             <version>11.2.0</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>4.0.1.RELEASE</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.5.2</version>
-            <scope>test</scope>
-            <type>jar</type>
-        </dependency>
         <!--
             Groovy script engine
         -->
-        <!--        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <version>2.3.6</version>
-        </dependency>-->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>2.3.6</version>
+            <version>2.3.7</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-jsr223</artifactId>
-            <version>2.3.6</version>
+            <version>2.3.7</version>
         </dependency>
         <!--
             Joda time
@@ -245,39 +258,20 @@
             <artifactId>usertype.core</artifactId>
             <version>3.2.0.GA</version>
         </dependency>
-        <!--
-            Eclipselink
+        <!--        
+            Scala dependency
         -->
-<!--        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.6.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.persistence</groupId>
-                    <artifactId>commonj.sdo</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
+            <version>2.4.2</version>
+        </dependency>
     </dependencies>
-    <organization>
-        <name>Mes Solutions</name>
-        <url>http://mes-solutions.org</url>
-    </organization>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <id>anatolse</id>
-            <name>Sementsov Anatoly</name>
-            <email>anatolse@yandex.ru</email>
-        </developer>
-    </developers>
     <build>
         <plugins>
             <plugin>
@@ -286,6 +280,29 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!--
+                Scala compiler
+            -->
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDir>src/main/java</sourceDir>
+                    <jvmArgs>
+                        <jvmArg>-Xms64m</jvmArg>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -340,5 +357,22 @@
             <name>Spring Portfolio Milestone Repository</name>
             <url>http://repo.springsource.org/milestone/</url>
         </repository>
+        
+        <!--        
+            Scala repository
+        -->
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
     </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

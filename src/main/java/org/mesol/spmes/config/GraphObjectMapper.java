@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.module.scala.DefaultScalaModule;
 import java.lang.invoke.MethodHandles;
 import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
@@ -37,9 +38,7 @@ import org.apache.log4j.Logger;
 public class GraphObjectMapper extends ObjectMapper 
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
-    
     static final long serialVersionUID = 1L;
-    
 
     public static String getRevisionNumber() {
         return "$Revision:$";
@@ -47,6 +46,9 @@ public class GraphObjectMapper extends ObjectMapper
 
     public GraphObjectMapper() {
         super ();
+        
+        registerModule(new DefaultScalaModule());
+        
         _serializationConfig = _serializationConfig
             .withSerializationInclusion(JsonInclude.Include.NON_NULL)
             .withSerializationInclusion(JsonInclude.Include.NON_EMPTY)
@@ -57,37 +59,8 @@ public class GraphObjectMapper extends ObjectMapper
         _deserializationConfig = _deserializationConfig
             .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .withVisibility(PropertyAccessor.SETTER, Visibility.PUBLIC_ONLY);
-        
+
         setVisibility(PropertyAccessor.GETTER, Visibility.PUBLIC_ONLY);
         setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"));
     }
-
-//    public static class JsonFilter extends SimpleFilterProvider {
-//        private static final HashSet<String> hiddenFields = new HashSet<>();
-//        static {
-//            hiddenFields.add("password");
-//            hiddenFields.add("callbacks");
-//            hiddenFields.add("managed");
-//        }
-//        private final PropertyFilter pf;
-//
-//        public JsonFilter() {
-//            this.pf = new SimpleBeanPropertyFilter() {
-//                @Override
-//                protected boolean include(BeanPropertyWriter writer) {
-//                    return !hiddenFields.contains(writer.getName());
-//                }
-//                
-//                @Override
-//                protected boolean include(PropertyWriter writer) {
-//                    return !hiddenFields.contains(writer.getName());
-//                }
-//            };
-//        }
-//        
-//        @Override
-//        public PropertyFilter findPropertyFilter(Object filterId, Object valueToFilter) {
-//            return pf;
-//        }
-//    }
 }
