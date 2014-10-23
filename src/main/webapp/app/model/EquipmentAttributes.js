@@ -15,10 +15,16 @@
  */
 Ext.define('NeoMes.model.EquipmentAttributes', {
     extend: 'Ext.data.Model',
-    fields: ['ATTRTYPE', 'NAME', 'ATTRVALUE'],  
-    associations : [{
-        model : 'NeoMes.model.Equipment',
-        name : 'equipment',
-        type : 'belongsTo'
-    }]
+    fields: ['id', 'name', 'attrValue', 'unitCode', 'attrType'],
+//    belonsTo: 'NeoMes.model.Equipment',
+    idProperty: 'name',
+    proxy: {
+        type: 'rest',
+        url: 'equipment/eq'
+    },
+    belongsTo:[
+    {
+      model:'NeoMes.model.Equipment'
+    }
+    ]
 });

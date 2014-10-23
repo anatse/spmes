@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.mat;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,6 +27,8 @@ import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
@@ -40,17 +43,14 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 @Entity
 @Table(name = "BOMC")
-public class BOMComponent extends AbstractEntity implements Serializable
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DIRECTION", discriminatorType = DiscriminatorType.STRING, length = 4)
+public abstract class BOMComponent extends AbstractEntity implements Serializable
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "bomcId", sequenceName = "BOMC_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "bomcId")
     private Long                    id;
-    @ManyToOne
-    @JoinColumn(name = "BOM_ID", foreignKey = @ForeignKey(name = "FK_BOMC_BOM", value = ConstraintMode.CONSTRAINT))
-    private BOM                     bom;
-    @Enumerated(EnumType.STRING)
-    private ComponentDirection      direction;
     @ManyToOne
     @JoinColumn(name = "MAT_MD_ID", foreignKey = @ForeignKey(name = "FK_BOMC_MMD", value = ConstraintMode.CONSTRAINT))
     private MatMD                   matMd;
@@ -65,21 +65,9 @@ public class BOMComponent extends AbstractEntity implements Serializable
         this.id = id;
     }
 
-    public BOM getBom() {
-        return bom;
-    }
+    public abstract BOM getBom();
 
-    public void setBom(BOM bom) {
-        this.bom = bom;
-    }
-
-    public ComponentDirection getDirection() {
-        return direction;
-    }
-
-    public void setDirection(ComponentDirection direction) {
-        this.direction = direction;
-    }
+    public abstract void setBom(BOM bom);
 
     public MatMD getMatMd() {
         return matMd;

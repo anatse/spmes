@@ -18,6 +18,7 @@ package org.mesol.spmes.config;
 import com.fasterxml.jackson.core.JsonEncoding;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,8 @@ import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.View;
@@ -96,14 +99,14 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter
 
         return df;
     }
-    
+
     /**
      * Property SPeL Configurer
      * This bean allowed to use @Value ("${placeholder}") annotation
      * @return PropertySourcesPlaceholderConfigurer
      */
     @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+    public PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 

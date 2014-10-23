@@ -73,6 +73,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     private boolean         enabled = true;
     private boolean         expired = false;
     private boolean         locked = false;
+    private String          email;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -207,5 +208,13 @@ public class User extends AbstractEntity implements Serializable, UserDetails
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

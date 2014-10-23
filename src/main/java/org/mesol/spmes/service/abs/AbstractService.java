@@ -50,6 +50,10 @@ public abstract class AbstractService<T extends AbstractEntity>
         return getEntityManager().createQuery(cq).getResultList();
     }
 
+    public T findOne (Object id) {
+        return getEntityManager().find(entityClass, id);
+    }
+
     /**
      * Function find objects using all given object as template. I.e. all filled fields in this object
      * used to build where clause. 

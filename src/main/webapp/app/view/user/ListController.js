@@ -15,18 +15,26 @@
  */
 Ext.define("NeoMes.view.user.ListController", {
     extend: 'Ext.app.ViewController',
+    requires: [
+      'NeoMes.view.user.Edit'  
+    ],
     alias: 'controller.list',
     
     control: {
         '#': {
             itemdblclick: 'editUser'
         },
-        button: {
+        'users button[action=sync]': {
             click: 'syncUser'
+        },
+        'useredit button[action=save]': {
+            click: 'updateUser'
         }
     },
     editUser: function(grid, record) {
-        alert ('edit user');
+        var win = new NeoMes.view.user.Edit ();
+        win.down('form').loadRecord (record);
+        win.show();
     },
     updateUser: function(button) {
         var win = button.up('window'),

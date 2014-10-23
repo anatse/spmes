@@ -26,7 +26,8 @@ Ext.define('NeoMes.view.factory.Equipment', {
     alias: 'widget.equipment',    
     requires: [
         'Ext.layout.container.Border',
-        'NeoMes.controller.Equipment'
+        'NeoMes.controller.Equipment',
+        'NeoMes.model.EquipmentAttributes'
     ],
     controller: 'equipment',
     layout: 'border',
@@ -77,6 +78,8 @@ Ext.define('NeoMes.view.factory.Equipment', {
                 xtype: 'propertygrid',
                 id: 'eqAttrGrid',
                 nameColumnWidth: 165,
+                valueField: 'attrValue',
+                nameField: 'name',
                 source: {}
             }]
             
@@ -92,26 +95,17 @@ Ext.define('NeoMes.view.factory.Equipment', {
                 text : "Добавить",
                 xtype : 'button',
                 height : '20px',
-                listeners : {
-                        scope : this,
-                        click : function(node, rec) {alert('OK!')}
-                }
+                action : 'eqAdd'
             },{
                 text : "Изменить",
                 xtype : 'button',
                 height : '20px',
-                listeners : {
-                        scope : this,
-                        click : function(node, rec) {alert('OK!')}
-                }
+                action : 'eqUpd'
             },{
                 text : "Удалить",
                 xtype : 'button',
                 height : '20px',
-                listeners : {
-                        scope : this,
-                        click : function(node, rec) {alert('OK!')}
-                }
+                action : 'eqDel'
             }],
             region: 'center',
             autoScroll: true,
@@ -129,16 +123,25 @@ Ext.define('NeoMes.view.factory.Equipment', {
                         var propGrid = Ext.getCmp('eqAttrGrid');
                         if (propGrid)
                         {
-                            var attributes = [];
-                            attributes = Ext.Array.toArray(rec.get('attributes'));
                             
-                            var source = {};
-                            
-                            Ext.Array.forEach(attributes, function(record) {
-                              source[record.name] = record.attrValue;
-                            });
-                            
-                            propGrid.setSource(source);                         
+//                            var attributes = [];
+//                            attributes = Ext.Array.toArray(rec.get('attributes'));
+//                            
+//                            var source = {};
+//                            
+//                            Ext.Array.forEach(attributes, function(record) {
+//                              source[record.name] = record.attrValue;
+//                            });
+//                            
+//                            propGrid.setSource(source);        
+                              propGrid.setStore(this.store.getById(rec.get('id')).attrs());//this.store.getAt(1).attrs());
+//                              propGrid.store.reload();
+//                              propGrid.store.sync();
+                              //propGrid.reconfigure(this.store.getById(rec.get('id')).attrs(), [{'dataIndex': 'eqId', 'text' : 'equipment id'}]
+//                                      );
+//                              propGrid.store.save();
+//                              propGrid.store.load();
+                         //     alert("ok!");
                         }
                     }
                 }
