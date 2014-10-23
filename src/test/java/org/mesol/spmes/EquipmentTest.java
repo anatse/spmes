@@ -17,6 +17,7 @@ package org.mesol.spmes;
 
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.mail.NoSuchProviderException;
@@ -39,6 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.util.Assert;
 
 /**
  *
@@ -74,11 +76,13 @@ public class EquipmentTest {
         Equipment eqTemplate = new Equipment();
         eqTemplate.setName("1%0");
 
-        Equipment wc1 = eqService.findByName("WorkCenter 1");
+        List<Equipment> eqs = eqService.getAll();
+        Equipment wc1 = eqService.findByName("WC-1");
+        Assert.notNull(wc1, "Workcenter not found: WC-1" );
 //        List<Equipment> found = eqService.findByTemplate(eqTemplate);
         
         Set<EquipmentAttribute> attrs;
-        attrs = new TreeSet<>();
+        attrs = new HashSet<>();
         EquipmentAttribute eqa = new EquipmentAttribute();
         eqa.setOwner(wc1);
         eqa.setName("testAttr1");
