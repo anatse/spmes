@@ -1,0 +1,23 @@
+<data>
+    <Equipment name="SITE-2" description="Site #2">
+        <children name="attributes">
+            <EquipmentAttribute name="erpNum" unitCode="" attrType="string" attrValue="2100"/>
+        </children>
+        
+        <children parent="parentEquipment">
+            <Equipment name="WC-1" description="Work center #1">
+                <children name="attributes">
+                    <EquipmentAttribute name="capability" unitCode="LBS" attrType="number" attrValue="120"/>
+                    <EquipmentAttribute name="status" unitCode="" attrType="string" attrValue="WAIT"/>
+                </children>
+            </Equipment>
+
+            <Equipment name="WC-2" description="Work center #2">
+                <children name="attributes">
+                    <EquipmentAttribute name="capability" unitCode="LBS" attrType="number" attrValue="20"/>
+                    <EquipmentAttribute name="status" unitCode="" attrType="string" attrValue="WAIT"/>
+                </children>
+            </Equipment>
+        </children>
+    </Equipment>
+</data>

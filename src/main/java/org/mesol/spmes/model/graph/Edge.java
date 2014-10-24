@@ -39,7 +39,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "EDG")
-@DiscriminatorColumn(name = "ETYPE", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "ETYPE", discriminatorType = DiscriminatorType.STRING, length = 4)
 public abstract class Edge<T extends Vertex> extends AbstractEntity implements Serializable
 {
     @Id

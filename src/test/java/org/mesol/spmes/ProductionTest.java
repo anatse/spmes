@@ -14,32 +14,23 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.graph.attr;
+package org.mesol.spmes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Embeddable;
-import org.hibernate.annotations.Parent;
-import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.Router;
+import org.apache.log4j.Logger;
+import java.lang.invoke.MethodHandles;
+import org.junit.Test;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Embeddable
-public class RouterAttribute extends AbstractAttribute
+public class ProductionTest 
 {
-    @Parent
-    private Router           owner;
-
-    @JsonIgnore
-    public Router getOwner() {
-        return owner;
-    }
-
-    @JsonIgnore
-    public void setOwner(Router owner) {
-        this.owner = owner;
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+    
+    @Test
+    public void operTest () {
+        
     }
 }

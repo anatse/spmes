@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.graph.attr;
+package org.mesol.spmes.model.graph;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Embeddable;
-import org.hibernate.annotations.Parent;
-import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.Router;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Embeddable
-public class RouterAttribute extends AbstractAttribute
+@Entity
+@Table(name = "PSINGLE")
+@DiscriminatorValue("SMAT")
+public class PSingleMaterial extends ProductionObject
 {
-    @Parent
-    private Router           owner;
-
-    @JsonIgnore
-    public Router getOwner() {
-        return owner;
-    }
-
-    @JsonIgnore
-    public void setOwner(Router owner) {
-        this.owner = owner;
-    }
 }

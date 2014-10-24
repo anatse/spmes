@@ -30,7 +30,7 @@ import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.OperEdge;
-import org.mesol.spmes.model.graph.PerformanceType;
+import org.mesol.spmes.model.graph.PerformType;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterStep;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
@@ -122,24 +122,24 @@ public class RouteService
     }
 
     @Transactional
-    private void checkPerformanceType (RouterStep rs, OperEdge oper) throws ManySequentalOperationException, 
+    private void checkPerformingType (RouterStep rs, OperEdge oper) throws ManySequentalOperationException, 
                                                                             NonParallelOperationException, 
                                                                             NoRuleException {
         OperEdge firstOper = rs.getOut().iterator().next();
 
         // It is necessary to check type of the first operation.
-        switch (firstOper.getPerformanceType()) {
+        switch (firstOper.getPerformingType()) {
             case SEQUENTIAL:
                 throw (new ManySequentalOperationException("Trying to add more than one sequental operation. Please use other operation type such as Parallel or Rule based"));
 
             case PARALLEL:
                 // Check if all operatio types are parallel
                 for (OperEdge op : rs.getOut()) {
-                    if (op.getPerformanceType() != PerformanceType.PARALLEL)
+                    if (op.getPerformingType() != PerformType.PARALLEL)
                         throw (new NonParallelOperationException("One of operation parallel other is not."));
                 }
 
-                if (oper.getPerformanceType() != PerformanceType.PARALLEL)
+                if (oper.getPerformingType() != PerformType.PARALLEL)
                     throw (new NonParallelOperationException("Trying to add non parallel operation with parallel one."));
 
                 break;
@@ -152,11 +152,16 @@ public class RouteService
                 break;
 
             case ALTERNATIVE:
-                oper.setPerformanceType(PerformanceType.ALTERNATIVE);
+                oper.setPerformingType(PerformType.ALTERNATIVE);
                 break;
         }
     }
 
+    /**
+     * Function save router step
+     * @param rs - router step
+     * @return saved router step
+     */
     @Transactional
     public RouterStep saveRouterStep (RouterStep rs) {
         return em.merge(rs);
@@ -206,7 +211,7 @@ public class RouteService
             }
             else {
                 OperEdge first = rs.getOut().iterator().next();
-                switch (first.getPerformanceType()) {
+                switch (first.getPerformingType()) {
                     case PARALLEL:
                     case ALTERNATIVE:
                         ops.addAll(rs.getOut());
@@ -245,7 +250,7 @@ public class RouteService
                    NoRuleException {
         // Check if rsFrom router step already has incoming edges
         if (rsFrom.getOut() != null && !rsFrom.getOut().isEmpty()) {
-            checkPerformanceType (rsFrom, oper);
+            checkPerformingType (rsFrom, oper);
         }
 
         // Persist operation if operation is this is a new edge

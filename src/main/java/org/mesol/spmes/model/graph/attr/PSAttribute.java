@@ -17,37 +17,27 @@
 package org.mesol.spmes.model.graph.attr;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.AssociationOverride;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Embeddable;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.graph.ProductionObject;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Embeddable
-@AssociationOverride(
-    name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
-)
-public class OperAttribute extends AbstractAttribute
+public class PSAttribute extends AbstractAttribute
 {
     @Parent
-    private OperEdge           owner;
+    private ProductionObject     owner;
 
     @JsonIgnore
-    public OperEdge getOwner() {
+    public ProductionObject getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(OperEdge owner) {
+    public void setOwner(ProductionObject owner) {
         this.owner = owner;
     }
 }

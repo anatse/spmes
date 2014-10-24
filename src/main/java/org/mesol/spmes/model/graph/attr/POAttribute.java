@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.graph.attr;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +23,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.graph.ProductionOrder;
 
 /**
  * 
@@ -34,20 +33,20 @@ import org.mesol.spmes.model.graph.OperEdge;
 @Embeddable
 @AssociationOverride(
     name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
+    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_PO_ATTR_UNIT", value = ConstraintMode.CONSTRAINT))
 )
-public class OperAttribute extends AbstractAttribute
+public class POAttribute extends AbstractAttribute
 {
     @Parent
-    private OperEdge           owner;
+    private ProductionOrder     owner;
 
     @JsonIgnore
-    public OperEdge getOwner() {
+    public ProductionOrder getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(OperEdge owner) {
+    public void setOwner(ProductionOrder owner) {
         this.owner = owner;
     }
 }

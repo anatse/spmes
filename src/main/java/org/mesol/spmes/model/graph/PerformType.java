@@ -22,7 +22,7 @@ package org.mesol.spmes.model.graph;
  * @version 1.0.0
  * @author ASementsov
  */
-public enum PerformanceType 
+public enum PerformType 
 {
     /**
      * Sequential router step. Only one outgoing edge allowed

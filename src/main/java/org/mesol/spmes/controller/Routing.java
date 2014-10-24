@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.OperEdge;
-import org.mesol.spmes.model.graph.PerformanceType;
+import org.mesol.spmes.model.graph.PerformType;
 import org.mesol.spmes.model.graph.RouterStep;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
@@ -89,7 +89,7 @@ public class Routing
 
             OperEdge opNew = new OperEdge();
             opNew.setName("newOper");
-            opNew.setPerformanceType(PerformanceType.SEQUENTIAL);
+            opNew.setPerformingType(PerformType.SEQUENTIAL);
             opNew.setWeight(100.0);
             opNew = routeService.addOperation(opNew, rs, rsNew);
             return routeService.getLastStep(routerId);

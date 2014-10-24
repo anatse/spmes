@@ -24,7 +24,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.graph.ProdOper;
 
 /**
  * 
@@ -34,20 +34,20 @@ import org.mesol.spmes.model.graph.OperEdge;
 @Embeddable
 @AssociationOverride(
     name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
+    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_POP_ATTR_UNIT", value = ConstraintMode.CONSTRAINT))
 )
-public class OperAttribute extends AbstractAttribute
+public class POperAttribute extends AbstractAttribute
 {
     @Parent
-    private OperEdge           owner;
+    private ProdOper     owner;
 
     @JsonIgnore
-    public OperEdge getOwner() {
+    public ProdOper getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(OperEdge owner) {
+    public void setOwner(ProdOper owner) {
         this.owner = owner;
     }
 }

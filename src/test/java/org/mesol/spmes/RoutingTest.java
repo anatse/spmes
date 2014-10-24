@@ -27,7 +27,7 @@ import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
 import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.model.graph.OperEdge;
-import org.mesol.spmes.model.graph.PerformanceType;
+import org.mesol.spmes.model.graph.PerformType;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterStep;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
@@ -132,7 +132,7 @@ public class RoutingTest
 //            
 //            OperEdge opNew = new OperEdge();
 //            opNew.setName("newOper");
-//            opNew.setPerformanceType(PerformanceType.SEQUENTIAL);
+//            opNew.setPerformanceType(PerformType.SEQUENTIAL);
 //            opNew.setWeight(100.0);
 //            opNew.setEquipmentClass(eqc);
 //            
@@ -157,7 +157,7 @@ public class RoutingTest
 //                rs = service.saveRouterStep(rs);
 //                
 //                opNew.setId(null);
-//                opNew.setPerformanceType(PerformanceType.RULE_BASED);
+//                opNew.setPerformanceType(PerformType.RULE_BASED);
 //                opNew.setRuleValue("true");
 //                rsNew.setId(null);
 //                service.addOperation(opNew, rs, rsNew);
@@ -168,7 +168,7 @@ public class RoutingTest
 //            
 //                OperEdge opNew2 = new OperEdge();
 //                opNew2.setName("newOper2");
-//                opNew2.setPerformanceType(PerformanceType.RULE_BASED);
+//                opNew2.setPerformanceType(PerformType.RULE_BASED);
 //                opNew2.setWeight(200.0);
 //                opNew2.setEquipmentClass(eqc);
 //                opNew2.setRuleValue("false");

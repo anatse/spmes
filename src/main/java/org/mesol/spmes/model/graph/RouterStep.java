@@ -86,7 +86,6 @@ public class RouterStep extends Vertex
     )
     private Set<RsAttribute>            attributes;
 
-    
     public Long getId() {
         return id;
     }
@@ -153,6 +152,9 @@ public class RouterStep extends Vertex
     }
 
     public Set<RsAttribute> getAttributes() {
+        if (attributes == null)
+            attributes = new HashSet<>();
+        
         return attributes;
     }
 

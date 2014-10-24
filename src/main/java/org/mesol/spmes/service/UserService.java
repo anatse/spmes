@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
@@ -28,6 +29,7 @@ import org.hibernate.criterion.Property;
 import static org.hibernate.criterion.Restrictions.eq;
 import static org.hibernate.criterion.Restrictions.isNull;
 import org.hibernate.criterion.Subqueries;
+import org.mesol.spmes.config.PersistenceJPAConfig;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
@@ -36,20 +38,29 @@ import org.mesol.spmes.model.security.UserShift;
 import org.mesol.spmes.model.security.WorkCalendar;
 import org.mesol.spmes.model.security.WorkDay;
 import org.mesol.spmes.service.abs.AbstractService;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ * Class implements user functions
  * @version 1.0.0
  * @author ASementsov
  */
 @Service
+@PropertySource("classpath:/" + PersistenceJPAConfig.CONFIG)
 public class UserService extends AbstractService<User>
 {
+    @PersistenceContext
+    private EntityManager           entityManager;
 
+    /**
+     * Truncate date remove hours
+     * @param cal - calendar object
+     * @return truncated calendar
+     */
     private static Calendar trunc(final Calendar cal) {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -57,20 +68,24 @@ public class UserService extends AbstractService<User>
         cal.set(Calendar.MILLISECOND, 0);
         return cal;
     }
-    @PersistenceContext
-    private EntityManager           entityManager;
 
     public UserService () {
         super(User.class);
     }
 
+    /**
+     * Function retrieves current shift for given user
+     * @param curDate - current date
+     * @param user - user
+     * @return user shift if available for this user
+     */
     @Transactional
     public UserShift getCurrentShift(Date curDate, User user) {
         Session session = getHibernateSession();
         UserShift us = (UserShift)session.getNamedQuery("UserShift.currentShift")
             .setParameter("curTime", UserShift.convertTime(curDate))
             .uniqueResult();
-        
+
         if (us == null)
             return null;
 
@@ -99,12 +114,21 @@ public class UserService extends AbstractService<User>
         return us;
     }
 
+    /**
+     * Function retrieves all shifts for current day
+     * @return list of user shift
+     */
     @Transactional
     public List<UserShift> getAlLShifts () {
         Session session = getHibernateSession();
         return session.createCriteria(UserShift.class).list();
     }
 
+    /**
+     * Find user by username
+     * @param username - user name to find
+     * @return found user
+     */
     @Transactional
     public User findByName (String username) {
         Session session = getHibernateSession();
@@ -116,11 +140,19 @@ public class UserService extends AbstractService<User>
         return usr;
     }
 
+    /**
+     * Delete user by username
+     * @param username - user name
+     */
     @Transactional
     public void deleteByName(String username) {
         getHibernateSession().delete(findByName(username));
     }
 
+    /**
+     * Create or update user
+     * @param usr - user information
+     */
     @Transactional
     @Secured({BasicConstants.ADMIN_ROLE})
     public void save(User usr) {
@@ -134,7 +166,7 @@ public class UserService extends AbstractService<User>
      * Scheduled at 00:00:00 every Saturday
      */
     @Transactional
-    @Scheduled(cron = "0 0 0 * * SAT")
+    @Scheduled(cron = "${calendar.scheduler.cron}")
     public void fillWorkDays() {
         Calendar cal = Calendar.getInstance();
         trunc (cal);
@@ -154,7 +186,11 @@ public class UserService extends AbstractService<User>
             dayOfWeek = cal.get (Calendar.DAY_OF_WEEK);
         } while (dayOfWeek != Calendar.SATURDAY);
     }
-    
+
+    /**
+     * Function adds date as work day to production calendar
+     * @param truncedDate - date to add
+     */
     @Transactional
     public void addWorkDay (Calendar truncedDate) {
         Session session = getHibernateSession();
@@ -169,7 +205,14 @@ public class UserService extends AbstractService<User>
             session.save(wcal);
         });
     }
-    
+
+    /**
+     * Function retrieves menu for current user
+     * @param username - user name
+     * @param parentId - id of parent menu item
+     * @return menu items
+     */
+    @Transactional
     public List<Menu> getUserMenu (String username, Long parentId) {
         Session session = getHibernateSession();
         DetachedCriteria userGroups = DetachedCriteria.forClass(User.class)
@@ -180,12 +223,16 @@ public class UserService extends AbstractService<User>
         return session.createCriteria(Menu.class)
             .add(parentId == null ? isNull("parent") : eq("parent.id", parentId))
             .createAlias("groups", "grp")
-            .add(Subqueries.propertyIn("grp.id", userGroups)).list();
+            .add(Subqueries.propertyIn("grp.id", userGroups))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
+    /**
+     * Implements the same function from AbstractController
+     * @return entity manager
+     */
     @Override
     protected EntityManager getEntityManager() {
         return entityManager;
     }
-
 }

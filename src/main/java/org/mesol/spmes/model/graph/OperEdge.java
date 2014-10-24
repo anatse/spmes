@@ -78,7 +78,7 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     private String                  ruleValue;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "OPER_TYPE")
-    private PerformanceType         performanceType;
+    private PerformType         performType;
     
     @ElementCollection
     @CollectionTable (
@@ -90,9 +90,6 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @ManyToOne
     @JoinColumn(name = "EQC_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPEREDGE_EQC", value = ConstraintMode.CONSTRAINT))
     private EquipmentClass          equipmentClass;
-
-    public OperEdge() {
-    }
 
     @Override
     public RouterStep getFrom() {
@@ -122,12 +119,12 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
         this.ruleValue = ruleValue;
     }
 
-    public PerformanceType getPerformanceType() {
-        return performanceType;
+    public PerformType getPerformingType() {
+        return performType;
     }
 
-    public void setPerformanceType(PerformanceType performanceType) {
-        this.performanceType = performanceType;
+    public void setPerformingType(PerformType performanceType) {
+        this.performType = performanceType;
     }
 
     public Set<OperAttribute> getAttributes() {

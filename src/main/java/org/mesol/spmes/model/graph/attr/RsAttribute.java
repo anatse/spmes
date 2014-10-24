@@ -16,6 +16,7 @@
 
 package org.mesol.spmes.model.graph.attr;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Embeddable;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
@@ -32,10 +33,12 @@ public class RsAttribute extends AbstractAttribute
     @Parent
     private RouterStep           owner;
 
+    @JsonIgnore
     public RouterStep getOwner() {
         return owner;
     }
 
+    @JsonIgnore
     public void setOwner(RouterStep owner) {
         this.owner = owner;
     }
