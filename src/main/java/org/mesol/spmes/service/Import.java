@@ -39,8 +39,6 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.Attributes;
@@ -53,7 +51,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author ASementsov
  */
 @Service
-public class Import extends DefaultHandler implements ApplicationContextAware
+public class Import extends DefaultHandler
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -61,15 +59,23 @@ public class Import extends DefaultHandler implements ApplicationContextAware
     @PersistenceContext
     private EntityManager               entityManager;
 
-    private ApplicationContext          appContext;
     private final Stack<Container>      stack = new Stack<>();
     private final List<Container>       objects = new ArrayList<>();
     private Set<EntityType<?>>          types;
     private Set<EmbeddableType<?>>      embeddables;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        appContext = applicationContext;
+    public Set<EntityType<?>> getTypes() {
+        if (types == null)
+            types = entityManager.getMetamodel().getEntities();
+
+        return types;
+    }
+
+    public Set<EmbeddableType<?>> getEmbeddables() {
+        if (embeddables == null)
+            embeddables = entityManager.getMetamodel().getEmbeddables();
+
+        return embeddables;
     }
 
     public BeanWrapper getWrapper (Object obj) {
@@ -100,9 +106,6 @@ public class Import extends DefaultHandler implements ApplicationContextAware
     @Transactional
     public void parse (final InputStream xml) {
 		try {
-            types = entityManager.getMetamodel().getEntities();
-            embeddables = entityManager.getMetamodel().getEmbeddables();
-
      		final SAXParserFactory spf = SAXParserFactory.newInstance();
 			final SAXParser sp = spf.newSAXParser();
             sp.parse(xml, this);
@@ -152,11 +155,11 @@ public class Import extends DefaultHandler implements ApplicationContextAware
         Type<?> foundObj = null;
 
         // Find enity class
-        final Stream<EntityType<?>> found = types.stream().filter(w -> (qName.equals(w.getName())));
+        final Stream<EntityType<?>> found = getTypes().stream().filter(w -> (qName.equals(w.getName())));
         Optional optData = found.findFirst();
         if (!optData.isPresent()) {
             // Try to find in embeddables
-            final Stream<EmbeddableType<?>> embFound = embeddables.stream().filter(w -> (qName.equals(w.getJavaType().getSimpleName())));
+            final Stream<EmbeddableType<?>> embFound = getEmbeddables().stream().filter(w -> (qName.equals(w.getJavaType().getSimpleName())));
             optData = embFound.findFirst();
             if (optData.isPresent())
                 foundObj = (Type<?>)optData.get();

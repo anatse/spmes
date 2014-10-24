@@ -17,8 +17,12 @@ package org.mesol.spmes.utils;
 
 
 import java.lang.invoke.MethodHandles;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 
 /**
@@ -26,26 +30,51 @@ import org.apache.log4j.Logger;
  * @version 1.0.0
  * @author ASementsov
  */
-public class GroovyExecutor extends FutureTask<Object>
+public class GroovyExecutor
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    public GroovyExecutor(Callable<Object> callable) {
-        super(callable);
+    private final ScriptEngine      engine;
+    private final Bindings          bindings;
+ 
+    public GroovyExecutor() {
+        engine = new ScriptEngineManager().getEngineByName("groovy");
+        bindings = engine.createBindings();
     }
     
+    public GroovyExecutor bind (String name, Object value) {
+        bindings.put(name, value);
+        return this;
+    }
     
-//        ScriptEngineManager factory = new ScriptEngineManager();
-////        List<ScriptEngineFactory> engines = factory.getEngineFactories();
-////        for (ScriptEngineFactory f : engines) {
-////            System.out.println (f.getEngineName());
-////        }
-//        
-//        ScriptEngine engine = factory.getEngineByName("groovy");
-//        String fact = "def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }";
-//        engine.eval(fact);
-//        Invocable inv = (Invocable) engine;
-//        Object[] params = { new Integer(5) };
-//        Object result = inv.invokeFunction("factorial", params);
-//        System.out.println(result);
+    public GroovyExecutor clearBindings () {
+        bindings.clear();
+        return this;
+    }
+    
+    public Bindings getBindings () {
+        return bindings;
+    }
+
+    public <T> T execute (String script) {
+        T res = null;
+
+        try {
+            if (engine instanceof Compilable) {
+                Compilable compilingEngine = (Compilable)engine;
+                CompiledScript compiledScript = compilingEngine.compile(script);
+                res = (T)compiledScript.eval(bindings);
+            }
+
+//            Invocable inv = (Invocable) engine;
+//            Object[] params = { new Integer(5) };
+//            Object result = inv.invokeFunction("factorial", params);
+//            System.out.println(result);
+        } 
+        catch (ScriptException ex) {
+            logger.error(ex, ex);
+        }
+
+        return res;
+    }
 }

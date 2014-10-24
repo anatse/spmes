@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.factory;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -119,6 +120,9 @@ public class Equipment extends AbstractEntity implements Serializable
     }
 
     public Set<EquipmentAttribute> getAttributes() {
+        if (attributes == null)
+            attributes = new HashSet<>();
+
         return attributes;
     }
 

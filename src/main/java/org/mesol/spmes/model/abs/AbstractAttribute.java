@@ -26,7 +26,7 @@ import javax.persistence.MappedSuperclass;
  * @author ASementsov
  */
 @MappedSuperclass
-public abstract class AbstractAttribute implements Serializable 
+public abstract class AbstractAttribute implements Serializable
 {
     @Column(nullable = false, length = 32)
     private String      name;
