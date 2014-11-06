@@ -19,7 +19,6 @@ import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.mail.NoSuchProviderException;
 import javax.transaction.Transactional;
 import org.junit.Test;

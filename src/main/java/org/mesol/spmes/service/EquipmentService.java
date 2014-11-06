@@ -92,4 +92,9 @@ public class EquipmentService extends AbstractServiceWithAttributes<Equipment, E
     public EquipmentClass saveEquipmentClass (EquipmentClass eqc) {
         return getEntityManager().merge(eqc);
     }
+    
+    @Transactional
+    public Equipment save (Equipment eq) {
+        return equipmentRepo.save(eq);
+    }
 }
