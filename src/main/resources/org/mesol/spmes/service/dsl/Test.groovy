@@ -24,6 +24,11 @@ eqService {
                 EquipmentAttribute ([
                     name: 'test',
                     attrValue: '10'
+                ]),
+                EquipmentAttribute ([
+                    name: 'capability',
+                    attrValue: '100',
+                    attrType: 'number'
                 ])
             ]
         ])
