@@ -15,6 +15,45 @@
  */
 def WC1 = eqService {findByName ('WC-1')}
 
+def site = {
+    eqService {
+        findByName ('1000')
+    }
+}
+
+def prodOrderTestData = {
+    productionService {
+        po = persist (
+            ProductionOrder ([
+                product: matMDService {
+                    persist (MatMD ([
+                            name: 'megaProduct',
+                            site: site(),
+                            description: 'Mega Product',
+                            unit: 'KG'
+                        ])
+                    )
+                },
+                plannedQty: Quantity ([
+                    unitCode: 'KG',
+                    quantity: 1000
+                ]),
+                defaultBatchQty: Quantity ([
+                    unitCode: 'KG',
+                    quantity: 200
+                ]),
+                router: routeService {findRouterByName ('R_TEST_1')}
+            ])
+        )
+    }
+}
+
+System.out.println ('create prodyuction order');
+
+def prodOrder = prodOrderTestData ()
+
+System.out.println ('Prodyuction order: ' + prodOrder.id);
+
 eqService {
     def neq = save (
         Equipment ([

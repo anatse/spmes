@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.graph;
 
+import java.util.List;
+import javax.persistence.CollectionTable;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -26,8 +29,14 @@ import javax.persistence.Table;
  * @author ASementsov
  */
 @Entity
-@Table(name = "PBATCH")
-//@DiscriminatorValue("BATCH")
-public class ProductionBatch extends ProductionObject
+@Table(name = "PAGGR")
+//@DiscriminatorValue("AGGR")
+public class AggregateStep extends ProductionObject
 {
+    @ElementCollection
+//    @CollectionTable(
+//        name="PHONE",
+//        joinColumns=@JoinColumn(name="OWNER_ID")
+//    )
+    private List<ProductionObject>          aggregatedSteps;
 }

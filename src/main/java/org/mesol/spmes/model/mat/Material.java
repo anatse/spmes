@@ -16,8 +16,11 @@
 package org.mesol.spmes.model.mat;
 
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -67,6 +70,13 @@ public class Material extends AbstractEntity implements Serializable
 
     private Quantity                    qty;
 
+    @ElementCollection
+    @CollectionTable (
+        name = "MATA",
+        joinColumns = @JoinColumn(name = "MAT_ID")
+    )
+    private Set<MaterialAttribute>     attributes;
+    
     @ManyToOne
     @JoinColumn(name = "PO_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_MAT_PO", value = ConstraintMode.CONSTRAINT))
     private ProductionOrder             ownedBy;
@@ -141,5 +151,13 @@ public class Material extends AbstractEntity implements Serializable
 
     public void setOwnedBy(ProductionOrder ownedBy) {
         this.ownedBy = ownedBy;
+    }
+
+    public Set<MaterialAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<MaterialAttribute> attributes) {
+        this.attributes = attributes;
     }
 }

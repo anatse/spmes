@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.graph;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,7 +32,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import org.mesol.spmes.consts.BasicConstants;
@@ -45,7 +43,7 @@ import org.mesol.spmes.model.graph.attr.PSAttribute;
  * @author ASementsov
  */
 @Entity
-@DiscriminatorColumn(name = "OBJ_TYPE", discriminatorType = DiscriminatorType.STRING, length = 10)
+//@DiscriminatorColumn(name = "OBJ_TYPE", discriminatorType = DiscriminatorType.STRING, length = 10)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ProductionObject extends Vertex 
 {

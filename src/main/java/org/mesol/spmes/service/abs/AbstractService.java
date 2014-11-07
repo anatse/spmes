@@ -53,6 +53,15 @@ public abstract class AbstractService<T extends AbstractEntity>
     public T findOne (Object id) {
         return getEntityManager().find(entityClass, id);
     }
+    
+    public T persist (T entity) {
+        getEntityManager().persist(entity);
+        return entity;
+    }
+    
+    public T merge (T entity) {
+        return getEntityManager().merge(entity);
+    }
 
     /**
      * Function find objects using all given object as template. I.e. all filled fields in this object
