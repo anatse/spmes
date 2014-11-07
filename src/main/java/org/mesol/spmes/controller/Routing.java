@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
@@ -57,7 +58,8 @@ public class Routing
     
     @RequestMapping(value = "oper", method = RequestMethod.GET)
     public List<OperEdge> findAllOperations (@RequestParam(value = "routerId", defaultValue = "5150") Long routerId) {
-        return routeService.findAllOperation(routerId);
+//        return routeService.findAllOperation(routerId);
+        return Collections.EMPTY_LIST;
     }
 
     @Secured({BasicConstants.TECHNOLOG_ROLE})

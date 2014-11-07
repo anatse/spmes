@@ -28,17 +28,22 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
+import static org.hibernate.criterion.Restrictions.eq;
 import org.mesol.spmes.consts.BasicConstants;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.graph.OperEdge;
 import org.mesol.spmes.model.graph.PerformType;
+import org.mesol.spmes.model.graph.ProductionOrder;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterStep;
+import org.mesol.spmes.model.graph.attr.RouterAttribute;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.graph.exceptions.MultipleOperationsException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
 import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 import org.mesol.spmes.model.graph.exceptions.OperEntryPointChanged;
 import org.mesol.spmes.repo.RoutingRepo;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,29 +54,32 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service
-public class RouteService 
+public class RouteService extends AbstractServiceWithAttributes<Router, RouterAttribute>
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @PersistenceContext
     private EntityManager           em;
 
-    @Autowired
-    private RoutingRepo             repo;
+    public RouteService () {
+        super(Router.class);
+    }
 
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+    
     @Transactional
     public Iterable<Router> findAllRouters () {
-        return repo.findAll();
+        return findAll();
     }
 
     @Transactional
     public Router findRouterByName (String routerName) {
-        return repo.findRouterByName(routerName);
-    }
-
-    @Transactional
-    public List<OperEdge> findAllOperation (Long routerId) {
-        return repo.findAllRouterOpers(routerId);
+        return (Router) getHibernateSession().createCriteria(Router.class)
+            .add(eq(NamingRuleConstants.NAME, routerName))
+            .uniqueResult();
     }
 
     /**
@@ -117,7 +125,7 @@ public class RouteService
      */
     @Transactional
     public RouterStep getLastStep (Long routerId) throws MultipleOperationsException {
-        Router router = repo.findOne(routerId);
+        Router router = findOne(routerId);
         return getLastStep(router);
     }
 
@@ -179,6 +187,7 @@ public class RouteService
      * @throws ManySequentalOperationException
      * @throws NoRuleException 
      */
+    @Transactional
     public Collection<OperEdge> getNextOperation (RouterStep rs) throws ManySequentalOperationException, NoRuleException {
         final Collection<OperEdge> ops = new LinkedList<>();
         if (rs.getOut().size() > 1) {
@@ -273,6 +282,7 @@ public class RouteService
      * @return changed operation
      * @throws org.mesol.spmes.model.graph.exceptions.OperEntryPointChanged
      */
+    @Transactional
     public OperEdge saveOperation (OperEdge edge) throws OperEntryPointChanged {
         OperEdge oldOper = em.find(OperEdge.class, edge.getId());
         if (!oldOper.getFrom().getId().equals(edge.getFrom().getId()) || 
@@ -288,6 +298,7 @@ public class RouteService
      * 
      * @param oper 
      */
+    @Transactional
     public void deleteOperation (OperEdge oper) {
         // Check if operation
         if (!em.contains(oper)) {
@@ -299,10 +310,5 @@ public class RouteService
             oper.getFrom().getOut().remove(oper);
             em.remove(oper);
         }
-    }
-    
-    @Transactional
-    public Router findRouter(Long routerId) {
-        return em.find(Router.class, routerId);
     }
 }

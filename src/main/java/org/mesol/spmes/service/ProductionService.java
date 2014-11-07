@@ -19,10 +19,14 @@ import java.lang.invoke.MethodHandles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
+import static org.hibernate.criterion.Restrictions.eq;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.graph.ProductionOrder;
 import org.mesol.spmes.model.graph.attr.POAttribute;
+import org.mesol.spmes.model.refs.Quantity;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -33,16 +37,29 @@ import org.springframework.stereotype.Service;
 public class ProductionService extends AbstractServiceWithAttributes<ProductionOrder, POAttribute>
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     @PersistenceContext
     private EntityManager           em;
 
     public ProductionService() {
         super(ProductionOrder.class);
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @Transactional
+    public ProductionOrder findByName (String poName) {
+        return (ProductionOrder) getHibernateSession().createCriteria(ProductionOrder.class)
+            .add(eq("externalOrderId", poName))
+            .uniqueResult();
+    }
+
+    @Transactional
+    public void releaseProductionOrder (ProductionOrder po, Quantity qtyToRelease) {
+        if (po.getId() == null)
+            po = findByName (po.getExternalOrderId());
     }
 }

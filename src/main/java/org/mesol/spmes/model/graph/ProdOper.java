@@ -44,10 +44,10 @@ public class ProdOper extends Edge<ProductionObject> implements Serializable
 {
     @ManyToOne
     @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_PO_OPER_FROM", value = ConstraintMode.CONSTRAINT))
-    private ProductionObject     from;
+    private ProductionObject        from;
     @ManyToOne
     @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_PO_OPER_TO", value = ConstraintMode.CONSTRAINT))
-    private ProductionObject     to;
+    private ProductionObject        to;
     @Column(length = 255, name = "RULE_VAL")
     private String                  ruleValue;
     @Enumerated(EnumType.ORDINAL)

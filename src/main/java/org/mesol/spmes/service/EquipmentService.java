@@ -16,6 +16,7 @@
 package org.mesol.spmes.service;
 
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
@@ -71,10 +72,10 @@ public class EquipmentService extends AbstractServiceWithAttributes<Equipment, E
         return (List<Equipment>) equipmentRepo.findAll();
     }
 
-    public List<EquipmentAttribute> getAttributesByEquipment (Long eqId) {
+    public Set<EquipmentAttribute> getAttributesByEquipment (Long eqId) {
         Equipment eq;
         eq = this.findById(eqId);        
-        return (List<EquipmentAttribute>) eq.getAttributes();
+        return eq.getAttributes();
     }
     
     @Transactional

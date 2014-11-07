@@ -110,13 +110,8 @@ public class EquipmentTest {
         eqa.setAttrType("num");
         attrs.add(eqa);                
         
-//        Set<EquipmentAttribute> attrSet = new HashSet<>(attrs);
-        
-        //List<EquipmentAttribute> attrList = new ArrayList<>(attrs);
-        
         wc1.setAttributes(attrs);
-        
-//        List<Equipment> found = eqService.findByAttributes (attrs);
+        List<Equipment> found = eqService.findByAttributes (attrs);
 //        Assert.isTrue(found.size() == 1, "Found not only one entity for given attributes");
 //
 //        Equipment site = eqService.findByName("2000");

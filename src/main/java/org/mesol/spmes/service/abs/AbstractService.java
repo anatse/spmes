@@ -36,7 +36,7 @@ public abstract class AbstractService<T extends AbstractEntity>
 {
     protected static final Logger   logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     private final Class<T>          entityClass;
-
+    
     protected AbstractService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }

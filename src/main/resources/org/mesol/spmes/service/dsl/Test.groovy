@@ -48,11 +48,14 @@ def prodOrderTestData = {
     }
 }
 
-System.out.println ('create prodyuction order');
+def poStep = {prodOrder ->
+    def oper = ProdOper ([
+        
+    ])
+}
 
-def prodOrder = prodOrderTestData ()
-
-System.out.println ('Prodyuction order: ' + prodOrder.id);
+def po = prodOrderTestData ()
+def ps = poStep (ps)
 
 eqService {
     def neq = save (
