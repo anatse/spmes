@@ -20,13 +20,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import static org.hibernate.criterion.Restrictions.eq;
-import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.graph.ProductionOrder;
 import org.mesol.spmes.model.graph.attr.POAttribute;
 import org.mesol.spmes.model.refs.Quantity;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * 
@@ -40,6 +41,9 @@ public class ProductionService extends AbstractServiceWithAttributes<ProductionO
 
     @PersistenceContext
     private EntityManager           em;
+    
+    @Autowired
+    private UnitService             units;
 
     public ProductionService() {
         super(ProductionOrder.class);
@@ -52,14 +56,29 @@ public class ProductionService extends AbstractServiceWithAttributes<ProductionO
 
     @Transactional
     public ProductionOrder findByName (String poName) {
-        return (ProductionOrder) getHibernateSession().createCriteria(ProductionOrder.class)
+        return (ProductionOrder)getHibernateSession().createCriteria(ProductionOrder.class)
             .add(eq("externalOrderId", poName))
             .uniqueResult();
     }
 
     @Transactional
-    public void releaseProductionOrder (ProductionOrder po, Quantity qtyToRelease) {
-        if (po.getId() == null)
-            po = findByName (po.getExternalOrderId());
+    public ProductionOrder releaseProductionOrder (final ProductionOrder po, final Quantity qtyToRelease) {
+        Assert.isTrue(po.getId() != null || po.getExternalOrderId() != null, "One of the identifiers should not be null: id, externalId");
+
+        ProductionOrder found = po;
+        if (found.getId() == null)
+            found = findByName (po.getExternalOrderId());
+
+        // Compute planned quantity
+        Quantity newPlanQty = po.getPlannedQty().minus(qtyToRelease, (from, to) -> {
+            return units.findFor(from, to);
+        });
+
+        // Set planned quantity
+        found.setPlannedQty(newPlanQty);
+
+        // Create
+
+        return merge(found);
     }
 }

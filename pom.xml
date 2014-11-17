@@ -83,7 +83,7 @@
         <!--
             Spring Integration
         -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-core</artifactId>
             <version>${spring.integration}</version>
@@ -97,7 +97,7 @@
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-jms</artifactId>
             <version>${spring.integration}</version>
-        </dependency>
+        </dependency>-->
         <!--
             Spring aspects
         -->
@@ -183,6 +183,29 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.3.6.Final</version>
         </dependency>
+        <!--
+            Hibernate ENCache
+        -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>4.3.6.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>2.6.9</version>
+        </dependency>
+        
+        <!--
+            Hibernate Validator
+        -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -267,7 +290,7 @@
         <!--        
             Scala dependency
         -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.11.2</version>
@@ -276,7 +299,7 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-scala_2.11</artifactId>
             <version>2.4.2</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -291,7 +314,7 @@
             <!--
                 Scala compiler
             -->
-            <plugin>
+<!--            <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <version>2.15.2</version>
@@ -310,7 +333,7 @@
                         <jvmArg>-Xmx1024m</jvmArg>
                     </jvmArgs>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.4</version>

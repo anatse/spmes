@@ -16,6 +16,7 @@
 package org.mesol.spmes.model.refs;
 
 import java.io.Serializable;
+import javax.persistence.Cacheable;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -23,6 +24,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -36,6 +39,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  */
 @Entity
 @Table (name = "UCONV")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
 public class UnitConverter extends AbstractEntity implements Serializable
 {
     @Id

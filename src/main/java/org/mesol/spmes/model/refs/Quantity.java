@@ -16,8 +16,10 @@
 package org.mesol.spmes.model.refs;
 
 import java.io.Serializable;
+import java.util.function.BiFunction;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.springframework.util.Assert;
 
 /**
  * 
@@ -46,5 +48,26 @@ public class Quantity implements Serializable
 
     public void setUnitCode(String unitCode) {
         this.unitCode = unitCode;
+    }
+    
+    public Quantity minus (Quantity qty, BiFunction<String, String, UnitConverter> conv) {
+        final Quantity q = new Quantity();
+        q.setUnitCode(unitCode);
+
+        // Check units
+        if (unitCode.equals(qty.unitCode)) {
+            Assert.isTrue(quantity >= qty.quantity, "Cannot substruct more quantity than exist");
+            q.setQuantity(quantity - qty.quantity);
+        }
+        else {
+            // Try to convert unit codes
+            Assert.notNull(conv, "Converter function should be set");
+            UnitConverter uc = conv.apply(qty.unitCode, unitCode);
+            Assert.notNull(uc, String.format ("Converter between %s and %s not found", qty.unitCode, unitCode));
+            double tQty = uc.convert(qty.quantity);
+            q.setQuantity(quantity - tQty);
+        }
+
+        return q;
     }
 }

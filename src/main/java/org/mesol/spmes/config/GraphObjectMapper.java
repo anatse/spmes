@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.module.scala.DefaultScalaModule;
+//import com.fasterxml.jackson.module.scala.DefaultScalaModule;
 import java.lang.invoke.MethodHandles;
 import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
@@ -47,7 +47,7 @@ public class GraphObjectMapper extends ObjectMapper
     public GraphObjectMapper() {
         super ();
         
-        registerModule(new DefaultScalaModule());
+//        registerModule(new DefaultScalaModule());
         
         _serializationConfig = _serializationConfig
             .withSerializationInclusion(JsonInclude.Include.NON_NULL)

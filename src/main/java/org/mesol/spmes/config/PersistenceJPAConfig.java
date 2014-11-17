@@ -139,6 +139,10 @@ public class PersistenceJPAConfig
         readAndSetProperty(properties, "hibernate.dialect");
         readAndSetProperty(properties, "hibernate.hbm2ddl.auto");
         readAndSetProperty(properties, "hibernate.default_schema");
+        readAndSetProperty(properties, "hibernate.cache.region.factory_class");
+        readAndSetProperty(properties, "hibernate.cache.use_second_level_cache");
+        readAndSetProperty(properties, "hibernate.cache.use_query_cache");
+        readAndSetProperty(properties, "net.sf.ehcache.configurationResourceName");
         return properties;
     }
     

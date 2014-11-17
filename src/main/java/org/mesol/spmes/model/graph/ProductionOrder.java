@@ -37,6 +37,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.graph.attr.POAttribute;
@@ -67,6 +68,15 @@ public class ProductionOrder extends AbstractEntity implements Serializable
     @ManyToOne
     @JoinColumn (name = "MAT_MD_ID", foreignKey = @ForeignKey(name = "FK_PO_MATMD", value = ConstraintMode.CONSTRAINT))
     private MatMD                   product;
+    /**
+     * Production order quantity. This field cannot be changed
+     */
+    @Embedded
+    @AttributeOverrides ({
+        @AttributeOverride(name="quantity", column = @Column(name = "QTY", precision = 38, scale = 6)),
+        @AttributeOverride(name="unitCode", column = @Column(name = "QTY_UNIT", length = 32))
+    })
+    private Quantity                poQty;
     /**
      * Planned product quantity
      */
@@ -160,6 +170,13 @@ public class ProductionOrder extends AbstractEntity implements Serializable
     )
     private Set<POAttribute>        attributes;
 
+    /**
+     * field used to implement optimistic locking
+     */
+    @Version
+    @Column(name = "OPT_LOCK")
+    private Long                    optLock;
+
     public Long getId() {
         return id;
     }
@@ -174,6 +191,14 @@ public class ProductionOrder extends AbstractEntity implements Serializable
 
     public void setProduct(MatMD product) {
         this.product = product;
+    }
+
+    public Quantity getPoQty() {
+        return poQty;
+    }
+
+    public void setPoQty(Quantity poQty) {
+        this.poQty = poQty;
     }
 
     public Quantity getPlannedQty() {
@@ -281,5 +306,13 @@ public class ProductionOrder extends AbstractEntity implements Serializable
 
     public void setAttributes(Set<POAttribute> attributes) {
         this.attributes = attributes;
+    }
+
+    public Long getOptLock() {
+        return optLock;
+    }
+
+    public void setOptLock(Long optLock) {
+        this.optLock = optLock;
     }
 }
