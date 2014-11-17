@@ -55,7 +55,7 @@ def poStep = {prodOrder ->
 }
 
 def po = prodOrderTestData ()
-def ps = poStep (ps)
+def ps = poStep (po)
 
 eqService {
     def neq = save (
