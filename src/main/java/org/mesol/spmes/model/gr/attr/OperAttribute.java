@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.graph.attr;
+package org.mesol.spmes.model.gr.attr;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.AssociationOverride;
@@ -24,7 +24,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.OperEdge;
+import org.mesol.spmes.model.gr.RouterOperation;
 
 /**
  * 
@@ -39,15 +39,15 @@ import org.mesol.spmes.model.graph.OperEdge;
 public class OperAttribute extends AbstractAttribute
 {
     @Parent
-    private OperEdge           owner;
+    private RouterOperation     owner;
 
     @JsonIgnore
-    public OperEdge getOwner() {
+    public RouterOperation getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(OperEdge owner) {
+    public void setOwner(RouterOperation owner) {
         this.owner = owner;
     }
 }

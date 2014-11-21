@@ -25,20 +25,14 @@ import org.mesol.spmes.config.PersistenceJPAConfig;
 import org.mesol.spmes.config.RootConfiguration;
 import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
-import org.mesol.spmes.model.factory.EquipmentClass;
-import org.mesol.spmes.model.graph.OperEdge;
-import org.mesol.spmes.model.graph.PerformType;
-import org.mesol.spmes.model.graph.Router;
-import org.mesol.spmes.model.graph.RouterStep;
-import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
-import org.mesol.spmes.model.graph.exceptions.MultipleOperationsException;
-import org.mesol.spmes.model.graph.exceptions.NoRuleException;
-import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
-import org.mesol.spmes.model.graph.exceptions.OperEntryPointChanged;
+import org.mesol.spmes.model.gr.ObjectState;
+import org.mesol.spmes.model.gr.Router;
+import org.mesol.spmes.model.gr.RouterOperation;
 import org.mesol.spmes.model.refs.Unit;
 import org.mesol.spmes.model.refs.UnitConverter;
 import org.mesol.spmes.service.EquipmentService;
-import org.mesol.spmes.service.RouteService;
+import org.mesol.spmes.service.RoutingService;
+//import org.mesol.spmes.service.RoutingService;
 import org.mesol.spmes.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -69,16 +63,36 @@ public class RoutingTest
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-
-    @Autowired
-    private RouteService        service;
+//    @Autowired
+//    private RoutingService        service;
     
     @Autowired
     private EquipmentService    eqService;
     
     @Autowired
     private UnitService         unitService;
+    
+    @Autowired
+    private RoutingService            gService;
 
+    @Test
+    @Transactional
+    public void testGRouting () {
+        gService.test();
+        
+        Iterable<Router> rs = gService.findActiveRouters();
+        Iterable<Router> rs2 = gService.findRoutersByStatus(ObjectState.DEVELOPMENT);
+
+        rs2.forEach(r -> {
+            System.out.println (r.getName());
+            
+            Collection<RouterOperation> opers = gService.finaAllOperations(r);
+            opers.forEach(o -> {
+                System.out.println ("    " + o.getName());
+            });
+        });
+    }
+    
     @Test
     @Transactional
     public void testUnitConverter () {

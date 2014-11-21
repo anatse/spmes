@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.graph.attr;
+package org.mesol.spmes.model.gr.attr;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.AssociationOverride;
-import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.ProdOper;
+import org.mesol.spmes.model.gr.Router;
 
 /**
  * 
@@ -32,22 +28,18 @@ import org.mesol.spmes.model.graph.ProdOper;
  * @author ASementsov
  */
 @Embeddable
-@AssociationOverride(
-    name="unit", 
-    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_POP_ATTR_UNIT", value = ConstraintMode.CONSTRAINT))
-)
-public class POperAttribute extends AbstractAttribute
+public class RouterAttribute extends AbstractAttribute
 {
     @Parent
-    private ProdOper     owner;
+    private Router           owner;
 
     @JsonIgnore
-    public ProdOper getOwner() {
+    public Router getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(ProdOper owner) {
+    public void setOwner(Router owner) {
         this.owner = owner;
     }
 }

@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.mesol.spmes.model.gr;
 
-package org.mesol.spmes.model.graph.exceptions;
+import java.util.Collection;
+import java.util.OptionalLong;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class ManySequentalOperationException extends Exception
+public class RoutingUtils 
 {
-    public ManySequentalOperationException() {
-    }
-
-    public ManySequentalOperationException(String message) {
-        super(message);
+    public static long computeStart (Collection<Edge> edges) {
+        OptionalLong startTime = edges.parallelStream().mapToLong(e -> e.getStartTime() + e.getDuration().getDuration()).max();
+        return startTime.isPresent() ? startTime.getAsLong() : 0;
     }
 }

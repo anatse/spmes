@@ -32,7 +32,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
-import org.mesol.spmes.model.graph.ProductionOrder;
 import org.mesol.spmes.model.refs.Quantity;
 
 /**
@@ -77,9 +76,9 @@ public class Material extends AbstractEntity implements Serializable
     )
     private Set<MaterialAttribute>     attributes;
     
-    @ManyToOne
-    @JoinColumn(name = "PO_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_MAT_PO", value = ConstraintMode.CONSTRAINT))
-    private ProductionOrder             ownedBy;
+//    @ManyToOne
+//    @JoinColumn(name = "PO_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_MAT_PO", value = ConstraintMode.CONSTRAINT))
+//    private ProductionOrder             ownedBy;
 
     public Long getId() {
         return id;
@@ -145,13 +144,13 @@ public class Material extends AbstractEntity implements Serializable
         this.qty = qty;
     }
 
-    public ProductionOrder getOwnedBy() {
-        return ownedBy;
-    }
-
-    public void setOwnedBy(ProductionOrder ownedBy) {
-        this.ownedBy = ownedBy;
-    }
+//    public ProductionOrder getOwnedBy() {
+//        return ownedBy;
+//    }
+//
+//    public void setOwnedBy(ProductionOrder ownedBy) {
+//        this.ownedBy = ownedBy;
+//    }
 
     public Set<MaterialAttribute> getAttributes() {
         return attributes;

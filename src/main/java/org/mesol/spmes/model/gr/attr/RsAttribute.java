@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.graph.exceptions;
+package org.mesol.spmes.model.gr.attr;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Parent;
+import org.mesol.spmes.model.abs.AbstractAttribute;
+import org.mesol.spmes.model.gr.RouterStep;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class NonParallelOperationException extends Exception
+@Embeddable
+public class RsAttribute extends AbstractAttribute
 {
-    public NonParallelOperationException() {
+    @Parent
+    private RouterStep           owner;
+
+    @JsonIgnore
+    public RouterStep getOwner() {
+        return owner;
     }
 
-    public NonParallelOperationException(String message) {
-        super(message);
+    @JsonIgnore
+    public void setOwner(RouterStep owner) {
+        this.owner = owner;
     }
 }

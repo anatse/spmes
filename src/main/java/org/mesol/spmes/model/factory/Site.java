@@ -13,33 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.mesol.spmes.model.factory;
 
-package org.mesol.spmes.model.graph.attr;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Embeddable;
-import org.hibernate.annotations.Parent;
-import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.graph.Router;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-@Embeddable
-public class RouterAttribute extends AbstractAttribute
+@Entity
+@DiscriminatorValue("SITE")
+public class Site extends Equipment
 {
-    @Parent
-    private Router           owner;
-
-    @JsonIgnore
-    public Router getOwner() {
-        return owner;
-    }
-
-    @JsonIgnore
-    public void setOwner(Router owner) {
-        this.owner = owner;
-    }
 }

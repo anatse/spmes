@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.graph;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Collection;
-import java.util.HashSet;
+package org.mesol.spmes.model.gr;
+
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -25,18 +23,14 @@ import javax.persistence.ConstraintMode;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.script.CompiledScript;
-import org.mesol.spmes.consts.BasicConstants;
-import org.mesol.spmes.model.graph.attr.RsAttribute;
+import org.mesol.spmes.model.gr.attr.RsAttribute;
 import org.mesol.spmes.model.mat.BOM;
+import org.mesol.spmes.model.refs.Duration;
+import org.springframework.util.Assert;
 
 /**
  * 
@@ -45,22 +39,11 @@ import org.mesol.spmes.model.mat.BOM;
  */
 @Entity
 @Table(name = "RS")
-public class RouterStep extends Vertex
+public class RouterStep extends Vertex implements IRouterElement
 {
-    @Id
-    @SequenceGenerator(initialValue = 1, name = "rsId", sequenceName = "RS_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
-    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "rsId")
-    private Long                        id;
-
-    @OneToMany(mappedBy = "from")
-    private Collection<OperEdge>        out;
-
-    @OneToMany(mappedBy = "to")
-    private Collection<OperEdge>        in;
-
-    @Column(nullable = false, length = 32)
+    @Column(length = 80, nullable = false, unique = true)
     private String                      name;
-
+    
     /**
      * Groovy script to determine next operation (only for rule based operations)
      */
@@ -86,32 +69,6 @@ public class RouterStep extends Vertex
     )
     private Set<RsAttribute>            attributes;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Collection<OperEdge> getOut() {
-        return out;
-    }
-
-    public void setOut(Collection<OperEdge> out) {
-        this.out = out;
-    }
-
-    @JsonIgnore
-    public Collection<OperEdge> getIn() {
-        return in;
-    }
-
-    public void setIn(Collection<OperEdge> in) {
-        this.in = in;
-    }
-
     public String getName() {
         return name;
     }
@@ -126,40 +83,6 @@ public class RouterStep extends Vertex
 
     public void setRule(String rule) {
         this.rule = rule;
-        ruleScript = null;
-    }
-    
-    public void addIn (OperEdge edge) {
-        if (in == null)
-            in = new HashSet<>();
-
-        in.add(edge);
-    }
-    
-    public void addOut (OperEdge edge) {
-        if (out == null)
-            out = new HashSet<>();
-
-        out.add(edge);
-    }
-
-    public Router getRouter() {
-        return router;
-    }
-
-    public void setRouter(Router router) {
-        this.router = router;
-    }
-
-    public Set<RsAttribute> getAttributes() {
-        if (attributes == null)
-            attributes = new HashSet<>();
-        
-        return attributes;
-    }
-
-    public void setAttributes(Set<RsAttribute> attributes) {
-        this.attributes = attributes;
     }
 
     public CompiledScript getRuleScript() {
@@ -170,11 +93,37 @@ public class RouterStep extends Vertex
         this.ruleScript = ruleScript;
     }
 
+    @Override
+    public Router getRouter() {
+        return router;
+    }
+
+    public void setRouter(Router router) {
+        this.router = router;
+    }
+
     public BOM getBom() {
         return bom;
     }
 
     public void setBom(BOM bom) {
         this.bom = bom;
+    }
+
+    public Set<RsAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<RsAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    @Override
+    public RouterOperation createEdgeTo (Vertex endPoint, Duration duration) {
+        Assert.isInstanceOf(IRouterElement.class, endPoint, "End point should implement IRouterElement interface");
+        Assert.isTrue(this.getRouter().equals(((IRouterElement)endPoint).getRouter()), "Entry point must belong to same router");
+        RouterOperation ro = createEdgeTo(endPoint, RouterOperation.class, duration);
+        ro.setRouter(router);
+        return ro;
     }
 }

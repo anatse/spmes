@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.graph;
+package org.mesol.spmes.model.gr;
 
-import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,9 +26,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
 import org.mesol.spmes.model.factory.EquipmentClass;
-import org.mesol.spmes.model.graph.attr.OperAttribute;
+import org.mesol.spmes.model.gr.attr.OperAttribute;
 
 /**
  * Class describes operation edge
@@ -55,22 +52,16 @@ import org.mesol.spmes.model.graph.attr.OperAttribute;
  * @author ASementsov
  */
 @Entity
-@DiscriminatorValue("Oper")
-@NamedNativeQuery (name = "OperEdge.operList", 
-    resultClass = OperEdge.class, 
-    query = "select * " + 
-            "from operedge op " +
-            "start with id = (select oper_id from router where id = ?1) " +
-            "connect by prior to_id = from_id " +
-            "order by level")
-public class OperEdge extends Edge<RouterStep> implements Serializable
+@Table(name = "RO")
+public class RouterOperation extends Edge
 {
+    @Column(length = 32, nullable = false, unique = true)
+    private String                  name;
+    
     @ManyToOne
-    @JoinColumn(name = "FROM_ID", foreignKey = @ForeignKey(name = "FK_OPER_FROM", value = ConstraintMode.CONSTRAINT))
-    private RouterStep              from;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "TO_ID", foreignKey = @ForeignKey(name = "FK_OPER_TO", value = ConstraintMode.CONSTRAINT))
-    private RouterStep              to;
+    @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPER_ROUTER", value = ConstraintMode.CONSTRAINT))
+    private Router                  router;
+
     /**
      * Column contains value which can be used to check is this operation can be next
      */
@@ -78,8 +69,8 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     private String                  ruleValue;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "OPER_TYPE")
-    private PerformType         performType;
-    
+    private PerformType             performType;
+
     @ElementCollection
     @CollectionTable (
         name = "OPEDGA",
@@ -91,24 +82,12 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
     @JoinColumn(name = "EQC_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPEREDGE_EQC", value = ConstraintMode.CONSTRAINT))
     private EquipmentClass          equipmentClass;
 
-    @Override
-    public RouterStep getFrom() {
-        return from;
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public RouterStep getTo() {
-        return to;
-    }
-
-    public void setFrom(RouterStep from) {
-        this.from = from;
-        from.addOut(this);
-    }
-
-    public void setTo(RouterStep to) {
-        this.to = to;
-        to.addIn(this);
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRuleValue() {
@@ -119,12 +98,12 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
         this.ruleValue = ruleValue;
     }
 
-    public PerformType getPerformingType() {
+    public PerformType getPerformType() {
         return performType;
     }
 
-    public void setPerformingType(PerformType performanceType) {
-        this.performType = performanceType;
+    public void setPerformType(PerformType performType) {
+        this.performType = performType;
     }
 
     public Set<OperAttribute> getAttributes() {
@@ -141,5 +120,13 @@ public class OperEdge extends Edge<RouterStep> implements Serializable
 
     public void setEquipmentClass(EquipmentClass equipmentClass) {
         this.equipmentClass = equipmentClass;
+    }
+
+    public Router getRouter() {
+        return router;
+    }
+
+    public void setRouter(Router router) {
+        this.router = router;
     }
 }

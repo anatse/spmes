@@ -130,7 +130,9 @@ public class PersistenceJPAConfig
     }
 
     private void readAndSetProperty(Properties properties, String property) {
-        properties.setProperty(property, env.getProperty(property));
+        String propValue = env.getProperty(property);
+        if (propValue != null)
+            properties.setProperty(property, env.getProperty(property));
     }
     
     private Properties additionalProperties () {
