@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.model.gr;
 
 import java.io.Serializable;
@@ -21,6 +20,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,6 +57,13 @@ public abstract class Edge implements Serializable
 
     @Column(name = "START_TIME", nullable = false)
     private Long                    startTime;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "OPER_TYPE")
+    private PerformType             performType;
+    
+    @Column(length = 255, name = "RULE_VAL")
+    private String                  ruleValue;
 
     public Long getId() {
         return id;
@@ -117,5 +125,21 @@ public abstract class Edge implements Serializable
 
     public void setStartTime(Long startTime) {
         this.startTime = startTime;
+    }
+
+    public PerformType getPerformType() {
+        return performType;
+    }
+
+    public void setPerformType(PerformType performType) {
+        this.performType = performType;
+    }
+
+    public String getRuleValue() {
+        return ruleValue;
+    }
+
+    public void setRuleValue(String ruleValue) {
+        this.ruleValue = ruleValue;
     }
 }

@@ -15,7 +15,6 @@
  */
 package org.mesol.spmes.utils;
 
-
 import java.lang.invoke.MethodHandles;
 import javax.script.Bindings;
 import javax.script.Compilable;

@@ -45,11 +45,6 @@ public class RouterStep extends Vertex implements IRouterElement
     private String                      name;
     
     /**
-     * Groovy script to determine next operation (only for rule based operations)
-     */
-    @Column(length = 255)
-    private String                      rule;
-    /**
      * Compiled script (rule)
      */
     private transient CompiledScript    ruleScript;
@@ -75,14 +70,6 @@ public class RouterStep extends Vertex implements IRouterElement
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRule() {
-        return rule;
-    }
-
-    public void setRule(String rule) {
-        this.rule = rule;
     }
 
     public CompiledScript getRuleScript() {
@@ -119,10 +106,10 @@ public class RouterStep extends Vertex implements IRouterElement
     }
 
     @Override
-    public RouterOperation createEdgeTo (Vertex endPoint, Duration duration) {
+    public RouterOperation addEdgeTo (Vertex endPoint, RouterOperation op) throws Exception {
         Assert.isInstanceOf(IRouterElement.class, endPoint, "End point should implement IRouterElement interface");
         Assert.isTrue(this.getRouter().equals(((IRouterElement)endPoint).getRouter()), "Entry point must belong to same router");
-        RouterOperation ro = createEdgeTo(endPoint, RouterOperation.class, duration);
+        RouterOperation ro = addEdge(endPoint, op);
         ro.setRouter(router);
         return ro;
     }

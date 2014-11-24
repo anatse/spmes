@@ -35,7 +35,7 @@ public class Duration implements Serializable
     private long                duration;
     @Enumerated(EnumType.STRING)
     @Column(name = "DURATION_TYPE", nullable = false)
-    private DurationType        durationType;
+    private DurationType        durationType = DurationType.PER_UNIT;
     @Column(name = "QTY_UNIT_CODE", length = 32)
     private String              unitCode = "UNIT";
 

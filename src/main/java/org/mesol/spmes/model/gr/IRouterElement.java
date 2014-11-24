@@ -15,13 +15,11 @@
  */
 package org.mesol.spmes.model.gr;
 
-import org.mesol.spmes.model.refs.Duration;
-
 /**
  *
  * @author ASementsov
  */
 public interface IRouterElement {
     Router getRouter();
-    RouterOperation createEdgeTo (Vertex endPoint, Duration duration);
+    RouterOperation addEdgeTo (Vertex endPoint, RouterOperation operation) throws Exception;
 }

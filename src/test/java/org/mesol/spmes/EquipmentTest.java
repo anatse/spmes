@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import javax.mail.NoSuchProviderException;
 import javax.transaction.Transactional;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mesol.spmes.config.PersistenceJPAConfig;
@@ -64,6 +65,7 @@ public class EquipmentTest {
     private Import              imp;
 
     @Test
+    @Ignore
     @Transactional
     public void testFM() throws GeneralSecurityException, NoSuchProviderException {
         System.out.println ("Import sample data");

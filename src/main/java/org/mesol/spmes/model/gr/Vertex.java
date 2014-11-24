@@ -15,13 +15,14 @@
  */
 package org.mesol.spmes.model.gr;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.OptionalLong;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +32,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import org.mesol.spmes.consts.BasicConstants;
-import org.mesol.spmes.model.refs.Duration;
+import org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException;
+import org.mesol.spmes.model.gr.exceptions.NoRuleException;
+import org.mesol.spmes.model.gr.exceptions.NonParallelOperationException;
 import org.springframework.util.Assert;
 
 /**
@@ -53,6 +56,12 @@ public abstract class Vertex implements Serializable
 
     @OneToMany(mappedBy = "from")
     private Set<Edge>               outEdges;
+    
+    /**
+     * Groovy script to determine next operation (only for rule based operations)
+     */
+    @Column(length = 255)
+    private String                  rule;
 
     public Long getId() {
         return id;
@@ -84,6 +93,7 @@ public abstract class Vertex implements Serializable
         return true;
     }
 
+    @JsonIgnore
     public Set<Edge> getInEdges() {
         if (inEdges == null)
             return Collections.EMPTY_SET;
@@ -95,6 +105,7 @@ public abstract class Vertex implements Serializable
         this.inEdges = inEdges;
     }
 
+    @JsonIgnore
     public Set<Edge> getOutEdges() {
         if (outEdges == null)
             return Collections.EMPTY_SET;
@@ -104,6 +115,14 @@ public abstract class Vertex implements Serializable
 
     public void setOutEdges(Set<Edge> outEdges) {
         this.outEdges = outEdges;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 
     public void addOutEdge (Edge edge) {
@@ -128,36 +147,37 @@ public abstract class Vertex implements Serializable
      * Function creates new edge from this to endPoint. 
      * If such edge already exists then returns it
      * @param <T>
-     * @param endPoint edge to create to
-     * @param edgeClass edge class 
-     * @param duration duration for new created edge
+     * @param endPoint destination vertex
+     * @param newEdge edge 
      * @return edge
+     * @throws org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException
+     * @throws org.mesol.spmes.model.gr.exceptions.NonParallelOperationException
+     * @throws org.mesol.spmes.model.gr.exceptions.NoRuleException
      */
-    protected <T extends Edge> T createEdgeTo (Vertex endPoint, Class<T> edgeClass, Duration duration) {
+    protected <T extends Edge> T addEdge (Vertex endPoint, T newEdge) throws ManySequentalOperationException, NonParallelOperationException, NoRuleException {
         Assert.notNull(endPoint, "Endpoint cannot be null");
         Assert.isTrue(!this.equals(endPoint), "Cannot add edge to self object");
         Assert.isTrue(endPoint.getOutEdges().isEmpty(), "Endpoint must not have any out edges");
-
+        Assert.isNull(newEdge.getFrom(), "From object is not null");
+        Assert.isNull(newEdge.getTo(), "To object is not null");
+        Assert.isNull(newEdge.getId(), "New edge already persists");
+        
         // if edge already exists
         if (getOutEdges() != null && !getOutEdges().isEmpty()) {
             Optional<Edge> oedge = getOutEdges().stream().filter(e -> e.getTo().equals(endPoint)).findFirst();
             if (oedge.isPresent())
                 return (T)oedge.get();
+
+            RoutingUtils.checkPerformingType(this, newEdge);
+            
         }
 
-        try {
-            T newEdge = edgeClass.newInstance();
-            addOutEdge(newEdge);
-            endPoint.addInEdge(newEdge);
-            newEdge.setDuration(duration);
+        addOutEdge(newEdge);
+        endPoint.addInEdge(newEdge);
 
-            // Compute start time for this operation. Find max duration for several edges with no redards to connection type
-            newEdge.setStartTime (RoutingUtils.computeStart(getInEdges()));
-            return newEdge;
-        }
-        catch (InstantiationException | IllegalAccessException e) {
-            throw (new RuntimeException(e));
-        }
+        // Compute start time for this operation. Find max duration for several edges with no redards to connection type
+        newEdge.setStartTime (RoutingUtils.computeStart(getInEdges()));
+        return newEdge;
     }
     
     public <T extends Edge> T undockEdge (T edge) {

@@ -21,8 +21,6 @@ import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -62,15 +60,6 @@ public class RouterOperation extends Edge
     @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPER_ROUTER", value = ConstraintMode.CONSTRAINT))
     private Router                  router;
 
-    /**
-     * Column contains value which can be used to check is this operation can be next
-     */
-    @Column(length = 255, name = "RULE_VAL")
-    private String                  ruleValue;
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "OPER_TYPE")
-    private PerformType             performType;
-
     @ElementCollection
     @CollectionTable (
         name = "OPEDGA",
@@ -88,22 +77,6 @@ public class RouterOperation extends Edge
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRuleValue() {
-        return ruleValue;
-    }
-
-    public void setRuleValue(String ruleValue) {
-        this.ruleValue = ruleValue;
-    }
-
-    public PerformType getPerformType() {
-        return performType;
-    }
-
-    public void setPerformType(PerformType performType) {
-        this.performType = performType;
     }
 
     public Set<OperAttribute> getAttributes() {

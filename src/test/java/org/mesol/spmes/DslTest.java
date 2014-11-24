@@ -18,6 +18,7 @@ package org.mesol.spmes;
 
 import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mesol.spmes.config.PersistenceJPAConfig;
@@ -57,6 +58,7 @@ public class DslTest
     private DslExecutor             de;
     
     @Test
+    @Ignore
     @Transactional
     public void testDsl () throws Exception {
         de.execute(getClass().getResource("/org/mesol/spmes/service/dsl/Test.groovy").toString());

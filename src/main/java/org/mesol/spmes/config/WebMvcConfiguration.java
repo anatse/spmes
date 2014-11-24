@@ -22,6 +22,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -50,6 +51,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
  * @version 1.0.0
  * @author ASementsov
  */
+@Configuration
 @EnableWebMvc
 @ComponentScan({"org.mesol.spmes.controller", "org.mesol.spmes.service"})
 @EnableTransactionManagement(proxyTargetClass = true)

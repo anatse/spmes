@@ -17,6 +17,7 @@ package org.mesol.spmes;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
+import java.util.logging.Level;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -28,11 +29,11 @@ import org.mesol.spmes.config.WebMvcSecurityConfig;
 import org.mesol.spmes.model.gr.ObjectState;
 import org.mesol.spmes.model.gr.Router;
 import org.mesol.spmes.model.gr.RouterOperation;
+import org.mesol.spmes.model.gr.RouterStep;
 import org.mesol.spmes.model.refs.Unit;
 import org.mesol.spmes.model.refs.UnitConverter;
 import org.mesol.spmes.service.EquipmentService;
 import org.mesol.spmes.service.RoutingService;
-//import org.mesol.spmes.service.RoutingService;
 import org.mesol.spmes.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -63,9 +64,6 @@ public class RoutingTest
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-//    @Autowired
-//    private RoutingService        service;
-    
     @Autowired
     private EquipmentService    eqService;
     
@@ -89,6 +87,14 @@ public class RoutingTest
             Collection<RouterOperation> opers = gService.finaAllOperations(r);
             opers.forEach(o -> {
                 System.out.println ("    " + o.getName());
+                if (o.getStartTime() % 2 != 0) {
+                    try {
+                        gService.deleteRouterStep((RouterStep)o.getTo(), Boolean.TRUE);
+                    } 
+                    catch (Exception ex) {
+                        logger.error(ex, ex);
+                    }
+                }
             });
         });
     }
