@@ -86,7 +86,7 @@ public class RoutingTest
             
             Collection<RouterOperation> opers = gService.finaAllOperations(r);
             opers.forEach(o -> {
-                System.out.println ("    " + o.getName());
+                System.out.println ("    " + o.getName() + " startTime: " + o.getStartTime());
                 if (o.getStartTime() % 2 != 0) {
                     try {
                         gService.deleteRouterStep((RouterStep)o.getTo(), Boolean.TRUE);
