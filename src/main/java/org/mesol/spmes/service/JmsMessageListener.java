@@ -16,21 +16,22 @@
 package org.mesol.spmes.service;
 
 import java.lang.invoke.MethodHandles;
-import javax.jms.Message;
-import javax.jms.MessageListener;
 import org.apache.log4j.Logger;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class JmsMessageListener implements MessageListener
+@Component
+public class JmsMessageListener
 {
     private static final Logger         logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Override
-    public void onMessage(Message message) {
-        System.out.println (message.toString());
+    @JmsListener(destination = "mesQueue")
+    public void processOrder(String data) {
+        System.out.println (data);
     }
 }

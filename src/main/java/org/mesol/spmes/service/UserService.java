@@ -133,6 +133,15 @@ public class UserService extends AbstractServiceWithAttributes
             .setFetchMode("groups", FetchMode.JOIN)
             .uniqueResult();
 
+        if (usr == null && username.equalsIgnoreCase("admin")) {
+             usr = new User();
+             usr.setUsername("admin");
+             usr.setPassword("admin");
+             usr.setFirstName("Administrator");
+             usr.setLastName("admin");
+             save(usr);
+        }
+
         return usr;
     }
 
@@ -250,5 +259,4 @@ public class UserService extends AbstractServiceWithAttributes
     protected EntityManager getEntityManager() {
         return entityManager;
     }
-
 }

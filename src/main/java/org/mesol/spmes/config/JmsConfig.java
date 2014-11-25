@@ -16,23 +16,22 @@
 package org.mesol.spmes.config;
 
 import java.lang.invoke.MethodHandles;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.region.Queue;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTopic;
-import org.apache.activemq.store.memory.MemoryPersistenceAdapter;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.CachingConnectionFactory;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.jms.listener.MessageListenerContainer;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.jms.core.JmsOperations;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.destination.BeanFactoryDestinationResolver;
+import org.springframework.jms.support.destination.DestinationResolver;
 
 /**
  * 
@@ -40,13 +39,32 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author ASementsov
  */
 @Configuration
+@EnableJms
 public class JmsConfig 
 {
     private static final Logger         logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Autowired
-    private ConnectionFactory           connectionFactory;
+    @Bean
+    public DestinationResolver jmsDestinationResolver () {
+        return new BeanFactoryDestinationResolver();
+    }
     
+    @Bean
+    public Queue mesQueue () {
+        return new ActiveMQQueue("mes");
+    }
+    
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(
+        ConnectionFactory connectionFactory,
+        DestinationResolver jmsDestinationResolver) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setDestinationResolver(jmsDestinationResolver);
+        factory.setConcurrency("3-10");
+        return factory;
+    }
+
     @Bean
     public ConnectionFactory jmsConnectionFactory() {
         final ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
@@ -55,14 +73,21 @@ public class JmsConfig
         return cf;
     }
 
-    @Bean(destroyMethod = "stop")
-    public MessageListenerContainer jmsMessageListener () {
-        DefaultMessageListenerContainer ml = new DefaultMessageListenerContainer();
-        ml.setConnectionFactory(connectionFactory);
-        ml.setSessionTransacted(true);
-        ml.setDestination(new ActiveMQTopic("mes-queue"));
-        return ml;
-    }
+//    @Bean
+//    public MessageListenerContainer jmsMessageListener () {
+//        DefaultMessageListenerContainer ml = new DefaultMessageListenerContainer();
+//        ml.setConnectionFactory(connectionFactory);
+//        ml.setSessionTransacted(true);
+//        ml.setDestinationResolver(new DynamicDestinationResolver());
+//        return ml;
+//    }
+    
+    @Bean
+	public JmsOperations jmsOperations() {
+		final JmsTemplate jmsTemplate = new JmsTemplate(jmsConnectionFactory());
+		jmsTemplate.setDefaultDestination(mesQueue ());
+		return jmsTemplate;
+	}
 
     @Bean(destroyMethod = "stop")
     public BrokerService embeddedBroker () {
