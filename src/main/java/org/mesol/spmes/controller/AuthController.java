@@ -16,7 +16,6 @@
 package org.mesol.spmes.controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -109,7 +107,6 @@ public class AuthController
 
     /**
      * Function implements LIST and GET operation of the REST interface for users
-     * @param userId - identifier of user id
      * @return list of users, or information about concrete  user
      */
     @Secured({

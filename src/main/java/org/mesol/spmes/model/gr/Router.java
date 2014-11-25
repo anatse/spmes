@@ -29,7 +29,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.mesol.spmes.model.factory.Site;
 import org.mesol.spmes.model.gr.attr.RouterAttribute;
-import org.mesol.spmes.model.refs.Duration;
 import org.springframework.util.Assert;
 
 /**

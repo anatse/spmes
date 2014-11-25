@@ -23,7 +23,7 @@ import static org.hibernate.criterion.Restrictions.and;
 import static org.hibernate.criterion.Restrictions.eq;
 import org.mesol.spmes.model.refs.Unit;
 import org.mesol.spmes.model.refs.UnitConverter;
-import org.mesol.spmes.service.abs.AbstractService;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,16 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service
-public class UnitService extends AbstractService<Unit>
+public class UnitService extends AbstractServiceWithAttributes
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @PersistenceContext
     private EntityManager           entityManager;
-
-    public UnitService() {
-        super(Unit.class);
-    }
 
     @Override
     protected EntityManager getEntityManager() {

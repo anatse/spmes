@@ -20,8 +20,6 @@ import java.lang.invoke.MethodHandles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
-import org.mesol.spmes.model.mat.Material;
-import org.mesol.spmes.model.mat.MaterialAttribute;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.stereotype.Service;
 
@@ -31,17 +29,13 @@ import org.springframework.stereotype.Service;
  * @author ASementsov
  */
 @Service
-public class MaterialService extends AbstractServiceWithAttributes<Material, MaterialAttribute>
+public class MaterialService extends AbstractServiceWithAttributes
 {
     private static final            Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
     @PersistenceContext
     private EntityManager           em;
 
-    public MaterialService() {
-        super(Material.class);
-    }
-    
     @Override
     protected EntityManager getEntityManager() {
         return em;

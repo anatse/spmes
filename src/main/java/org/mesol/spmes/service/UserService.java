@@ -37,7 +37,7 @@ import org.mesol.spmes.model.security.UserGroup;
 import org.mesol.spmes.model.security.UserShift;
 import org.mesol.spmes.model.security.WorkCalendar;
 import org.mesol.spmes.model.security.WorkDay;
-import org.mesol.spmes.service.abs.AbstractService;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
@@ -51,7 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @PropertySource("classpath:/" + PersistenceJPAConfig.CONFIG)
-public class UserService extends AbstractService<User>
+public class UserService extends AbstractServiceWithAttributes
 {
     @PersistenceContext
     private EntityManager           entityManager;
@@ -67,10 +67,6 @@ public class UserService extends AbstractService<User>
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal;
-    }
-
-    public UserService () {
-        super(User.class);
     }
 
     /**
@@ -228,6 +224,25 @@ public class UserService extends AbstractService<User>
     }
 
     /**
+     * Find all users
+     * @return list of users
+     */
+    @Transactional
+    public List<User> findAll() {
+        return getHibernateSession().createCriteria(User.class).list();
+    }
+    
+    /**
+     * Find user by id
+     * @param userId user id
+     * @return found user
+     */
+    @Transactional
+    public User findOne(Long userId) {
+        return entityManager.find(User.class, userId);
+    }
+    
+    /**
      * Implements the same function from AbstractController
      * @return entity manager
      */
@@ -235,4 +250,5 @@ public class UserService extends AbstractService<User>
     protected EntityManager getEntityManager() {
         return entityManager;
     }
+
 }

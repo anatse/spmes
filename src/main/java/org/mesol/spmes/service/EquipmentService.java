@@ -15,19 +15,21 @@
  */
 package org.mesol.spmes.service;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import static org.hibernate.criterion.Restrictions.*;
 import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.factory.EquipmentAttribute;
 import org.mesol.spmes.model.factory.EquipmentClass;
-import org.mesol.spmes.repo.EquipmentRepo;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,65 +39,77 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ASementsov
  */
 @Service(value = "eqService")
-public class EquipmentService extends AbstractServiceWithAttributes<Equipment, EquipmentAttribute>
+public class EquipmentService extends AbstractServiceWithAttributes
 {
+    private static final Logger         logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
     @PersistenceContext
-    private EntityManager           entityManager;
-    
-    @Autowired
-    private EquipmentRepo           equipmentRepo;
+    private EntityManager               em;
 
     public EquipmentService() {
-        super(Equipment.class);
         if (logger.isDebugEnabled())
             logger.debug("create EquipmentService object");
     }
 
     @Override
     protected EntityManager getEntityManager() {
-        return entityManager;
+        return em;
     }
 
     public Equipment findByName (String name) {
-        return equipmentRepo.findByName(name);
+        Session session = getHibernateSession();
+        return (Equipment)session.createCriteria(Equipment.class)
+            .add(eq(NamingRuleConstants.NAME, name))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .uniqueResult();
     }
 
     public List<Equipment> findRoot () {
-        return equipmentRepo.findRootElements();
+        Session session = getHibernateSession();
+        return session.createCriteria(Equipment.class)
+            .add(isNull(NamingRuleConstants.PARENT_EQ))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
-    
+
     public Equipment findById (Long eqId) {
-        return equipmentRepo.findOne(eqId);
+        return em.find(Equipment.class, eqId);
     }
-   
+
     public List<Equipment> getAll () {
-        return (List<Equipment>) equipmentRepo.findAll();
+        Session session = getHibernateSession();
+        return session.createCriteria(Equipment.class)
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
 
     public Set<EquipmentAttribute> getAttributesByEquipment (Long eqId) {
-        Equipment eq;
-        eq = this.findById(eqId);        
+        Equipment eq = findById(eqId);        
         return eq.getAttributes();
     }
-    
+
     @Transactional
     public List<Equipment> findByParent (Equipment parent) {
-        
-//        return equipmentRepo.findByParentEquipment(parent);
         return getHibernateSession().createCriteria(Equipment.class).add (
             eq(NamingRuleConstants.PARENT_EQ, parent)
-        )//.setFetchMode("equipmentClasses", FetchMode.SELECT)
-         //.setFetchMode(NamingRuleConstants.ATTRIBUTES, FetchMode.SELECT)
-         .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+        ).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Transactional
     public EquipmentClass saveEquipmentClass (EquipmentClass eqc) {
         return getEntityManager().merge(eqc);
     }
-    
+
     @Transactional
     public Equipment save (Equipment eq) {
-        return equipmentRepo.save(eq);
+        return getEntityManager().merge(eq);
+    }
+    
+    @Transactional
+    public List<Equipment> findEquipmentByAttributes (Set<EquipmentAttribute> attrs) {
+        if (attrs.size() == 1)
+            return findByAttribute(attrs.iterator().next(), Equipment.class);
+        else
+            return findByAttributes(attrs, Equipment.class);
     }
 }

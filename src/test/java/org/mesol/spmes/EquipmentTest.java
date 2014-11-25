@@ -56,8 +56,6 @@ import org.springframework.util.Assert;
 @TransactionConfiguration(defaultRollback = true)
 @WebAppConfiguration
 public class EquipmentTest {
-
-    
     @Autowired
     private EquipmentService    eqService;
     
@@ -113,7 +111,7 @@ public class EquipmentTest {
         attrs.add(eqa);                
         
         wc1.setAttributes(attrs);
-        List<Equipment> found = eqService.findByAttributes (attrs);
+        List<Equipment> found = eqService.findEquipmentByAttributes (attrs);
 //        Assert.isTrue(found.size() == 1, "Found not only one entity for given attributes");
 //
 //        Equipment site = eqService.findByName("2000");

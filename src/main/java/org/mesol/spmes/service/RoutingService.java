@@ -18,10 +18,9 @@ package org.mesol.spmes.service;
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.script.Bindings;
@@ -45,6 +44,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static org.hibernate.criterion.Restrictions.*;
 import org.mesol.spmes.consts.BasicConstants;
+import org.mesol.spmes.model.abs.NamingRuleConstants;
 import org.mesol.spmes.model.gr.Edge;
 import org.mesol.spmes.model.gr.IRouterElement;
 import static org.mesol.spmes.model.gr.PerformType.ALTERNATIVE;
@@ -52,19 +52,21 @@ import static org.mesol.spmes.model.gr.PerformType.PARALLEL;
 import static org.mesol.spmes.model.gr.PerformType.RULE_BASED;
 import static org.mesol.spmes.model.gr.PerformType.SEQUENTIAL;
 import org.mesol.spmes.model.gr.RoutingUtils;
+import org.mesol.spmes.model.gr.attr.RouterAttribute;
 import org.mesol.spmes.model.gr.exceptions.LoopException;
 import org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.gr.exceptions.NoRuleException;
 import org.mesol.spmes.model.refs.Duration;
+import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.util.Assert;
 
 /**
- * 
+ * Class represents routing service
  * @version 1.0.0
  * @author ASementsov
  */
 @Service
-public class RoutingService 
+public class RoutingService extends AbstractServiceWithAttributes
 {
     private static final Logger         logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -79,6 +81,23 @@ public class RoutingService
     public Collection<Router> findActiveRouters () {
         return findRoutersByStatus(ObjectState.RELEASED);
     }
+    
+    @Transactional
+    public Collection<Router> findRouterByName (String name) {
+        Session session = getHibernateSession();
+        return session.createCriteria(Router.class)
+            .add(eq(NamingRuleConstants.NAME, name))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
+    }
+
+    @Transactional
+    public List<Router> findRoutersByAttributes (Set<RouterAttribute> attrs) {
+        if (attrs.size() == 1)
+            return findByAttribute(attrs.iterator().next(), Router.class);
+        else
+            return findByAttributes(attrs, Router.class);
+    }
 
     /**
      * Find routers with specified status
@@ -87,16 +106,34 @@ public class RoutingService
      */
     @Transactional
     public Collection<Router> findRoutersByStatus (ObjectState status) {
-        Session session = em.unwrap(Session.class);
+        Session session = getHibernateSession();
         return session.createCriteria(Router.class)
             .add(eq("status", status))
             .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
             .list();
     }
+    
+    /**
+     * Function find all routers with status != DISABLED
+     * @return list of found routers
+     */
+    @Transactional
+    public Collection<Router> findAllRouters () {
+        Session session = getHibernateSession();
+        return session.createCriteria(Router.class)
+            .add(not(eq("status", ObjectState.DISABLED)))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
+    }
 
+    /**
+     * Function find all router operations, ordered by startTime
+     * @param router router
+     * @return list of router operations
+     */
     @Transactional
     public Collection<RouterOperation> finaAllOperations (Router router) {
-        Session session = em.unwrap(Session.class);
+        Session session = getHibernateSession();
         return session.createCriteria(RouterOperation.class)
             .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
             .add(eq("router", router))
@@ -191,6 +228,16 @@ public class RoutingService
     }
 
     /**
+     * Function marks router as disabled
+     * @param router router
+     */
+    @Transactional
+    public void deleteRouter (Router router) {
+        router.setStatus(ObjectState.DISABLED);
+        save (router);
+    }
+
+    /**
      * Function get next operation from current router step
      * @param rs current router step
      * @return next operation or operations depends on operation type
@@ -250,6 +297,10 @@ public class RoutingService
         return ops;
     }
 
+    /**
+     * Recursive function used to remove router step from router with cascade removing children elements
+     * @param rs -Router step to remove
+     */
     private void cascadeRemove (Vertex rs) {
         rs.getOutEdges().stream().forEach(op -> {
             cascadeRemove(op.getTo());
@@ -337,5 +388,10 @@ public class RoutingService
         createRouter ("RT-1", eq);
         createRouter ("RT-2", eq);
         createRouter ("RT-3", eq);
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 }

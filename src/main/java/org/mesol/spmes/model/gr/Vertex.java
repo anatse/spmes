@@ -32,6 +32,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import org.mesol.spmes.consts.BasicConstants;
+import org.mesol.spmes.model.abs.AbstractEntity;
 import org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.gr.exceptions.NoRuleException;
 import org.mesol.spmes.model.gr.exceptions.NonParallelOperationException;
@@ -44,7 +45,7 @@ import org.springframework.util.Assert;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Vertex implements Serializable 
+public abstract class Vertex extends AbstractEntity implements Serializable 
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "gvertexId", sequenceName = "GМЕЧ_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
@@ -87,10 +88,7 @@ public abstract class Vertex implements Serializable
             return false;
         }
         final Vertex other = (Vertex) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @JsonIgnore
