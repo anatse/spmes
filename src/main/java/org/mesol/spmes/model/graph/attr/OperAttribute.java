@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr.attr;
+package org.mesol.spmes.model.graph.attr;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.AssociationOverride;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
 import org.hibernate.annotations.Parent;
 import org.mesol.spmes.model.abs.AbstractAttribute;
-import org.mesol.spmes.model.gr.Router;
+import org.mesol.spmes.model.graph.RouterOperation;
 
 /**
  * 
@@ -28,18 +32,22 @@ import org.mesol.spmes.model.gr.Router;
  * @author ASementsov
  */
 @Embeddable
-public class RouterAttribute extends AbstractAttribute
+@AssociationOverride(
+    name="unit", 
+    joinColumns=@JoinColumn(name="UNIT_CODE", foreignKey = @ForeignKey(name = "FK_OPEGA_UNIT", value = ConstraintMode.CONSTRAINT))
+)
+public class OperAttribute extends AbstractAttribute
 {
     @Parent
-    private Router           owner;
+    private RouterOperation     owner;
 
     @JsonIgnore
-    public Router getOwner() {
+    public RouterOperation getOwner() {
         return owner;
     }
 
     @JsonIgnore
-    public void setOwner(Router owner) {
+    public void setOwner(RouterOperation owner) {
         this.owner = owner;
     }
 }

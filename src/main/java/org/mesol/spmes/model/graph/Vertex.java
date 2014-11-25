@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.gr;
+package org.mesol.spmes.model.graph;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -33,9 +33,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
-import org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException;
-import org.mesol.spmes.model.gr.exceptions.NoRuleException;
-import org.mesol.spmes.model.gr.exceptions.NonParallelOperationException;
+import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
+import org.mesol.spmes.model.graph.exceptions.NoRuleException;
+import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 import org.springframework.util.Assert;
 
 /**
@@ -48,7 +48,7 @@ import org.springframework.util.Assert;
 public abstract class Vertex extends AbstractEntity implements Serializable 
 {
     @Id
-    @SequenceGenerator(initialValue = 1, name = "gvertexId", sequenceName = "GМЕЧ_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
+    @SequenceGenerator(initialValue = 1, name = "gvertexId", sequenceName = "GVTX_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "gvertexId")
     private Long                    id;
 
@@ -148,9 +148,9 @@ public abstract class Vertex extends AbstractEntity implements Serializable
      * @param endPoint destination vertex
      * @param newEdge edge 
      * @return edge
-     * @throws org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException
-     * @throws org.mesol.spmes.model.gr.exceptions.NonParallelOperationException
-     * @throws org.mesol.spmes.model.gr.exceptions.NoRuleException
+     * @throws org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException
+     * @throws org.mesol.spmes.model.graph.exceptions.NonParallelOperationException
+     * @throws org.mesol.spmes.model.graph.exceptions.NoRuleException
      */
     protected <T extends Edge> T addEdge (Vertex endPoint, T newEdge) throws ManySequentalOperationException, NonParallelOperationException, NoRuleException {
         Assert.notNull(endPoint, "Endpoint cannot be null");

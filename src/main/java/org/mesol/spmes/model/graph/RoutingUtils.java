@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.gr;
+package org.mesol.spmes.model.graph;
 
 import java.util.Collection;
 import java.util.OptionalLong;
-import org.mesol.spmes.model.gr.exceptions.ManySequentalOperationException;
-import org.mesol.spmes.model.gr.exceptions.NoRuleException;
-import org.mesol.spmes.model.gr.exceptions.NonParallelOperationException;
+import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
+import org.mesol.spmes.model.graph.exceptions.NoRuleException;
+import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
 
 /**
  * 

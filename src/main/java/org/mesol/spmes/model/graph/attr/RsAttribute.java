@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr.exceptions;
+package org.mesol.spmes.model.graph.attr;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Parent;
+import org.mesol.spmes.model.abs.AbstractAttribute;
+import org.mesol.spmes.model.graph.RouterStep;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class OperEntryPointChanged  extends Exception
+@Embeddable
+public class RsAttribute extends AbstractAttribute
 {
-    public OperEntryPointChanged() {
+    @Parent
+    private RouterStep           owner;
+
+    @JsonIgnore
+    public RouterStep getOwner() {
+        return owner;
     }
 
-    public OperEntryPointChanged(String message) {
-        super(message);
+    @JsonIgnore
+    public void setOwner(RouterStep owner) {
+        this.owner = owner;
     }
 }

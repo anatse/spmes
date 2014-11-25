@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr.exceptions;
+package org.mesol.spmes.model.graph.prod;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class NonParallelOperationException extends Exception
+@Entity
+@Table(name = "PBATCH")
+//@DiscriminatorValue("BATCH")
+public class ProductionBatch extends ProductionObject
 {
-    public NonParallelOperationException() {
-    }
-
-    public NonParallelOperationException(String message) {
-        super(message);
-    }
 }

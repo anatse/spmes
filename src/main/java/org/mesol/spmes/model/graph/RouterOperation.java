@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.gr;
+package org.mesol.spmes.model.graph;
 
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -26,7 +26,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.mesol.spmes.model.factory.EquipmentClass;
-import org.mesol.spmes.model.gr.attr.OperAttribute;
+import org.mesol.spmes.model.graph.attr.OperAttribute;
 
 /**
  * Class describes operation edge

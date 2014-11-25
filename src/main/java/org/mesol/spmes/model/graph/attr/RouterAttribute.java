@@ -14,21 +14,32 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr.exceptions;
+package org.mesol.spmes.model.graph.attr;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Parent;
+import org.mesol.spmes.model.abs.AbstractAttribute;
+import org.mesol.spmes.model.graph.Router;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class NoRuleException extends Exception
+@Embeddable
+public class RouterAttribute extends AbstractAttribute
 {
-    public NoRuleException() {
+    @Parent
+    private Router           owner;
+
+    @JsonIgnore
+    public Router getOwner() {
+        return owner;
     }
 
-    public NoRuleException(String message) {
-        super(message);
+    @JsonIgnore
+    public void setOwner(Router owner) {
+        this.owner = owner;
     }
-
 }

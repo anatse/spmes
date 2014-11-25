@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr.exceptions;
+package org.mesol.spmes.model.graph.exceptions;
 
 /**
  * 
  * @version 1.0.0
  * @author ASementsov
  */
-public class MultipleOperationsException extends Exception
+public class ManySequentalOperationException extends Exception
 {
-    public MultipleOperationsException() {
+    public ManySequentalOperationException() {
     }
 
-    public MultipleOperationsException(String message) {
+    public ManySequentalOperationException(String message) {
         super(message);
     }
 }

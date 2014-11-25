@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes.model.gr;
+
+package org.mesol.spmes.model.graph;
 
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -21,14 +22,14 @@ import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.mesol.spmes.model.factory.Site;
-import org.mesol.spmes.model.gr.attr.RouterAttribute;
+import javax.script.CompiledScript;
+import org.mesol.spmes.model.graph.attr.RsAttribute;
+import org.mesol.spmes.model.mat.BOM;
+import org.mesol.spmes.model.refs.Duration;
 import org.springframework.util.Assert;
 
 /**
@@ -37,26 +38,31 @@ import org.springframework.util.Assert;
  * @author ASementsov
  */
 @Entity
-@Table(name = "ROUTER")
-public class Router extends Vertex implements IRouterElement
+@Table(name = "RS")
+public class RouterStep extends Vertex implements IRouterElement
 {
     @Column(length = 80, nullable = false, unique = true)
     private String                      name;
+    
+    /**
+     * Compiled script (rule)
+     */
+    private transient CompiledScript    ruleScript;
 
     @ManyToOne
-    @JoinColumn(name = "SITE_ID", foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_ROUTER_SITE"))
-    private Site                        site;
+    @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_RS_ROUTER", value = ConstraintMode.CONSTRAINT))
+    private Router                      router;
+
+    @ManyToOne
+    @JoinColumn(name = "BOM_ID", nullable = true, foreignKey = @ForeignKey(name = "FK_RS_BOM", value = ConstraintMode.CONSTRAINT))
+    private BOM                         bom;
     
     @ElementCollection
     @CollectionTable (
-        name = "RA",
-        joinColumns = @JoinColumn(name = "ROUTER_ID")
+        name = "RSA",
+        joinColumns = @JoinColumn(name = "RS_ID")
     )
-    private Set<RouterAttribute>        attributes;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS", nullable = false)
-    private ObjectState                 status = ObjectState.DEVELOPMENT;
+    private Set<RsAttribute>            attributes;
 
     public String getName() {
         return name;
@@ -66,33 +72,37 @@ public class Router extends Vertex implements IRouterElement
         this.name = name;
     }
 
-    public Site getSite() {
-        return site;
+    public CompiledScript getRuleScript() {
+        return ruleScript;
     }
 
-    public void setSite(Site site) {
-        this.site = site;
-    }
-
-    public Set<RouterAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Set<RouterAttribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public ObjectState getStatus() {
-        return status;
-    }
-
-    public void setStatus(ObjectState status) {
-        this.status = status;
+    public void setRuleScript(CompiledScript ruleScript) {
+        this.ruleScript = ruleScript;
     }
 
     @Override
     public Router getRouter() {
-        return this;
+        return router;
+    }
+
+    public void setRouter(Router router) {
+        this.router = router;
+    }
+
+    public BOM getBom() {
+        return bom;
+    }
+
+    public void setBom(BOM bom) {
+        this.bom = bom;
+    }
+
+    public Set<RsAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<RsAttribute> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
@@ -100,7 +110,7 @@ public class Router extends Vertex implements IRouterElement
         Assert.isInstanceOf(IRouterElement.class, endPoint, "End point should implement IRouterElement interface");
         Assert.isTrue(this.getRouter().equals(((IRouterElement)endPoint).getRouter()), "Entry point must belong to same router");
         RouterOperation ro = addEdge(endPoint, op);
-        ro.setRouter(this);
+        ro.setRouter(router);
         return ro;
     }
 }

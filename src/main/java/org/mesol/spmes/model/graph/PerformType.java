@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes.model.gr;
+package org.mesol.spmes.model.graph;
 
 import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
