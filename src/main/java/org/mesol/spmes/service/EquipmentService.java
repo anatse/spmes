@@ -16,7 +16,6 @@
 package org.mesol.spmes.service;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
