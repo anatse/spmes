@@ -35,7 +35,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * 
+ * Class used to execute DSL script
  * @version 1.0.0
  * @author ASementsov
  */
@@ -66,6 +66,12 @@ public class DslExecutor implements ApplicationContextAware
         return embeddables;
     }
     
+    /**
+     * Function executes DSL script
+     * @param groovyScript DSL script resource name
+     * @return script result
+     * @throws Exception 
+     */
     public Object execute (String groovyScript) throws Exception {
         GroovyClassLoader ldr = new GroovyClassLoader(getClass().getClassLoader());
         Class baseCl = ldr.parseClass(new File (getClass().getResource("/org/mesol/spmes/service/dsl/DslBase.groovy").toURI()));
