@@ -31,7 +31,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import static org.hibernate.criterion.Order.*;
 import org.mesol.spmes.model.factory.EquipmentClass;
@@ -137,9 +136,9 @@ public class RoutingService extends AbstractServiceWithAttributes
         return session.createCriteria(RouterOperation.class)
             .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
             .add(eq("router", router))
-            .setFetchMode("router", FetchMode.JOIN)
-            .setFetchMode("from", FetchMode.SELECT)
-            .setFetchMode("to", FetchMode.SELECT)
+//            .setFetchMode("router", FetchMode.JOIN)
+//            .setFetchMode("from", FetchMode.SELECT)
+//            .setFetchMode("to", FetchMode.SELECT)
             .addOrder(asc("startTime"))
             .list();
     }
@@ -196,23 +195,27 @@ public class RoutingService extends AbstractServiceWithAttributes
     public RouterOperation insertOperation (Vertex after, Vertex element, RouterOperation ro) throws Exception {
         Assert.isInstanceOf(IRouterElement.class, after, "After element should be instance of IRouterElement");
         Assert.isInstanceOf(IRouterElement.class, element, "To element should be instance of IRouterElement");
+
+        final Vertex _after = after.getId() != null ? em.find(after.getClass(), after.getId()) : after;
+        final Vertex _element = element.getId() != null ? em.find(element.getClass(), element.getId()) : element;
+
         // move next from after vertex to element 
         if (!after.getOutEdges().isEmpty()) {
             after.getOutEdges().forEach(edge -> {
-                after.undockEdge(edge);
-                element.addOutEdge(edge);
+                _after.undockEdge(edge);
+                _element.addOutEdge(edge);
                 em.merge(edge);
             });
         }
 
-        IRouterElement re = (IRouterElement)after;
-        ro = re.addEdgeTo(element, ro);
+        IRouterElement re = (IRouterElement)_after;
+        ro = re.addEdgeTo(_element, ro);
 
         // Save new operation
         em.merge(ro);
 
         // Recalculate startTime for all following operations
-        calcStartTime(after, ro.getTo());
+        calcStartTime(_after, ro.getTo());
 
         return ro;
     }
@@ -246,6 +249,8 @@ public class RoutingService extends AbstractServiceWithAttributes
     @Transactional
     public Set<RouterOperation> getNextOperation (RouterStep rs) throws Exception {
         final Set<RouterOperation> ops = new HashSet<>();
+        
+        rs = em.find(RouterStep.class, rs.getId());
         if (rs.getOutEdges().size() > 1) {
             // Check type of operationns
             if (rs.getRule() != null && !rs.getRule().isEmpty()) {
@@ -302,10 +307,15 @@ public class RoutingService extends AbstractServiceWithAttributes
      * @param rs -Router step to remove
      */
     private void cascadeRemove (Vertex rs) {
-        rs.getOutEdges().stream().forEach(op -> {
-            cascadeRemove(op.getTo());
-            em.remove(op);
-        });
+        if (rs != null && rs.getOutEdges() != null) {
+            rs.getOutEdges().stream().forEach(op -> {
+                if (op.getTo() != null)
+                    cascadeRemove(op.getTo());
+
+                em.remove(op);
+            });
+        }
+
         em.remove(rs);
     }
     
@@ -320,6 +330,11 @@ public class RoutingService extends AbstractServiceWithAttributes
         Assert.notNull(rs, "RouterStep is null");
         Assert.notNull(rs.getId(), "RouterStep Id is null");
         Assert.isTrue(rs.getOutEdges().size() <= 1 || cascade, "Cannot remove router step with several outgoing edges. Please use cascade removing");
+
+        rs = em.find(RouterStep.class, rs.getId());
+        if (rs == null)
+            return;
+
         if (cascade) {
             cascadeRemove (rs);
             rs.getInEdges().stream().forEach(edge -> {

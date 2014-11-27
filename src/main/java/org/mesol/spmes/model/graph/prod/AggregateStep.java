@@ -16,11 +16,9 @@
 package org.mesol.spmes.model.graph.prod;
 
 import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,13 +28,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PAGGR")
-//@DiscriminatorValue("AGGR")
 public class AggregateStep extends ProductionObject
 {
-    @ElementCollection
-//    @CollectionTable(
-//        name="PHONE",
-//        joinColumns=@JoinColumn(name="OWNER_ID")
-//    )
+    @OneToMany
+    @JoinColumn(name="PAGGR_ID")
     private List<ProductionObject>          aggregatedSteps;
+
+    public List<ProductionObject> getAggregatedSteps() {
+        return aggregatedSteps;
+    }
+
+    public void setAggregatedSteps(List<ProductionObject> aggregatedSteps) {
+        this.aggregatedSteps = aggregatedSteps;
+    }
 }

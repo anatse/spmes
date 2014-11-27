@@ -97,7 +97,8 @@ public class Router extends Vertex implements IRouterElement
 
     @Override
     public RouterOperation addEdgeTo (Vertex endPoint, RouterOperation op) throws Exception {
-        Assert.isInstanceOf(IRouterElement.class, endPoint, "End point should implement IRouterElement interface");
+        Assert.notNull(endPoint, "End point must not be null");
+        Assert.isInstanceOf(IRouterElement.class, endPoint, "End point should implement IRouterElement interface: " + endPoint.getClass().getName());
         Assert.isTrue(this.getRouter().equals(((IRouterElement)endPoint).getRouter()), "Entry point must belong to same router");
         RouterOperation ro = addEdge(endPoint, op);
         ro.setRouter(this);
