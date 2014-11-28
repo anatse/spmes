@@ -294,6 +294,14 @@
             <artifactId>activemq-kahadb-store</artifactId>
             <version>5.10.0</version>
         </dependency>
+        <!--        
+            Planning
+        -->
+        <dependency>
+            <groupId>org.optaplanner</groupId>
+            <artifactId>optaplanner-core</artifactId>
+            <version>6.1.0.Final</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
