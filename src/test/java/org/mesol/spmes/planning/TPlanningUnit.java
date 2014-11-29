@@ -32,3 +32,18 @@ public class TPlanningUnit {
                  
      }
 }
+
+// TestNG class
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = { AppConfig.class, UnitTestDatabaseConfig.class })
+//@ActiveProfiles("unit-test")
+//public class PersonDaoTest {
+// 
+//  @Autowired
+//  private PersonDao personDao;
+// 
+//  @Test
+//  public void testGetPerson() {
+//    Person p = personDao.getPerson("Joe");
+//  }
+//}
