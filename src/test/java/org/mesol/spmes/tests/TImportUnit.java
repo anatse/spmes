@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes;
+package org.mesol.spmes.tests;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -56,7 +56,7 @@ import org.springframework.util.Assert;
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 @WebAppConfiguration
-public class ImportTest 
+public class TImportUnit 
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 

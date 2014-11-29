@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes;
+package org.mesol.spmes.tests;
 
 import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 })
 @TransactionConfiguration(defaultRollback = true)
 @WebAppConfiguration
-public class DslTest 
+public class TDslUnit 
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     

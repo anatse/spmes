@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mesol.spmes;
+package org.mesol.spmes.tests;
 
 import org.apache.log4j.Logger;
 import java.lang.invoke.MethodHandles;
@@ -25,7 +25,7 @@ import org.junit.Test;
  * @version 1.0.0
  * @author ASementsov
  */
-public class ProductionTest 
+public class TProductionUnit 
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     

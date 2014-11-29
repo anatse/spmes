@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes;
+package org.mesol.spmes.tests;
 
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
@@ -55,7 +55,7 @@ import org.springframework.util.Assert;
 })
 @TransactionConfiguration(defaultRollback = true)
 @WebAppConfiguration
-public class EquipmentTest {
+public class TEquipmentUnit {
     @Autowired
     private EquipmentService    eqService;
     

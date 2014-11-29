@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mesol.spmes;
+package org.mesol.spmes.tests;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
@@ -60,7 +60,7 @@ import org.springframework.util.Assert;
 })
 @TransactionConfiguration(defaultRollback = true)
 @WebAppConfiguration
-public class RoutingTest 
+public class TRoutingUnit 
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
