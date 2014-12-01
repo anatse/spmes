@@ -18,6 +18,7 @@ package org.mesol.spmes.tests;
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.logging.Level;
+import javax.persistence.EntityManager;
 import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -26,10 +27,13 @@ import org.mesol.spmes.config.PersistenceJPAConfig;
 import org.mesol.spmes.config.RootConfiguration;
 import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
+import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.model.graph.ObjectState;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterOperation;
 import org.mesol.spmes.model.graph.RouterStep;
+import org.mesol.spmes.model.graph.Vertex;
+import org.mesol.spmes.model.refs.Duration;
 import org.mesol.spmes.model.refs.Unit;
 import org.mesol.spmes.model.refs.UnitConverter;
 import org.mesol.spmes.service.EquipmentService;
@@ -73,10 +77,51 @@ public class TRoutingUnit
     @Autowired
     private RoutingService            gService;
 
+//    private void createRouter (String routerName, EquipmentClass eq) {
+//        Router r = new Router();
+//        r.setName(routerName);
+//        em.persist(r);
+//
+//        Vertex last = null;
+//        for (int i=0;i<100;i++) {
+//            try {
+//                RouterStep rs = new RouterStep();
+//                rs.setName("RS-" + r.getName() + "." + i);
+//                rs.setRouter(r);
+//                em.persist(rs);
+//
+//                String name = last != null ? ((RouterStep)last).getName() : r.getName();
+//                insertOperation (((last != null) ? last : r), rs, ro -> {
+//                    ro.setDuration(new Duration(101));
+//                    ro.setName("OP: " + name + " -> " + rs.getName());
+//                    ro.setEquipmentClass(eq);
+//                });
+//
+//                last = rs;
+//            } 
+//            catch (Exception ex) {
+//                logger.error(ex, ex);
+//            }
+//        }
+//    }
+    
+    
+    @Transactional
+    public void test () {
+//        EquipmentClass eq = new EquipmentClass();
+//        eq.setName("DEFAULT");
+//        em.persist(eq);
+//        
+//        createRouter ("RT-1", eq);
+//        createRouter ("RT-2", eq);
+//        createRouter ("RT-3", eq);
+    }
+
+    
     @Test
     @Transactional
     public void testGRouting () {
-        gService.test();
+//        gService.test();
         
         Iterable<Router> rs = gService.findActiveRouters();
         Iterable<Router> rs2 = gService.findRoutersByStatus(ObjectState.DEVELOPMENT);

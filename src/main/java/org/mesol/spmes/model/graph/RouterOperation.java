@@ -55,7 +55,7 @@ public class RouterOperation extends Edge
 {
     @Column(length = 32, nullable = false, unique = true)
     private String                  name;
-    
+
     @ManyToOne
     @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_OPER_ROUTER", value = ConstraintMode.CONSTRAINT))
     private Router                  router;

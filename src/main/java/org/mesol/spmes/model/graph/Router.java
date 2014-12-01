@@ -27,6 +27,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import org.mesol.spmes.model.factory.Site;
 import org.mesol.spmes.model.graph.attr.RouterAttribute;
 import org.springframework.util.Assert;
@@ -57,6 +58,10 @@ public class Router extends Vertex implements IRouterElement
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private ObjectState                 status = ObjectState.DEVELOPMENT;
+    
+    @Version
+    @Column(name = "OPT_LOCK", nullable = false)
+    private Long                        optsLock;
 
     public String getName() {
         return name;
@@ -93,6 +98,14 @@ public class Router extends Vertex implements IRouterElement
     @Override
     public Router getRouter() {
         return this;
+    }
+
+    public Long getOptsLock() {
+        return optsLock;
+    }
+
+    public void setOptsLock(Long optsLock) {
+        this.optsLock = optsLock;
     }
 
     @Override

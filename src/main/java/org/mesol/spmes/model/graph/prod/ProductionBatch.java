@@ -16,7 +16,6 @@
 
 package org.mesol.spmes.model.graph.prod;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -27,7 +26,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PBATCH")
-//@DiscriminatorValue("BATCH")
 public class ProductionBatch extends ProductionObject
 {
 }

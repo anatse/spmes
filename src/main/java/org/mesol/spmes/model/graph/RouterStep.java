@@ -29,7 +29,6 @@ import javax.persistence.Table;
 import javax.script.CompiledScript;
 import org.mesol.spmes.model.graph.attr.RsAttribute;
 import org.mesol.spmes.model.mat.BOM;
-import org.mesol.spmes.model.refs.Duration;
 import org.springframework.util.Assert;
 
 /**

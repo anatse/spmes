@@ -33,7 +33,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import static org.hibernate.criterion.Order.*;
-import org.mesol.spmes.model.factory.EquipmentClass;
 import org.mesol.spmes.model.graph.ObjectState;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.RouterOperation;
@@ -55,7 +54,6 @@ import org.mesol.spmes.model.graph.attr.RouterAttribute;
 import org.mesol.spmes.model.graph.exceptions.LoopException;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
-import org.mesol.spmes.model.refs.Duration;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.util.Assert;
 
@@ -77,12 +75,17 @@ public class RoutingService extends AbstractServiceWithAttributes
      * @return list of routers
      */
     @Transactional
-    public Collection<Router> findActiveRouters () {
+    public List<Router> findActiveRouters () {
         return findRoutersByStatus(ObjectState.RELEASED);
     }
     
+    /**
+     * Function find routers by router name
+     * @param name router name
+     * @return found routers
+     */
     @Transactional
-    public Collection<Router> findRouterByName (String name) {
+    public List<Router> findRouterByName (String name) {
         Session session = getHibernateSession();
         return session.createCriteria(Router.class)
             .add(eq(NamingRuleConstants.NAME, name))
@@ -90,6 +93,11 @@ public class RoutingService extends AbstractServiceWithAttributes
             .list();
     }
 
+    /**
+     * Function finds routers by its attributes
+     * @param attrs router attributes
+     * @return list of found routers
+     */
     @Transactional
     public List<Router> findRoutersByAttributes (Set<RouterAttribute> attrs) {
         if (attrs.size() == 1)
@@ -104,7 +112,7 @@ public class RoutingService extends AbstractServiceWithAttributes
      * @return list of routers
      */
     @Transactional
-    public Collection<Router> findRoutersByStatus (ObjectState status) {
+    public List<Router> findRoutersByStatus (ObjectState status) {
         Session session = getHibernateSession();
         return session.createCriteria(Router.class)
             .add(eq("status", status))
@@ -117,7 +125,7 @@ public class RoutingService extends AbstractServiceWithAttributes
      * @return list of found routers
      */
     @Transactional
-    public Collection<Router> findAllRouters () {
+    public List<Router> findAllRouters () {
         Session session = getHibernateSession();
         return session.createCriteria(Router.class)
             .add(not(eq("status", ObjectState.DISABLED)))
@@ -131,7 +139,7 @@ public class RoutingService extends AbstractServiceWithAttributes
      * @return list of router operations
      */
     @Transactional
-    public Collection<RouterOperation> finaAllOperations (Router router) {
+    public List<RouterOperation> finaAllOperations (Router router) {
         Session session = getHibernateSession();
         return session.createCriteria(RouterOperation.class)
             .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
@@ -365,46 +373,7 @@ public class RoutingService extends AbstractServiceWithAttributes
             }
         }
     }
-
-    private void createRouter (String routerName, EquipmentClass eq) {
-        Router r = new Router();
-        r.setName(routerName);
-        em.persist(r);
-
-        Vertex last = null;
-        for (int i=0;i<100;i++) {
-            try {
-                RouterStep rs = new RouterStep();
-                rs.setName("RS-" + r.getName() + "." + i);
-                rs.setRouter(r);
-                em.persist(rs);
-
-                String name = last != null ? ((RouterStep)last).getName() : r.getName();
-                insertOperation (((last != null) ? last : r), rs, ro -> {
-                    ro.setDuration(new Duration(101));
-                    ro.setName("OP: " + name + " -> " + rs.getName());
-                    ro.setEquipmentClass(eq);
-                });
-
-                last = rs;
-            } 
-            catch (Exception ex) {
-                logger.error(ex, ex);
-            }
-        }
-    }
-
-    @Transactional
-    public void test () {
-        EquipmentClass eq = new EquipmentClass();
-        eq.setName("DEFAULT");
-        em.persist(eq);
-        
-        createRouter ("RT-1", eq);
-        createRouter ("RT-2", eq);
-        createRouter ("RT-3", eq);
-    }
-
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

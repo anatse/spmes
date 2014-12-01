@@ -23,15 +23,10 @@ import javax.persistence.ConstraintMode;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.graph.RouterStep;
 import org.mesol.spmes.model.graph.attr.PSAttribute;
 
@@ -50,13 +45,13 @@ public abstract class ProductionObject extends Vertex
      * reference to production order
      */
     @ManyToOne
-    @JoinColumn(name = "ROUTER_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_POBJ_PO", value = ConstraintMode.CONSTRAINT))
+    @JoinColumn(name = "PO_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_POBJ_PO", value = ConstraintMode.CONSTRAINT))
     private ProductionOrder             productionOrder;
     /**
      * Reference to corresponding router step
      */
     @ManyToOne
-    @JoinColumn(name = "BOM_ID", nullable = true, foreignKey = @ForeignKey(name = "FK_POBJ_RS", value = ConstraintMode.CONSTRAINT))
+    @JoinColumn(name = "RS_ID", nullable = true, foreignKey = @ForeignKey(name = "FK_POBJ_RS", value = ConstraintMode.CONSTRAINT))
     private RouterStep                  routerStep;
     /**
      * Additional attributes for this production object
