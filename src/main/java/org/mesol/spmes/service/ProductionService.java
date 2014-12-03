@@ -21,13 +21,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
-import org.mesol.spmes.model.graph.prod.ProductionObject;
 import org.mesol.spmes.model.graph.prod.ProductionOrder;
 import org.mesol.spmes.model.graph.states.ProdOrderState;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static org.hibernate.criterion.Restrictions.*;
+import static org.hibernate.criterion.Order.*;
 
 /**
  * Class implements production functions
@@ -49,10 +49,9 @@ public class ProductionService extends AbstractServiceWithAttributes
     
     @Transactional
     public List<ProductionOrder> findShopOrders (ProdOrderState status) {
-        getHibernateSession().createCriteria(ProductionOrder.class)
-            .add(eq("status", status));
-        
-        
-        return null;
+        return getHibernateSession().createCriteria(ProductionOrder.class)
+            .add(eq("status", status))
+            .addOrder(asc("planStartDate"))
+            .list();
     }
 }
