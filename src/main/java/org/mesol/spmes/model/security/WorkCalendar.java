@@ -19,7 +19,7 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 
 /**
  * 
@@ -28,7 +28,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 @Entity
 @Table(name = "WCAL")
-public class WorkCalendar extends AbstractEntity implements Serializable
+public class WorkCalendar extends BaseSiteObject implements Serializable
 {
     @EmbeddedId
     private WorkDay     workDay;

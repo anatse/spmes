@@ -33,6 +33,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 
 /**
  * 
@@ -43,7 +44,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @Table(name = "BOMC")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DIRECTION", discriminatorType = DiscriminatorType.STRING, length = 4)
-public abstract class BOMComponent extends AbstractEntity implements Serializable
+public abstract class BOMComponent extends BaseSiteObject implements Serializable
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "bomcId", sequenceName = "BOMC_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)

@@ -34,7 +34,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
-import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.model.refs.Quantity;
 
@@ -45,7 +45,7 @@ import org.mesol.spmes.model.refs.Quantity;
  */
 @Entity
 @Table(name = "MMD")
-public class MatMD extends AbstractEntity implements Serializable
+public class MatMD extends BaseSiteObject implements Serializable
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "matMdId", sequenceName = "MATMD_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)
@@ -120,14 +120,6 @@ public class MatMD extends AbstractEntity implements Serializable
 
     public void setExtrnalId(String extrnalId) {
         this.extrnalId = extrnalId;
-    }
-
-    public Equipment getSite() {
-        return site;
-    }
-
-    public void setSite(Equipment site) {
-        this.site = site;
     }
 
     public String getDescription() {

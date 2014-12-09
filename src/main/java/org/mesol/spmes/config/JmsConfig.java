@@ -22,7 +22,6 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -72,15 +71,6 @@ public class JmsConfig
         CachingConnectionFactory cf = new CachingConnectionFactory(factory);
         return cf;
     }
-
-//    @Bean
-//    public MessageListenerContainer jmsMessageListener () {
-//        DefaultMessageListenerContainer ml = new DefaultMessageListenerContainer();
-//        ml.setConnectionFactory(connectionFactory);
-//        ml.setSessionTransacted(true);
-//        ml.setDestinationResolver(new DynamicDestinationResolver());
-//        return ml;
-//    }
     
     @Bean
 	public JmsOperations jmsOperations() {
@@ -97,7 +87,7 @@ public class JmsConfig
             broker.setBrokerName("mes");
             broker.addConnector("vm://mes");
             broker.start();
-        } 
+        }
         catch (Exception ex) {
             logger.error(ex, ex);
         }

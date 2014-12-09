@@ -24,6 +24,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 
@@ -34,6 +36,7 @@ import javax.persistence.ManyToOne;
 public class WorkDay implements Serializable
 {
     @Column(name = "DT")
+    @Temporal(TemporalType.DATE)
     private Date        date;
     @ManyToOne
     @JoinColumn(name = "USH_ID", foreignKey = @ForeignKey(name = "FK_WD_USH", value = ConstraintMode.CONSTRAINT))

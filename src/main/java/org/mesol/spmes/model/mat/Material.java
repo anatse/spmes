@@ -32,6 +32,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 import org.mesol.spmes.model.refs.Quantity;
 
 /**
@@ -41,7 +42,7 @@ import org.mesol.spmes.model.refs.Quantity;
  */
 @Entity
 @Table(name = "MAT")
-public class Material extends AbstractEntity implements Serializable
+public class Material extends BaseSiteObject implements Serializable
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "materialId", sequenceName = "MAT_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)

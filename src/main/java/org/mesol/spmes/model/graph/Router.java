@@ -58,10 +58,6 @@ public class Router extends Vertex implements IRouterElement
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private ObjectState                 status = ObjectState.DEVELOPMENT;
-    
-    @Version
-    @Column(name = "OPT_LOCK", nullable = false)
-    private Long                        optsLock;
 
     public String getName() {
         return name;
@@ -98,14 +94,6 @@ public class Router extends Vertex implements IRouterElement
     @Override
     public Router getRouter() {
         return this;
-    }
-
-    public Long getOptsLock() {
-        return optsLock;
-    }
-
-    public void setOptsLock(Long optsLock) {
-        this.optsLock = optsLock;
     }
 
     @Override

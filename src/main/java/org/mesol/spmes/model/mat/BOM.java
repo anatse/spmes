@@ -28,6 +28,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 
 /**
  * 
@@ -36,7 +37,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
  */
 @Entity
 @Table(name = "BOM")
-public class BOM extends AbstractEntity implements Serializable
+public class BOM extends BaseSiteObject implements Serializable
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "bomId", sequenceName = "BOM_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)

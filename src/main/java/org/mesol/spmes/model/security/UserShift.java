@@ -28,7 +28,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.mesol.spmes.consts.BasicConstants;
-import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 
 /**
  * Class contains user shift definition. All time data defined in minutes
@@ -41,7 +41,7 @@ import org.mesol.spmes.model.abs.AbstractEntity;
 @NamedQueries(
     @NamedQuery (name = "UserShift.currentShift", query = "select u from UserShift u where :curTime between u.startTime and u.endTime")
 )
-public class UserShift extends AbstractEntity implements Serializable
+public class UserShift extends BaseSiteObject implements Serializable
 {
 
     public static int convertTime(int hour, int minutes, int seconds) {

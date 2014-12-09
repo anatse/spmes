@@ -40,7 +40,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.mesol.spmes.consts.BasicConstants;
-import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 import org.mesol.spmes.model.graph.Router;
 import org.mesol.spmes.model.graph.attr.POAttribute;
 import org.mesol.spmes.model.graph.states.ProdOrderState;
@@ -55,7 +55,7 @@ import org.mesol.spmes.model.refs.Quantity;
 @Entity
 @Table(name = "PO")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class ProductionOrder extends AbstractEntity implements Serializable
+public class ProductionOrder extends BaseSiteObject implements Serializable
 {
     /**
      * Primary key

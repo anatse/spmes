@@ -33,6 +33,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.abs.AbstractEntity;
+import org.mesol.spmes.model.abs.BaseSiteObject;
 import org.mesol.spmes.model.graph.exceptions.ManySequentalOperationException;
 import org.mesol.spmes.model.graph.exceptions.NoRuleException;
 import org.mesol.spmes.model.graph.exceptions.NonParallelOperationException;
@@ -45,7 +46,7 @@ import org.springframework.util.Assert;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Vertex extends AbstractEntity implements Serializable 
+public abstract class Vertex extends BaseSiteObject implements Serializable 
 {
     @Id
     @SequenceGenerator(initialValue = 1, name = "gvertexId", sequenceName = "GVTX_SEQ", allocationSize = BasicConstants.SEQ_ALLOCATION_SIZE)

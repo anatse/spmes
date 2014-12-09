@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.service;
 
 import java.lang.invoke.MethodHandles;
@@ -46,12 +45,23 @@ public class ProductionService extends AbstractServiceWithAttributes
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     @Transactional
     public List<ProductionOrder> findShopOrders (ProdOrderState status) {
         return getHibernateSession().createCriteria(ProductionOrder.class)
             .add(eq("status", status))
             .addOrder(asc("planStartDate"))
             .list();
+    }
+
+    /**
+     * Function create production order chain
+     * @param po production order data
+     * @return new created production order
+     */
+    @Transactional
+    public ProductionOrder createShopOrder (ProductionOrder po) {
+        
+        return po;
     }
 }
