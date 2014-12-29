@@ -13,6 +13,7 @@
         <spring.integration>4.0.4.RELEASE</spring.integration>
         <slf4j.version>1.7.9</slf4j.version>
         <hibernate.version>4.3.7.Final</hibernate.version>
+        <gwt.version>2.7.0</gwt.version>
     </properties>
     <organization>
         <name>Mes Solutions</name>
@@ -338,6 +339,27 @@
             <artifactId>optaplanner-core</artifactId>
             <version>6.1.0.Final</version>
         </dependency>
+        <!--
+            GWT
+        -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.isomorphic.smartgwt.lgpl</groupId>
+            <artifactId>smartgwt-lgpl</artifactId>
+            <version>5.0p</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.isomorphic.smartgwt.lgpl</groupId>
+            <artifactId>smartgwt-skins</artifactId>
+            <version>5.0p</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -366,6 +388,37 @@
                         -javaagent:"${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar"
                     </argLine>
                     <useSystemClassloader>true</useSystemClassloader>
+                </configuration>
+            </plugin>
+            <!--
+                Google GWT compiler plugin
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>generateAsync</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!--                
+                    Plugin configuration. There are many available options, see
+                    gwt-maven-plugin documentation at codehaus.org
+                -->
+                <configuration>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <draftCompile>true</draftCompile>
+<!--                    <logLevel>DEBUG</logLevel>
+                    <style>OBF</style>
+                    <optimizationLevel>9</optimizationLevel>
+                    <jsInteropMode>CLOSURE</jsInteropMode>
+                    <closureCompiler>true</closureCompiler>-->
+                    <compileReport>true</compileReport>
+                    <!--<style>PRETTY</style>-->
                 </configuration>
             </plugin>
         </plugins>
@@ -398,22 +451,5 @@
             <name>Spring Portfolio Milestone Repository</name>
             <url>http://repo.springsource.org/milestone/</url>
         </repository>
-        
-        <!--        
-            Scala repository
-        -->
-        <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
     </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

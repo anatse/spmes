@@ -16,16 +16,79 @@
 package org.mesol.spmes.gwt.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
+import com.smartgwt.client.widgets.grid.events.SelectionEvent;
+import com.smartgwt.client.widgets.layout.HLayout;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * Main GUI class
+ * How-to use JSNI (native JavaScript interface) see https://lustforge.com/2012/11/11/gwt-jsni-variables-an-exhaustive-list/
  * 
  * @version 1.0.0
  * @author ASementsov
  */
 public class SmartApp implements EntryPoint
 {
+    /**
+     * Registered modules
+     */
+    private static final Map<String, Canvas>    moduleMap = new HashMap<>();
+    
+    public static void registerModule (String name, Canvas module) {
+        moduleMap.put(name, module);
+    }
+
+    public static void unregisterModule (String name) {
+        moduleMap.remove(name);
+    }
+    
+    public SmartApp() {
+        SmartApp.registerModule("Users", new Users());
+    }
+    
     @Override
     public void onModuleLoad() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HLayout layout = new HLayout();
+        layout.setWidth100();
+        layout.setHeight100();
+
+        MenuTree tr = new MenuTree();
+        tr.setWidth(200);
+        tr.setHeight100();
+        layout.addMember(tr);
+
+        final ContentView view = new ContentView();
+//        view.setWidth("80%");
+        view.setHeight100();
+        tr.addSelectionChangedHandler(new SelectionChangedHandler() {
+            @Override
+            public void onSelectionChanged(SelectionEvent event) {
+                Canvas[] children = view.getChildren();
+                if (children != null) {
+                    for (Canvas child : children)
+                        view.removeChild(child);
+                }
+
+                String url = event.getSelectedRecord().getAttribute("url");
+                if (url != null) {
+                   Canvas module = moduleMap.get(url);
+                   if (module == null) {
+                       SC.say("Not found module: " + url);
+                   }
+                   else {
+                       module.setWidth100();
+                       module.setHeight100();
+                       view.addChild(module);
+                   }
+                }
+            }
+        });
+
+        layout.addMember(view);
+        layout.draw();
     }
 }

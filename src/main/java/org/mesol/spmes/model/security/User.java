@@ -109,6 +109,7 @@ public class User extends AbstractEntity implements Serializable, UserDetails
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -15,56 +15,52 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
-    <info value="www.slideshare.net/knowfrominfo/titan-big-graph-data-with-cassandra"/>
     <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no, minimum-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
-
-        <title id="page-title"><spring:message code="App.title"/></title>
-        <link rel="stylesheet" type="text/css" href="ext/resources/ext5-crisp/ext-theme-crisp-all.css"/>
-        <script type="text/javascript" charset="utf-8" src="ext/ext-all.js"></script>
-        <script type="text/javascript" charset="utf-8" src="ext/ext-charts/ext-charts.js"></script>
-        <%!
-        public boolean testResource (final HttpServletRequest request, final String path) {
-            final String realPath = getServletContext().getRealPath ("/" + path);
-            if (realPath == null)
-                return false;
-
-            final File fp = new File (realPath);
-            return fp.exists();
-        }
-        %>
-        <!-- localization -->
-        <%
-        final Locale locale = RequestContextUtils.getLocale(request);    
-        final String language = locale.getLanguage();
-        String path = "ext/locale/ext-locale-" + language + ".js";
-        if (!testResource (request, path)) {
-            path = "ext/locale/ext-locale-en.js";
-        }
-        %>
-        <script src="<%=path%>"></script>
-        <script>
-            Ext.Loader.setConfig({
-                paths: {
-                    'NeoMes': 'app'
-                }
-            });
-            
-            Ext.require ('NeoMes.locale.<%=language%>');
-            Ext.require('NeoMes.utils.CommonUtils');
-
-            Ext.onReady (function() {
-                GLocale = NeoMes.locale.<%=language%>;
-                GLang = '<%=language%>';
-            });
-        </script> 
-        <script type="text/javascript" src="app/app.js"></script>
     </head>
     <body>
-        <input type="hidden"
-    name="${_csrf.parameterName}"
-    value="${_csrf.token}"/>
+        <iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
+        <script src=app/sc/modules/ISC_Core.js></script>
+        <script src=app/sc/modules/ISC_Foundation.js></script>
+        <script src=app/sc/modules/ISC_Containers.js></script>
+        <script src=app/sc/modules/ISC_Grids.js></script>
+        <script src=app/sc/modules/ISC_Forms.js></script>
+        <script src=app/sc/modules/ISC_RichTextEditor.js></script>
+        <script src=app/sc/modules/ISC_Calendar.js></script>
+        <script src=app/sc/modules/ISC_DataBinding.js></script>
+        <script>
+            var csrfName = '${_csrf.headerName}';
+            var csrfValue = '${_csrf.token}';
+            
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ')
+                        c = c.substring(1, c.length);
+
+                    if (c.indexOf(nameEQ) == 0)
+                        return c.substring(nameEQ.length, c.length);
+                }
+
+                return null;
+            }
+
+            // Determine what skin file to load
+            var currentSkin = readCookie('skin');
+            if (currentSkin == null) {
+                currentSkin = "Enterprise";
+            }
+        </script>
+        <script type="text/javascript">
+            document.write("<" + "script src=app/sc/skins/" + currentSkin + "/load_skin.js><" + "/script>");
+        </script>
+
+        <script language='javascript' src='app/app.nocache.js'></script>
     </body>
 </html>

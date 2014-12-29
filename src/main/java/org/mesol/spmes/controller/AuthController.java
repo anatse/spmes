@@ -94,7 +94,7 @@ public class AuthController
         BasicConstants.LABORER_ROLE,
         BasicConstants.TECHNOLOG_ROLE
     })
-    @RequestMapping(value = "/service/menu")
+    @RequestMapping(value = "/service/menu", produces = {"application/json"})
     @Transactional
     public List<Menu> getUserMenu(
         @RequestParam (value = "parentId", required = false) Long parentId) {
@@ -113,7 +113,7 @@ public class AuthController
         BasicConstants.ADMIN_ROLE, 
         BasicConstants.CHIEF_ROLE
     })
-    @RequestMapping(value = "/service/user/list", method = {RequestMethod.GET}, produces = {"application/json"})
+    @RequestMapping(value = "/service/user/list", method = {RequestMethod.POST}, produces = {"application/json"})
     @Transactional
     public List<User> findAllUsers () {
         if (logger.isDebugEnabled())
@@ -122,26 +122,26 @@ public class AuthController
         return userService.findAll();
     }
 
-    @Secured({
-        BasicConstants.ADMIN_ROLE, 
-        BasicConstants.CHIEF_ROLE
-    })
-    @RequestMapping(
-        value = "/service/user/list", 
-        method = {RequestMethod.POST}, 
-        produces = {"application/json"},
-        consumes = {"application/json"}
-    )
-    @Transactional
-    public User createUser (
-        @RequestBody User newUser
-    ) {
-        if (logger.isDebugEnabled())
-            logger.debug("findAllUsers called");
-        
-        userService.save(newUser);
-        return newUser;
-    }
+//    @Secured({
+//        BasicConstants.ADMIN_ROLE, 
+//        BasicConstants.CHIEF_ROLE
+//    })
+//    @RequestMapping(
+//        value = "/service/user", 
+//        method = {RequestMethod.POST}, 
+//        produces = {"application/json"},
+//        consumes = {"application/json"}
+//    )
+//    @Transactional
+//    public User createUser (
+//        @RequestBody User newUser
+//    ) {
+//        if (logger.isDebugEnabled())
+//            logger.debug("findAllUsers called");
+//        
+//        userService.save(newUser);
+//        return newUser;
+//    }
 
     /**
      * Function update user information
@@ -149,25 +149,25 @@ public class AuthController
      * @param changedUser - changed user data
      * @return updated user
      */
-    @Secured({
-        BasicConstants.ADMIN_ROLE, 
-        BasicConstants.CHIEF_ROLE
-    })
-    @RequestMapping(value = "/service/user/list/{userId}", 
-        method = {RequestMethod.PUT},
-        produces = {"application/json"},
-        consumes = {"application/json"}
-    )
-    @Transactional
-    public User saveUser (
-        @PathVariable("userId")Long userId,
-        @RequestBody User changedUser
-    ) {
-        User user = userService.findOne(userId);
-        if (user != null) {
-            user = EntityCopier.copy(changedUser, user);
-            userService.save(user);
-        }
-        return user;
-    }
+//    @Secured({
+//        BasicConstants.ADMIN_ROLE, 
+//        BasicConstants.CHIEF_ROLE
+//    })
+//    @RequestMapping(value = "/service/user/{userId}", 
+//        method = {RequestMethod.PUT},
+//        produces = {"application/json"},
+//        consumes = {"application/json"}
+//    )
+//    @Transactional
+//    public User saveUser (
+//        @PathVariable("userId")Long userId,
+//        @RequestBody User changedUser
+//    ) {
+//        User user = userService.findOne(userId);
+//        if (user != null) {
+//            user = EntityCopier.copy(changedUser, user);
+//            userService.save(user);
+//        }
+//        return user;
+//    }
 }
