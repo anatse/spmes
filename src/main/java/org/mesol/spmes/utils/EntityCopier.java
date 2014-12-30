@@ -19,6 +19,7 @@ package org.mesol.spmes.utils;
 import java.beans.PropertyDescriptor;
 import org.apache.log4j.Logger;
 import java.lang.invoke.MethodHandles;
+import org.joda.time.DateTime;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -33,19 +34,27 @@ public class EntityCopier
 
     public static BeanWrapper getWrapper (Object obj) {
         final BeanWrapper bw = new BeanWrapperImpl(obj);
+        bw.registerCustomEditor(DateTime.class, new JodaDateTimeEditor());
         return bw;
     }
     
     public static <T> T copy (T from, T to) {
-        final BeanWrapper fromB = new BeanWrapperImpl(from);
-        final BeanWrapper toB = new BeanWrapperImpl(to);
+        final BeanWrapper fromB = getWrapper(from);
+        final BeanWrapper toB = getWrapper(to);
         for (PropertyDescriptor pd : fromB.getPropertyDescriptors()) {
             String name = pd.getName();
             if (fromB.isReadableProperty(name) && toB.isWritableProperty(name)) {
                 Object value = fromB.getPropertyValue(name);
+                Object oldValue = toB.getPropertyValue(name);
                 if (value != null) {
-                    toB.setPropertyValue(name, value);
+                    if (!value.equals(oldValue))
+                        toB.setPropertyValue(name, value);
                 }
+//                else if (oldValue != null) {
+//                    
+//                    
+//                    toB.setPropertyValue(name, value);
+//                }
             }
         }
 

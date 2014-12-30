@@ -17,7 +17,16 @@
 package org.mesol.spmes.gwt.server;
 
 import com.google.gwt.core.client.GWT;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.OperationBinding;
+import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
+import com.smartgwt.client.types.DSDataFormat;
+import com.smartgwt.client.types.DSOperationType;
+import com.smartgwt.client.types.DSProtocol;
+import com.smartgwt.client.util.JSON;
+import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 import org.mesol.spmes.gwt.shared.BaseDataSource;
 import org.mesol.spmes.gwt.shared.FieldNamesConstants;
 
@@ -34,15 +43,26 @@ public class UsersDS extends BaseDataSource
     protected UsersDS () {
         super();
 
+        setCacheAllData(false);
+        setAutoCacheAllData(false);
+        setClientOnly(false);
+
         /*
         * Add fields
         */
         DataSourceTextField unameField = new DataSourceTextField("username", fieldNames.name());
         unameField.setPrimaryKey(true);
-        DataSourceTextField passwordField = new DataSourceTextField("password", fieldNames.password());
+        DataSourcePasswordField passwordField = new DataSourcePasswordField("password", fieldNames.password());
         DataSourceTextField firstNameField = new DataSourceTextField("firstName", fieldNames.firstName());
         DataSourceTextField lastNameField = new DataSourceTextField("lastName", fieldNames.lastName());
+        
+        /**
+         * Email field with validating
+         */
+        RegExpValidator regExpValidator = new RegExpValidator();
+        regExpValidator.setExpression("^([a-zA-Z0-9_.\\-+])+@(([a-zA-Z0-9\\-])+\\.)+[a-zA-Z0-9]{2,4}$");
         DataSourceTextField emailField = new DataSourceTextField("email", fieldNames.email());
+        emailField.setValidators(regExpValidator);
         
         setFields(unameField, passwordField, firstNameField, lastNameField, emailField);
         /*
@@ -54,6 +74,43 @@ public class UsersDS extends BaseDataSource
          * Root element 
          */
         setRecordXPath("userList");
+        
+        /*
+         * Operation bindings
+         */
+        setOperationBindings(
+            updateOperation(),
+            addOperation(),
+            new OperationBinding(DSOperationType.REMOVE, "service/user/delete")
+        );
+    }
+    
+    private OperationBinding addOperation () {
+        OperationBinding oper = new OperationBinding(DSOperationType.ADD, "service/user/add");
+        oper.setUseFlatFields(false);
+        oper.setDataFormat(DSDataFormat.JSON);
+        oper.setDataProtocol(DSProtocol.POSTMESSAGE);
+        return oper;
+    }
+    
+    private OperationBinding updateOperation () {
+        OperationBinding oper = new OperationBinding(DSOperationType.UPDATE, "service/user/update");
+        oper.setUseFlatFields(false);
+        oper.setDataFormat(DSDataFormat.JSON);
+        oper.setDataProtocol(DSProtocol.POSTMESSAGE);
+        return oper;
+    }
+
+    @Override
+    protected Object transformRequest(DSRequest dsRequest) {
+        switch (dsRequest.getOperationType()) {
+            case ADD:
+            case UPDATE:
+                dsRequest.setContentType("application/json");
+                return JSON.encode(dsRequest.getData());
+        }
+
+        return super.transformRequest(dsRequest);
     }
     
     public static UsersDS get () {

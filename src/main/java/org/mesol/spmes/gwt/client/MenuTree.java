@@ -84,6 +84,7 @@ public final class MenuTree extends TreeGrid {
         ds.fetchData(cr, new DSCallback() {
             @Override
             public void execute(DSResponse dsResponse, Object data, DSRequest dsRequest) {
+                tree.unloadChildren(root);
                 List<TreeNode> nodes = new ArrayList<>();
                 for (Record rec : dsResponse.getData()) {
                     TreeNode tn = new TreeNode();
