@@ -17,11 +17,13 @@
 package org.mesol.spmes.gwt.client;
 
 import com.google.gwt.core.shared.GWT;
+import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
-import com.smartgwt.client.util.SC;
+import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -30,8 +32,12 @@ import com.smartgwt.client.widgets.grid.events.RecordClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.tab.Tab;
+import com.smartgwt.client.widgets.tab.TabSet;
+import org.mesol.spmes.gwt.server.GroupsDS;
 import org.mesol.spmes.gwt.server.UsersDS;
 import org.mesol.spmes.gwt.shared.ButtonNameConstants;
+import org.mesol.spmes.gwt.shared.TitlesConstants;
 
 /**
  * 
@@ -40,31 +46,41 @@ import org.mesol.spmes.gwt.shared.ButtonNameConstants;
  */
 public final class Users extends VLayout
 {
-    private final ButtonNameConstants buttonNames = GWT.create(ButtonNameConstants.class);
-        
-    public Users () {
-        final UsersDS ds = UsersDS.get();
-        final ListGrid grid = new ListGrid(ds);
-//        grid.setAutoFetchData(true);
+    private final ButtonNameConstants   buttonNames = GWT.create(ButtonNameConstants.class);
+    private final TitlesConstants       titles = GWT.create(TitlesConstants.class);
+
+    private ListGrid createGrid () {
+        UsersDS ds = UsersDS.get();
+        ListGrid grid = new ListGrid(ds);
         grid.setWidth100();
         grid.setHeight(400);
         grid.setShowResizeBar(true);
         grid.setShowCustomScrollbars(true);
         grid.setShowFilterEditor(true);
         grid.setAllowFilterExpressions(true);
-        addMember(grid);
         grid.fetchData();
-
+        grid.setShowDetailFields(false);
+        
+        return grid;
+    }
+    
+    private Canvas createDetails (final ListGrid grid) {
+        VLayout vl = new VLayout();
+        vl.setWidth100();
+        vl.setHeight100();
         final DynamicForm form = new DynamicForm();
         form.setNumCols(6);
-        form.setDataSource(ds);
-        addMember(form);
+        form.setDataSource(grid.getDataSource());
+        vl.addMember(form);
 
         grid.addRecordClickHandler(new RecordClickHandler() {
             @Override
             public void onRecordClick(RecordClickEvent event) {
                 form.reset();
                 form.editSelectedData(grid);
+                GroupsDS.get().fetchData(
+                    new Criteria("username", event.getRecord().getAttributeAsString("username"))
+                );
             }
         });
         
@@ -81,11 +97,10 @@ public final class Users extends VLayout
                         form.reset();
                     }
                 });
-                
             }
         });
         hl.addMember(btnUpdate);
-        
+
         Button btnAdd = new Button(buttonNames.add());
         btnAdd.addClickHandler(new ClickHandler() {
             @Override
@@ -95,7 +110,28 @@ public final class Users extends VLayout
             }
         });
         hl.addMember(btnAdd);
+        vl.addMember(hl);
+        return vl;
+    }
+    
+    public Users () {
+        ListGrid grid = createGrid();
+        grid.setWidth100();
+        addMember(grid);
 
-        addMember(hl);
+        TabSet ts = new TabSet();
+        ts.setWidth100();
+        ts.setHeight100();
+        ts.setTabBarPosition(Side.TOP);
+
+        Tab details = new Tab(titles.details());
+        details.setPane (createDetails(grid));
+        
+        Tab roles = new Tab(titles.roles());
+        
+        ts.addTab (details);
+        ts.addTab (roles);
+
+        addMember(ts);
     }
 }

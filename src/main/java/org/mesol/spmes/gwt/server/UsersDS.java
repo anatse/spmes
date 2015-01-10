@@ -18,14 +18,15 @@ package org.mesol.spmes.gwt.server;
 
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.OperationBinding;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
+import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.util.JSON;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 import org.mesol.spmes.gwt.shared.BaseDataSource;
 import org.mesol.spmes.gwt.shared.FieldNamesConstants;
@@ -63,7 +64,12 @@ public class UsersDS extends BaseDataSource
         regExpValidator.setExpression("^([a-zA-Z0-9_.\\-+])+@(([a-zA-Z0-9\\-])+\\.)+[a-zA-Z0-9]{2,4}$");
         DataSourceTextField emailField = new DataSourceTextField("email", fieldNames.email());
         emailField.setValidators(regExpValidator);
-        
+
+//        DataSourceField groups = new DataSourceTextField("groups");
+//        groups.setTypeAsDataSource (GroupsDS.get());
+//        groups.setMultiple(true);
+//        groups.setDetail(true);
+
         setFields(unameField, passwordField, firstNameField, lastNameField, emailField);
         /*
          * Data URL

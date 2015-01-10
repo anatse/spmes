@@ -180,8 +180,13 @@ public class User extends AbstractEntity implements Serializable, UserDetails
         this.locked = locked;
     }
 
+    @JsonProperty
     public void setGroups(Set<UserGroup> groups) {
         this.groups = groups;
+    }
+
+    public Set<UserGroup> getGroups() {
+        return groups;
     }
 
     public String getFirstName() {

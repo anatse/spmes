@@ -15,6 +15,7 @@
  */
 package org.mesol.spmes.model.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
@@ -71,6 +72,7 @@ public class UserGroup extends AbstractEntity implements Serializable, GrantedAu
         this.name = name;
     }
 
+    @JsonIgnore
     public Set<User> getUsers() {
         if (users == null)
             return Collections.EMPTY_SET;

@@ -33,21 +33,7 @@ import java.util.Map;
  */
 public class SmartApp implements EntryPoint
 {
-    /**
-     * Registered modules
-     */
-    private static final Map<String, Canvas>    moduleMap = new HashMap<>();
-    
-    public static void registerModule (String name, Canvas module) {
-        moduleMap.put(name, module);
-    }
-
-    public static void unregisterModule (String name) {
-        moduleMap.remove(name);
-    }
-    
     public SmartApp() {
-        SmartApp.registerModule("Users", new Users());
     }
     
     @Override
@@ -62,8 +48,8 @@ public class SmartApp implements EntryPoint
         layout.addMember(tr);
 
         final ContentView view = new ContentView();
-//        view.setWidth("80%");
         view.setHeight100();
+        view.setWidth100();
         tr.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent event) {
@@ -75,7 +61,7 @@ public class SmartApp implements EntryPoint
 
                 String url = event.getSelectedRecord().getAttribute("url");
                 if (url != null) {
-                   Canvas module = moduleMap.get(url);
+                   Canvas module = ContentFactory.getCanvas(url);
                    if (module == null) {
                        SC.say("Not found module: " + url);
                    }

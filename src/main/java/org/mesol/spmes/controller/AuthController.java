@@ -18,12 +18,14 @@ package org.mesol.spmes.controller;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.consts.BasicConstants;
 import org.mesol.spmes.model.security.Menu;
 import org.mesol.spmes.model.security.User;
+import org.mesol.spmes.model.security.UserGroup;
 import org.mesol.spmes.service.UserService;
 import org.mesol.spmes.utils.EntityCopier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -167,5 +168,19 @@ public class AuthController
             userService.save(user);
         }
         return user;
+    }
+    
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
+    @RequestMapping(value = "/service/user/grp/list", 
+        method = {RequestMethod.POST},
+        produces = {"application/json"}
+    )
+    @Transactional
+    public Set<UserGroup> getUserGroups (@RequestParam (value = "username") String userName) {
+        User usr = userService.findByName(userName);
+        return usr.getGroups();
     }
 }

@@ -427,9 +427,9 @@
                 <configuration>
                     <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
                     <draftCompile>true</draftCompile>
-<!--                    <logLevel>DEBUG</logLevel>
-                    <style>OBF</style>
-                    <optimizationLevel>9</optimizationLevel>
+                    <!--<style>DETAILED</style>-->
+                    <!--<logLevel>DEBUG</logLevel>-->
+<!--                    <optimizationLevel>9</optimizationLevel>
                     <jsInteropMode>CLOSURE</jsInteropMode>
                     <closureCompiler>true</closureCompiler>-->
                     <compileReport>true</compileReport>
