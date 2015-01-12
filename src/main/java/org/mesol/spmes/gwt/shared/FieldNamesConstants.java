@@ -33,4 +33,5 @@ public interface FieldNamesConstants extends Constants
     @Key("email") String email();
     @Key("firstName") String firstName();
     @Key("lastName") String lastName();
+    @Key("lastName") String user();
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.gwt.client;
 
 import com.google.gwt.core.shared.GWT;
@@ -60,7 +59,7 @@ public final class Users extends VLayout
         grid.setAllowFilterExpressions(true);
         grid.fetchData();
         grid.setShowDetailFields(false);
-        
+
         return grid;
     }
     
@@ -83,7 +82,7 @@ public final class Users extends VLayout
                 );
             }
         });
-        
+
         HLayout hl = new HLayout();
         Button btnUpdate = new Button(buttonNames.update());
         btnUpdate.addClickHandler(new ClickHandler() {
@@ -126,9 +125,9 @@ public final class Users extends VLayout
 
         Tab details = new Tab(titles.details());
         details.setPane (createDetails(grid));
-        
+
         Tab roles = new Tab(titles.roles());
-        
+
         ts.addTab (details);
         ts.addTab (roles);
 

@@ -41,7 +41,7 @@ public class GroupsDS  extends BaseDataSource
         DataSourceTextField gname = new DataSourceTextField("name", fieldNames.name());
         gname.setPrimaryKey(true);
         
-        DataSourceField userField = new DataSourceTextField("username", "User");
+        DataSourceField userField = new DataSourceTextField("username", fieldNames.user());
         userField.setForeignKey("username");
 
         DataSourceField idField = new DataSourceTextField("id", fieldNames.id());
