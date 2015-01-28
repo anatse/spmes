@@ -43,6 +43,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * Class implements user functions
@@ -250,7 +251,19 @@ public class UserService extends AbstractServiceWithAttributes
     public User findOne(Long userId) {
         return entityManager.find(User.class, userId);
     }
-    
+
+    @Transactional
+    public Menu addMenu (Menu menu) {
+        entityManager.persist(menu);
+        return menu;
+    }
+
+    @Transactional
+    public UserGroup addGroup (UserGroup group) {
+        entityManager.persist(group);
+        return group;
+    }
+
     /**
      * Implements the same function from AbstractController
      * @return entity manager

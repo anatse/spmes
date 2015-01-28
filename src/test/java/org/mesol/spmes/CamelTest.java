@@ -22,6 +22,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mesol.spmes.config.PersistenceJPAConfig;
@@ -61,6 +62,7 @@ public class CamelTest implements ApplicationContextAware
     private ApplicationContext          appContext;
     
     @Test
+    @Ignore
     public void test() throws Exception {
         SpringCamelContext ctx = new SpringCamelContext(appContext);
         SpringRouteBuilder builder = new SpringRouteBuilder() {

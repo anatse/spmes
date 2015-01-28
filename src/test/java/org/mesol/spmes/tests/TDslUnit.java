@@ -56,14 +56,20 @@ public class TDslUnit
     
     @Autowired
     private DslExecutor             de;
-    
+
     @Test
     @Ignore
     @Transactional
     public void testDsl () throws Exception {
         de.execute(getClass().getResource("/org/mesol/spmes/service/dsl/Test.groovy").toString());
     }
-    
+
+    @Test
+    @Transactional
+    public void initiaCreateUserDsl () throws Exception {
+        de.execute(getClass().getResource("/org/mesol/spmes/service/dsl/CreateUsers.groovy").toString());
+    }
+
     @Configuration
     @EnableJpaRepositories
     @EnableJpaAuditing

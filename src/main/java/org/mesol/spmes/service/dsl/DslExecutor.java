@@ -51,6 +51,24 @@ public class DslExecutor implements ApplicationContextAware
 
     private static Set<EntityType<?>>       types;
     private static Set<EmbeddableType<?>>   embeddables;
+    
+    public static final class ScriptParameter {
+        private final String      name;
+        private final Object      value;
+
+        public ScriptParameter(String name, Object value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+    }
 
     public Set<EntityType<?>> getTypes() {
         if (types == null)
@@ -69,10 +87,11 @@ public class DslExecutor implements ApplicationContextAware
     /**
      * Function executes DSL script
      * @param groovyScript DSL script resource name
+     * @param parameters Additional script parameters
      * @return script result
      * @throws Exception 
      */
-    public Object execute (String groovyScript) throws Exception {
+    public Object execute (String groovyScript, ScriptParameter ... parameters) throws Exception {
         GroovyClassLoader ldr = new GroovyClassLoader(getClass().getClassLoader());
         Class baseCl = ldr.parseClass(new File (getClass().getResource("/org/mesol/spmes/service/dsl/DslBase.groovy").toURI()));
         CompilerConfiguration cc = new CompilerConfiguration();
@@ -84,6 +103,9 @@ public class DslExecutor implements ApplicationContextAware
         binding.setVariable ("context", context);
         binding.setVariable ("entities", getTypes());
         binding.setVariable ("embeddables", getEmbeddables());
+        for (ScriptParameter param : parameters) {
+            binding.setVariable(param.getName(), param.getValue());
+        }
 
         GroovyShell gs = new GroovyShell(ldr, binding, cc);
         Script script = gs.parse(new File(new URL(groovyScript).toURI()));

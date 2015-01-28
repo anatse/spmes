@@ -12,7 +12,7 @@
         <springsecurity.version>3.2.5.RELEASE</springsecurity.version>
         <spring.integration>4.0.4.RELEASE</spring.integration>
         <slf4j.version>1.7.9</slf4j.version>
-        <hibernate.version>4.3.7.Final</hibernate.version>
+        <hibernate.version>4.3.8.Final</hibernate.version>
         <gwt.version>2.7.0</gwt.version>
     </properties>
     <organization>
@@ -168,22 +168,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.4.4</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.4.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.4.4</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-            <version>2.4.4</version>
+            <version>2.5.0</version>
         </dependency>
         <!--
             Hibernate
@@ -231,7 +226,7 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
-            <version>2.6.9</version>
+            <version>2.6.10</version>
         </dependency>
         
         <!--
@@ -262,13 +257,13 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
-            <version>2.14.0</version>
+            <version>2.14.1</version>
         </dependency>
  
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-javaconfig</artifactId>
-            <version>2.14.0</version>
+            <version>2.14.1</version>
         </dependency>
         
         <!--
@@ -311,7 +306,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.3-1102-jdbc41</version>
+            <version>9.4-1200-jdbc41-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -329,7 +324,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.6</version>
+            <version>2.7</version>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
@@ -352,7 +347,7 @@
         <dependency>
             <groupId>org.optaplanner</groupId>
             <artifactId>optaplanner-core</artifactId>
-            <version>6.1.0.Final</version>
+            <version>6.2.0.CR4</version>
         </dependency>
         <!--
             GWT
