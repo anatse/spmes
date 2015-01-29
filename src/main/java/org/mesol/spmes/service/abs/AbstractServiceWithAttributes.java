@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import static org.hibernate.criterion.Restrictions.and;
@@ -132,7 +133,9 @@ public abstract class AbstractServiceWithAttributes
                 and()
                 .add(eq("attr." + NamingRuleConstants.NAME, attr.getName()))
                 .add(eq("attr." + NamingRuleConstants.VALUE, attr.getAttrValue()))
-            ).list();
+            )
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
 
     /**
@@ -180,5 +183,12 @@ public abstract class AbstractServiceWithAttributes
         });
 
         return ret;
+    }
+    
+    public <T extends AbstractEntity> List<T> findAll (Class<T> clazz) {
+        return getHibernateSession()
+            .createCriteria(clazz)
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
 }

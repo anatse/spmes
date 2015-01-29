@@ -17,6 +17,7 @@
 package org.mesol.spmes.controller;
 
 import java.lang.invoke.MethodHandles;
+import java.net.URL;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.service.dsl.DslExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 
@@ -39,10 +41,17 @@ public class DSLController
     @Autowired
     private DslExecutor                 dslExecutor;
 
+    // http://localhost:8080/SpringMes/dsl/run?path=/org/mesol/spmes/service/dsl/CreateUsers.groovy
     @Transactional
-    @RequestMapping(value="{path}")
-    public Object executeDslScript (@PathVariable(value = "path")String path) throws Exception {
-        String script = getClass().getResource(path).toString();
+    @RequestMapping(value="run", produces = {"appliation/json"})
+    public Object executeDslScript (@RequestParam(value = "path")String path) throws Exception {
+        System.out.println ("Path: " + path);
+        URL scriptUrl = getClass().getResource(path);
+        if (scriptUrl == null) {
+            return new Exception("Resource not found: " + path);
+        }
+
+        String script = scriptUrl.toString();
         return dslExecutor.execute(script);
     }
 }

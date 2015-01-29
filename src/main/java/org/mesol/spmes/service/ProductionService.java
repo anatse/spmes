@@ -20,6 +20,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.mesol.spmes.model.graph.prod.ProductionOrder;
 import org.mesol.spmes.model.graph.states.ProdOrderState;
 import org.mesol.spmes.service.abs.AbstractServiceWithAttributes;
@@ -51,6 +52,7 @@ public class ProductionService extends AbstractServiceWithAttributes
         return getHibernateSession().createCriteria(ProductionOrder.class)
             .add(eq("status", status))
             .addOrder(asc("planStartDate"))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
             .list();
     }
 

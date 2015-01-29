@@ -18,6 +18,7 @@ package org.mesol.spmes.model.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -55,7 +56,7 @@ public class Menu extends AbstractEntity implements Serializable
     @Column(length = 1024, nullable = true)
     private String                  url;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="PARENT_ID")
     private Menu                    parent;
 
@@ -67,7 +68,10 @@ public class Menu extends AbstractEntity implements Serializable
         foreignKey = @ForeignKey(name = "FK_MENU_GRP", value = ConstraintMode.CONSTRAINT),
         inverseForeignKey = @ForeignKey(name = "FK_GRP_MENU", value = ConstraintMode.CONSTRAINT)
     )
-    private Set<UserGroup>   groups;
+    private Set<UserGroup>          groups;
+
+    @Column(name = "SEQ", nullable = false)
+    private Integer                 seq;
 
     public Long getId() {
         return id;
@@ -117,5 +121,13 @@ public class Menu extends AbstractEntity implements Serializable
 
     public void setGroups(Set<UserGroup> groups) {
         this.groups = groups;
+    }
+
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
     }
 }

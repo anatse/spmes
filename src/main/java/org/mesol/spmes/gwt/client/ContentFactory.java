@@ -31,7 +31,7 @@ public final class ContentFactory
         Canvas ret = loadedObjects.get(name);
         if (ret == null) {
             switch (name) {
-                case "Users":
+                case "users":
                     ret = new Users();
                     loadedObjects.put(name, ret);
                     break;

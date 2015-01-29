@@ -1,45 +1,73 @@
 def WC1 = userService {
-    addGroup (
+    def adminUser = findByName ('admin');
+    
+    def adminGrp = addGroup (
         UserGroup ([
             name: 'ROLE_ADMIN',
             users: [
-                User ([
-                    username: 'admin',
-                    password: 'admin'
-                ])
+                adminUser
             ]
         ])
     )
 
-    addGroup (
+    def laborerGrp = addGroup (
         UserGroup ([
             name: 'ROLE_LABORER',
             users: [
-                User ([
-                    username: 'admin',
-                    password: 'admin'
-                ])
+                adminUser
+            ]
+        ])
+    )
+
+    def secMenu = addMenu (Menu([
+        name: 'Security',
+        description: 'Security',
+        seq: 0,
+        groups: [
+            adminGrp,
+            laborerGrp
+        ]
+    ]))
+    
+    addMenu (
+        Menu ([
+            name: 'Users',
+            description: 'Users',
+            seq: 0,
+            url: 'users',
+            parent: secMenu,
+            groups: [
+                adminGrp,
+                laborerGrp
             ]
         ])
     )
     
     addMenu (
         Menu ([
-            name: 'Users',
-            description: 'Users',
-            url: 'users',
-            parent: Menu([
-                name: 'Security',
-                description: 'Security',
-                groups: [
-                    UserGroup([
-                        name: 'ROLE_ADMIN'
-                    ]),
-                    UserGroup([
-                        name: 'ROLE_LABORER'
-                    ])
-                ]
-            ])
+            name: 'Equipment',
+            description: 'Equipment',
+            seq: 1,
+            url: 'equipment',
+            parent: secMenu,
+            groups: [
+                adminGrp,
+                laborerGrp
+            ]
+        ])
+    )
+    
+    addMenu (
+        Menu ([
+            name: 'Groups',
+            description: 'Groups',
+            seq: 2,
+            url: 'groups',
+            parent: secMenu,
+            groups: [
+                adminGrp,
+                laborerGrp
+            ]
         ])
     )
 }

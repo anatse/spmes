@@ -24,6 +24,7 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import static org.hibernate.criterion.Restrictions.eq;
@@ -118,7 +119,10 @@ public class UserService extends AbstractServiceWithAttributes
     @Transactional
     public List<UserShift> getAlLShifts () {
         Session session = getHibernateSession();
-        return session.createCriteria(UserShift.class).list();
+        return session
+            .createCriteria(UserShift.class)
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
 
     /**
@@ -225,12 +229,14 @@ public class UserService extends AbstractServiceWithAttributes
             .createAlias("groups", "grp")
             .add(eq ("username", username))
             .setProjection(Property.forName("grp.id"));
-        
+
         return session.createCriteria(Menu.class)
             .add(parentId == null ? isNull("parent") : eq("parent.id", parentId))
             .createAlias("groups", "grp")
+            .addOrder(Order.asc("seq"))
             .add(Subqueries.propertyIn("grp.id", userGroups))
-            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
     }
 
     /**
@@ -239,9 +245,9 @@ public class UserService extends AbstractServiceWithAttributes
      */
     @Transactional
     public List<User> findAll() {
-        return getHibernateSession().createCriteria(User.class).list();
+        return super.findAll (User.class);
     }
-    
+
     /**
      * Find user by id
      * @param userId user id
@@ -254,14 +260,29 @@ public class UserService extends AbstractServiceWithAttributes
 
     @Transactional
     public Menu addMenu (Menu menu) {
-        entityManager.persist(menu);
-        return menu;
+        Menu foundMenu = (Menu)getHibernateSession()
+                    .createCriteria(UserGroup.class)
+                    .add(eq("name", menu.getName()))
+                    .add(eq("parent", menu.getParent()))
+                    .uniqueResult();
+        if (foundMenu == null) {
+            foundMenu = entityManager.merge(menu);
+        }
+        
+        return foundMenu;
     }
 
     @Transactional
     public UserGroup addGroup (UserGroup group) {
-        entityManager.persist(group);
-        return group;
+        UserGroup foundGroup = (UserGroup)getHibernateSession()
+                    .createCriteria(UserGroup.class)
+                    .add(eq("name", group.getName()))
+                    .uniqueResult();
+        if (foundGroup == null) {
+            foundGroup = entityManager.merge(group);
+        }
+
+        return foundGroup;
     }
 
     /**
