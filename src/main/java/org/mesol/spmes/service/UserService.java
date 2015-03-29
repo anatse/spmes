@@ -261,7 +261,7 @@ public class UserService extends AbstractServiceWithAttributes
     @Transactional
     public Menu addMenu (Menu menu) {
         Menu foundMenu = (Menu)getHibernateSession()
-                    .createCriteria(UserGroup.class)
+                    .createCriteria(Menu.class)
                     .add(eq("name", menu.getName()))
                     .add(eq("parent", menu.getParent()))
                     .uniqueResult();
