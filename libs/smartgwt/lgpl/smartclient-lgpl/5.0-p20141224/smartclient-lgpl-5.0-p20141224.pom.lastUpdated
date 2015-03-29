@@ -1,0 +1,12 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Dec 25 11:02:44 MSK 2014
+https\://oss.sonatype.org/content/repositories/snapshots/.error=
+http\://jbig2-imageio.googlecode.com/svn/maven-repository/.lastUpdated=1419490963945
+http\://repo.springsource.org/milestone/.lastUpdated=1419490963752
+http\://jbig2-imageio.googlecode.com/svn/maven-repository/.error=
+https\://oss.sonatype.org/content/repositories/snapshots/.lastUpdated=1419490962755
+http\://repo.springsource.org/libs-milestone/.error=
+https\://repo.maven.apache.org/maven2/.lastUpdated=1419490964336
+http\://repo.springsource.org/libs-milestone/.lastUpdated=1419490963445
+https\://repo.maven.apache.org/maven2/.error=
+http\://repo.springsource.org/milestone/.error=

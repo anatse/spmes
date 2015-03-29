@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.isomorphic.smartgwt.lgpl</groupId>
+  <artifactId>smartgwt-skins</artifactId>
+  <versioning>
+    <release>5.0p</release>
+    <versions>
+      <version>4.0-p20141223</version>
+      <version>5.0p</version>
+    </versions>
+    <lastUpdated>20141225072006</lastUpdated>
+  </versioning>
+</metadata>

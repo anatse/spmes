@@ -297,16 +297,16 @@
         <!--
             Oracle driver
         -->
-        <dependency>
+<!--        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4-1200-jdbc41-SNAPSHOT</version>
+            <version>9.3-1102-jdbc41</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -370,12 +370,12 @@
             <version>5.0p</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.hydro4ge</groupId>
             <artifactId>raphaelgwt</artifactId>
             <version>42</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>

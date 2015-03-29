@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<description>A collection of resources appropriate for use in unit / integration testing environments, including the Isomorphic extensions to Selenium</description>
+
+	<groupId>com.isomorphic.smartgwt.lgpl</groupId>
+	<artifactId>isc-selenium-resources</artifactId>
+	<version>4.0-p20141223</version>
+	<packaging>zip</packaging>
+
+</project>
