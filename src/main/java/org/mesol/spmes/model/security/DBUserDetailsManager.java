@@ -17,8 +17,6 @@
 package org.mesol.spmes.model.security;
 
 import java.lang.invoke.MethodHandles;
-import javax.jms.MessageNotWriteableException;
-import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,14 +74,14 @@ public class DBUserDetailsManager implements UserDetailsManager
         if (ud == null)
             throw (new UsernameNotFoundException("user not found"));
 
-        try {
-            ActiveMQTextMessage msg = new ActiveMQTextMessage();
-            msg.setText("Hello world");
-            jmsOpers.convertAndSend(msg);
-        } 
-        catch (MessageNotWriteableException ex) {
-            logger.error(username, ex);
-        }
+//        try {
+//            ActiveMQTextMessage msg = new ActiveMQTextMessage();
+//            msg.setText("Hello world");
+//            jmsOpers.convertAndSend(msg);
+//        } 
+//        catch (MessageNotWriteableException ex) {
+//            logger.error(username, ex);
+//        }
 
         return ud;
     }
