@@ -282,6 +282,11 @@ public class UserService extends AbstractServiceWithAttributes
             foundGroup = entityManager.merge(group);
         }
 
+        for (User user : group.getUsers()) {
+            user.addGroup(foundGroup);
+            entityManager.merge(user);
+        }
+
         return foundGroup;
     }
 

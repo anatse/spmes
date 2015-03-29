@@ -80,6 +80,10 @@ public class UserGroup extends AbstractEntity implements Serializable, GrantedAu
         return Collections.unmodifiableSet(users);
     }
 
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

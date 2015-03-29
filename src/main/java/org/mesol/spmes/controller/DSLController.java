@@ -51,6 +51,8 @@ public class DSLController
         }
 
         String script = scriptUrl.toString();
-        return dslExecutor.execute(script);
+        Object value =  dslExecutor.execute(script);
+        System.out.println (value);
+        return value;
     }
 }

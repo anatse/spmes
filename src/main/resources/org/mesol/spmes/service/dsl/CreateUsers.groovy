@@ -1,6 +1,13 @@
 def WC1 = userService {
-    def adminUser = findByName ('admin');
-    
+    def adminUser = findByName ('admin')
+    if (adminUser == null) {
+        adminUser = save (
+            User ([
+               username: 'admin',
+               password: 'admin'
+        ]))
+    }
+
     def adminGrp = addGroup (
         UserGroup ([
             name: 'ROLE_ADMIN',
@@ -19,6 +26,8 @@ def WC1 = userService {
         ])
     )
 
+    System.out.println ('saved...')
+    
     def secMenu = addMenu (Menu([
         name: 'Security',
         description: 'Security',
@@ -72,3 +81,7 @@ def WC1 = userService {
     )
 }
 
+[
+    success: true,
+    error: ''
+]
