@@ -428,12 +428,13 @@
                 <configuration>
                     <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
                     <draftCompile>true</draftCompile>
+                    <runTarget>DEBUG</runTarget>
                     <!--<style>DETAILED</style>-->
                     <!--<logLevel>DEBUG</logLevel>-->
 <!--                    <optimizationLevel>9</optimizationLevel>
                     <jsInteropMode>CLOSURE</jsInteropMode>
                     <closureCompiler>true</closureCompiler>-->
-                    <compileReport>true</compileReport>
+                    <!--<compileReport>true</compileReport>-->
                     <!--<style>PRETTY</style>-->
                 </configuration>
             </plugin>

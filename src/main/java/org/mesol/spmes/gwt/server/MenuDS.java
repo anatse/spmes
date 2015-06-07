@@ -53,8 +53,9 @@ public final class MenuDS extends BaseDataSource
     }
     
     public static MenuDS get () {
-        if (instance == null)
+        if (instance == null) {
             instance = new MenuDS();
+        }
         
         return instance;
     }
