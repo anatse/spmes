@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ * Class implements bnasic data source functions include security header CSRF
  * @version 1.0.0
  * @author ASementsov
  */

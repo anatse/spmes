@@ -28,21 +28,13 @@ import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
 
 /**
- * $Rev:$
- * $Author:$
- * $Date:$
  * 
  * @version 1.0.0
  * @author ASementsov
  */
 public class GraphObjectMapper extends ObjectMapper 
 {
-    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
     static final long serialVersionUID = 1L;
-
-    public static String getRevisionNumber() {
-        return "$Revision:$";
-    }
 
     public GraphObjectMapper() {
         super ();

@@ -24,9 +24,6 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
- * $Rev:$
- * $Author:$
- * $Date:$
  * 
  * @version 1.0.0
  * @author ASementsov
@@ -36,10 +33,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
 {
     private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
-
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{RootConfiguration.class, PersistenceJPAConfig.class, JmsConfig.class};

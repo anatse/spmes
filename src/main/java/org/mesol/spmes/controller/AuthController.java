@@ -51,9 +51,6 @@ public class AuthController
 {
     private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static String getRevisionNumber() {
-        return "$Revision:$";
-    }
     @Autowired
     private UserService             userService;
 

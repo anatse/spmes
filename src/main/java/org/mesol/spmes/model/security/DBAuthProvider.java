@@ -36,10 +36,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class DBAuthProvider extends AbstractUserDetailsAuthenticationProvider 
 {
     private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
-    
-    public static String getRevisionNumber() {
-        return "$Revision:$";
-    }
+
     private UserDetailsService userDetailsService;
 
     public void setUserDetailsService(UserDetailsService userDetailsService) {

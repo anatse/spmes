@@ -35,7 +35,6 @@ import org.springframework.web.context.request.WebRequest;
  * @version 1.0.0
  * @author ASementsov
  */
-//@RestController
 @Controller
 @RequestMapping(value="/equipment")
 public class EQController 
@@ -47,25 +46,11 @@ public class EQController
     private MessageSource                messageSource;
     
     private static final Logger     logger = Logger.getLogger(AuthController.class);
-    public static String getRevisionNumber () {
-        return "$Revision:$";
-    }
 
-//	@RestController
-//    @RequestMapping("/service/greeting")
-//    public class SpringServiceController {
-//     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
-//     public String getGreeting(@PathVariable String name) {
-//      String result="Hello "+name; 
-//      return result;
-//     }
-//    }
-    
+
     @Transactional
     @RequestMapping(value = "eq/{eqId}", method = RequestMethod.GET, produces="application/json")
     public List<Equipment> equipmentList (@PathVariable Long eqId)
-//    @RequestMapping(value = "list", method = RequestMethod.GET)
-//    public List<Equipment> equipmentList (@RequestParam(value = "eqId" , required = false) Long eqId)
     {       
         if (eqId != null && eqId != -1) {            
             Equipment parentEqt = eqService.findById(eqId);

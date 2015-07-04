@@ -42,7 +42,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.Assert;
 
 /**
- * $Rev:$ $Author:$ $Date:$
  *
  * @version 1.0.0
  * @author ASementsov
@@ -57,10 +56,6 @@ public class PersistenceJPAConfig
     public static final String CONFIG = "ds/jdbc.properties";
     private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static String getRevisionNumber() {
-        return "$Revision:$";
-    }
-    
     @Autowired
     private Environment                             env;
 
