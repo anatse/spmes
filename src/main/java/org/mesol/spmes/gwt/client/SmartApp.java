@@ -21,8 +21,6 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
 import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.HLayout;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Main GUI class
@@ -50,6 +48,10 @@ public class SmartApp implements EntryPoint
         final ContentView view = new ContentView();
         view.setHeight100();
         view.setWidth100();
+        /*
+        * Selection change handler
+        * Do not try to use lambda expression while using 2.7 GWT compiler
+        */
         tr.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent event) {

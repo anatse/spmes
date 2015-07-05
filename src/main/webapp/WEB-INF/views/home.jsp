@@ -32,7 +32,7 @@
         <script src=app/sc/modules/ISC_RichTextEditor.js></script>
         <script src=app/sc/modules/ISC_Calendar.js></script>
         <script src=app/sc/modules/ISC_DataBinding.js></script>
-        <script src="app/raphael-min.js"></script>
+        <!--<script src="app/raphael-min.js"></script>-->
         <script>
             var csrfName = '${_csrf.headerName}';
             var csrfValue = '${_csrf.token}';

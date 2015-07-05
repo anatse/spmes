@@ -17,6 +17,7 @@
 package org.mesol.spmes.tests;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,6 +26,8 @@ import org.mesol.spmes.config.PersistenceJPAConfig;
 import org.mesol.spmes.config.RootConfiguration;
 import org.mesol.spmes.config.WebMvcConfiguration;
 import org.mesol.spmes.config.WebMvcSecurityConfig;
+import org.mesol.spmes.model.security.UserGroup;
+import org.mesol.spmes.service.UserService;
 import org.mesol.spmes.service.dsl.DslExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -57,6 +60,9 @@ public class TDslUnit
     @Autowired
     private DslExecutor             de;
 
+    @Autowired
+    private UserService             userService;
+    
     @Test
     @Ignore
     @Transactional
@@ -67,7 +73,10 @@ public class TDslUnit
     @Test
     @Transactional
     public void initiaCreateUserDsl () throws Exception {
-        de.execute(getClass().getResource("/org/mesol/spmes/service/dsl/CreateUsers.groovy").toString());
+//        List<UserGroup> groups = userService.findAvailableGroups("admin");
+//        groups = userService.findAvailableGroups("demo");
+//        System.out.println ("asd");
+//        de.execute(getClass().getResource("/org/mesol/spmes/service/dsl/CreateUsers.groovy").toString());
     }
 
     @Configuration

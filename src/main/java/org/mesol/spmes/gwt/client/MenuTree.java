@@ -36,7 +36,7 @@ import org.mesol.spmes.gwt.server.MenuDS;
 import org.mesol.spmes.gwt.shared.FieldNamesConstants;
 
 /**
- *
+ * Class fill main application menu tree
  * @version 1.0.0
  * @author ASementsov
  */
@@ -44,6 +44,9 @@ public final class MenuTree extends TreeGrid {
 
     private final FieldNamesConstants fieldNames = GWT.create(FieldNamesConstants.class);
 
+    /**
+     * Tree constructor
+     */
     public MenuTree() {
         setShowConnectors(true);
         setShowResizeBar(true);
@@ -51,6 +54,9 @@ public final class MenuTree extends TreeGrid {
         setLoadDataOnDemand(Boolean.TRUE);
         setLoadingDataMessage("Loading...");
 
+        /*
+        * Add tree grid fields
+        */
         TreeGridField nameField = new TreeGridField("name", fieldNames.name());
         setFields(nameField);
 
@@ -70,6 +76,10 @@ public final class MenuTree extends TreeGrid {
         fetchData (root, tree);
         setData(tree);
         
+        /*
+        * Handler to open tree node event. Do not try to use Java 8 lambda expression here
+        * The GWT 2.7 compiler not support lambdas
+        */
         addFolderOpenedHandler(new FolderOpenedHandler() {
             @Override
             public void onFolderOpened(FolderOpenedEvent event) {
@@ -78,6 +88,13 @@ public final class MenuTree extends TreeGrid {
         });
     }
 
+    /**
+     * Fucntion fetch data dynamically fetch children nodes through the REST service
+     * Do not try to use Java 8 syntax (lambdas) while GWT 2.7 compiler
+     * 
+     * @param root parent node
+     * @param tree pointer to tree object
+     */
     private void fetchData (final TreeNode root, final Tree tree) {
         final DataSource ds = MenuDS.get();
         Criteria cr = new Criteria("parentId", root.getAttribute("id"));

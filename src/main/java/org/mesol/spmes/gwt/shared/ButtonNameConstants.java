@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.gwt.shared;
 
 import com.google.gwt.i18n.client.Constants;

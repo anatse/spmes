@@ -19,7 +19,7 @@ import com.smartgwt.client.widgets.Canvas;
 import java.util.HashMap;
 
 /**
- * 
+ * Canvas factory - factory object. This object find or create canvases by name
  * @version 1.0.0
  * @author ASementsov
  */

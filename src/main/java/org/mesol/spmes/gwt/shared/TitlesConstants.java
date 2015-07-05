@@ -25,6 +25,7 @@ import com.google.gwt.i18n.client.Constants;
  */
 public interface TitlesConstants extends Constants 
 {
-    @Key("details") String     details();
-    @Key("roles") String     roles();
+    @Key("details") String      details();
+    @Key("roles") String        roles();
+    @Key("groups") String       groups();
 }

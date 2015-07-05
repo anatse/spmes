@@ -180,4 +180,33 @@ public class AuthController
         User usr = userService.findByName(userName);
         return usr.getGroups();
     }
+    
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
+    @RequestMapping(value = "/service/user/grp/availist", 
+        method = {RequestMethod.POST},
+        produces = {"application/json"}
+    )
+    @Transactional
+    public List<UserGroup> findAvailableGroups (@RequestParam (value = "username") String userName) {
+        return userService.findAvailableGroups(userName);
+    }
+    
+    @Secured({
+        BasicConstants.ADMIN_ROLE, 
+        BasicConstants.CHIEF_ROLE
+    })
+    @RequestMapping(value = "/service/user/grp/add", 
+        method = {RequestMethod.POST},
+        produces = {"application/json"}
+    )
+    @Transactional
+    public List<UserGroup> addUserGroups (
+            @RequestParam (value = "username") String userName,
+            @RequestParam (value = "groups")List<String> groups
+    ) {
+        return userService.addGroups(userName, groups);
+    }
 }

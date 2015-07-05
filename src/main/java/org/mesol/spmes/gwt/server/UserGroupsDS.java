@@ -26,21 +26,21 @@ import org.mesol.spmes.gwt.shared.FieldNamesConstants;
  * @version 1.0.0
  * @author ASementsov
  */
-public class GroupsDS  extends BaseDataSource
+public class UserGroupsDS extends BaseDataSource
 {
     private final FieldNamesConstants   fieldNames = GWT.create(FieldNamesConstants.class);
-    private static GroupsDS             instance;
+    private static UserGroupsDS         instance;
     
-    protected GroupsDS () {
+    protected UserGroupsDS () {
         super();
-        
+
         setCacheAllData(false);
         setAutoCacheAllData(false);
         setClientOnly(false);
-        
+
         DataSourceTextField gname = new DataSourceTextField("name", fieldNames.name());
         gname.setPrimaryKey(true);
-        
+
         DataSourceField userField = new DataSourceTextField("username", fieldNames.user());
         userField.setForeignKey("username");
 
@@ -48,14 +48,15 @@ public class GroupsDS  extends BaseDataSource
         idField.setHidden(true);
         setFields(gname, idField);
         setTitleField("name");
-        
+
         setDataURL("service/user/grp/list");
         setRecordXPath("userGroupList");
     }
     
-    public static GroupsDS get () {
-        if (instance == null)
-            instance = new GroupsDS();
+    public static UserGroupsDS get () {
+        if (instance == null) {
+            instance = new UserGroupsDS();
+        }
         
         return instance;
     }

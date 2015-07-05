@@ -29,6 +29,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import static org.hibernate.criterion.Restrictions.eq;
 import static org.hibernate.criterion.Restrictions.isNull;
+import static org.hibernate.criterion.Restrictions.in;
 import org.hibernate.criterion.Subqueries;
 import org.mesol.spmes.config.PersistenceJPAConfig;
 import org.mesol.spmes.consts.BasicConstants;
@@ -44,7 +45,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 /**
  * Class implements user functions
@@ -290,6 +290,37 @@ public class UserService extends AbstractServiceWithAttributes
         return foundGroup;
     }
 
+    @Transactional
+    public List<UserGroup> findAvailableGroups (String userName) {
+        Session session = getHibernateSession();
+        DetachedCriteria userGroups = DetachedCriteria.forClass(User.class)
+            .createAlias("groups", "grp")
+            .add(eq ("username", userName))
+            .setProjection(Property.forName("grp.id"));
+
+        return session.createCriteria(UserGroup.class)
+            .add(Subqueries.propertyNotIn("id", userGroups))
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            .list();
+    }
+    
+    @Transactional
+    public List<UserGroup> addGroups (String userName, List<String> groups) {
+        Session session = getHibernateSession();
+        User user = findByName(userName);
+        List<UserGroup> ugs = session.createCriteria(UserGroup.class)
+                .add(in ("name", groups))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                .list();
+
+        ugs.stream().forEach((ug) -> {
+            user.addGroup(ug);
+        });
+
+        entityManager.merge(user);
+        return ugs;
+    }
+    
     /**
      * Implements the same function from AbstractController
      * @return entity manager

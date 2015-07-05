@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.mesol.spmes.gwt.shared;
 
 import com.google.gwt.dom.client.Document;
@@ -35,7 +34,7 @@ public class BaseDataSource extends DataSource
 {
     private static Map              headers;
     
-    private static Map buildHeaders () {
+    public static Map buildHeaders () {
         if (headers != null && headers.isEmpty()) {
             return headers;
         }

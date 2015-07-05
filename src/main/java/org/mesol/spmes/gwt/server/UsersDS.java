@@ -18,14 +18,12 @@ package org.mesol.spmes.gwt.server;
 
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.data.DSRequest;
-import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.OperationBinding;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
-import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.util.JSON;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 import org.mesol.spmes.gwt.shared.BaseDataSource;
