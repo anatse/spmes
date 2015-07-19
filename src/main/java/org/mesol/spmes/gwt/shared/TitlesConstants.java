@@ -28,4 +28,5 @@ public interface TitlesConstants extends Constants
     @Key("details") String      details();
     @Key("roles") String        roles();
     @Key("groups") String       groups();
+    @Key("equipments") String   equipments();
 }

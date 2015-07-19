@@ -36,7 +36,13 @@ public final class ContentFactory
                     loadedObjects.put(name, ret);
                     break;
 
+                case "equipment":
+                    ret = new Equipment();
+                    loadedObjects.put(name, ret);
+                    break;
+                    
                 default:
+//                    ret = 
                     break;
             }
         }

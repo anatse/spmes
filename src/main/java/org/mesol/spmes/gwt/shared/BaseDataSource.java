@@ -22,6 +22,7 @@ import com.google.gwt.dom.client.NodeList;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.types.DSDataFormat;
+import com.smartgwt.client.util.JSON;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,5 +78,17 @@ public class BaseDataSource extends DataSource
         reqProps.setHttpMethod("POST");
         reqProps.setHttpHeaders(buildHeaders());
         setRequestProperties(reqProps);
+    }
+    
+    @Override
+    protected Object transformRequest(DSRequest dsRequest) {
+        switch (dsRequest.getOperationType()) {
+            case ADD:
+            case UPDATE:
+                dsRequest.setContentType("application/json");
+                return JSON.encode(dsRequest.getData());
+        }
+
+        return super.transformRequest(dsRequest);
     }
 }

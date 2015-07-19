@@ -15,19 +15,20 @@
  */
 package org.mesol.spmes.controller;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mesol.spmes.model.factory.Equipment;
 import org.mesol.spmes.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
 /**
@@ -36,30 +37,37 @@ import org.springframework.web.context.request.WebRequest;
  * @author ASementsov
  */
 @Controller
-@RequestMapping(value="/equipment")
+@RequestMapping(value="/service/equipment")
 public class EQController 
 {
+    private static final Logger     logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
     @Autowired
     private EquipmentService             eqService;
 
-    @Autowired
-    private MessageSource                messageSource;
-    
-    private static final Logger     logger = Logger.getLogger(AuthController.class);
-
-
     @Transactional
-    @RequestMapping(value = "eq/{eqId}", method = RequestMethod.GET, produces="application/json")
-    public List<Equipment> equipmentList (@PathVariable Long eqId)
-    {       
-        if (eqId != null && eqId != -1) {            
-            Equipment parentEqt = eqService.findById(eqId);
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces="application/json")
+    public List<Equipment> equipmentList (@RequestParam(value = "parentId", required = false) Long parentId) {
+        if (parentId != null && parentId != -1) {            
+            Equipment parentEqt = eqService.findById(parentId);
             return (List<Equipment>) eqService.findByParent(parentEqt);
         }
-        else
-        {
+        else {
             return eqService.findRoot();
         }
+    }
+    
+    @Transactional
+    @RequestMapping(value = "add", method = RequestMethod.POST, produces="application/json" , consumes = {"application/json"})
+    public Equipment addEquipment (
+            @RequestParam(value = "parentId") Long parentId, 
+            @RequestBody Equipment equipment, 
+            HttpServletResponse httpResponse, 
+            WebRequest request
+    ) {
+        Equipment parent = eqService.findById(parentId);
+        equipment.setParentEquipment(parent);
+        return eqService.save(equipment);
     }
 
     @Transactional

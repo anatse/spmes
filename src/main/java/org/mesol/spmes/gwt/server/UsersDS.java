@@ -17,14 +17,12 @@
 package org.mesol.spmes.gwt.server;
 
 import com.google.gwt.core.client.GWT;
-import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.OperationBinding;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
-import com.smartgwt.client.util.JSON;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 import org.mesol.spmes.gwt.shared.BaseDataSource;
 import org.mesol.spmes.gwt.shared.FieldNamesConstants;
@@ -104,22 +102,11 @@ public class UsersDS extends BaseDataSource
         oper.setDataProtocol(DSProtocol.POSTMESSAGE);
         return oper;
     }
-
-    @Override
-    protected Object transformRequest(DSRequest dsRequest) {
-        switch (dsRequest.getOperationType()) {
-            case ADD:
-            case UPDATE:
-                dsRequest.setContentType("application/json");
-                return JSON.encode(dsRequest.getData());
-        }
-
-        return super.transformRequest(dsRequest);
-    }
     
     public static UsersDS get () {
-        if (instance == null)
+        if (instance == null) {
             instance = new UsersDS();
+        }
         
         return instance;
     }
